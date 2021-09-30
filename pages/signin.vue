@@ -46,6 +46,7 @@
                   Sign In
                 </v-btn>
               </v-col>
+
               <v-col cols="12" sm="12" md="12" lg="12" align="center" class="pb-0">
                 <p>
                   Don't have an account?
