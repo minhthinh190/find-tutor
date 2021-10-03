@@ -1,17 +1,21 @@
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth'
 import { auth } from '~/firebase/config.js'
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut
+} from 'firebase/auth'
 
 export const state = () => ({
-  userCredential: null
+  authUser: null
 })
 
 export const getters = {
-  userCredential: state => state.userCredential
+  authUser: state => state.authUser
 }
 
 export const mutations = {
-  setUserCredential (state, data) {
-    state.userCredential = data
+  setAuthUser (state, authUser) {
+    state.authUser = authUser
   }
 }
 
@@ -19,22 +23,33 @@ export const actions = {
   signIn (context, { email, password }) {
     signInWithEmailAndPassword(auth, email, password)
       .then(userCredential => {
-        context.commit('setUserCredential', userCredential.user)
-        console.log('Sign in successful!')
+        const { uid, email } = userCredential.user
+        context.commit('setAuthUser', { uid, email })
+        $nuxt.$router.push({ name: 'index' })
       })
-      .catch(error => {
-        console.log(error)
+      .catch(err => {
+        console.log('Sign in error:', err)
       })
   },
 
   signUp (context, { email, password }) {
     createUserWithEmailAndPassword(auth, email, password)
-      .then(userCredential => {
-        context.commit('setUserCredential', userCredential.user)
-        console.log('Sign up successful!')
+      .then(() => {
+        $nuxt.$router.push({ name: 'signin' })
       })
-      .catch(error => {
-        console.log(error)
+      .catch(err => {
+        console.log('Sign up error:', err)
+      })
+  },
+
+  signOut (context) {
+    signOut(auth)
+      .then(() => {
+        context.commit('setAuthUser', null)
+        $nuxt.$router.push({ name: 'signin' })
+      })
+      .catch(err => {
+        console.log('Sign out error:', err)
       })
   }
 }
