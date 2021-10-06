@@ -6,16 +6,16 @@ import {
 } from 'firebase/auth'
 
 export const state = () => ({
-  authUser: null
+  user: null
 })
 
 export const getters = {
-  authUser: state => state.authUser
+  user: state => state.user
 }
 
 export const mutations = {
-  setAuthUser (state, authUser) {
-    state.authUser = authUser
+  setUser (state, user) {
+    state.user = user
   }
 }
 
@@ -24,7 +24,7 @@ export const actions = {
     signInWithEmailAndPassword(auth, email, password)
       .then(userCredential => {
         const { uid, email } = userCredential.user
-        context.commit('setAuthUser', { uid, email })
+        context.commit('setUser', { uid, email })
         $nuxt.$router.push({ name: 'index' })
       })
       .catch(err => {
@@ -34,8 +34,10 @@ export const actions = {
 
   signUp (context, { email, password }) {
     createUserWithEmailAndPassword(auth, email, password)
-      .then(() => {
-        $nuxt.$router.push({ name: 'signin' })
+      .then(userCredential => {
+        const { uid, email } = userCredential.user
+        context.commit('setUser', { uid, email })
+        $nuxt.$router.push({ name: 'index' })
       })
       .catch(err => {
         console.log('Sign up error:', err)
@@ -45,7 +47,7 @@ export const actions = {
   signOut (context) {
     signOut(auth)
       .then(() => {
-        context.commit('setAuthUser', null)
+        context.commit('setUser', null)
         $nuxt.$router.push({ name: 'signin' })
       })
       .catch(err => {
