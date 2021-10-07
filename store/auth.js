@@ -1,9 +1,4 @@
-import { auth } from '~/firebase/config.js'
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  signOut
-} from 'firebase/auth'
+import { userService } from '~/firebase/user'
 
 export const state = () => ({
   user: null
@@ -21,10 +16,12 @@ export const mutations = {
 
 export const actions = {
   signIn (context, { email, password }) {
-    signInWithEmailAndPassword(auth, email, password)
+    userService.signUserIn(email, password)
       .then(userCredential => {
         const { uid, email } = userCredential.user
         context.commit('setUser', { uid, email })
+      })
+      .then(() => {
         $nuxt.$router.push({ name: 'index' })
       })
       .catch(err => {
@@ -33,10 +30,12 @@ export const actions = {
   },
 
   signUp (context, { email, password }) {
-    createUserWithEmailAndPassword(auth, email, password)
+    userService.signUserUp(email, password)
       .then(userCredential => {
         const { uid, email } = userCredential.user
         context.commit('setUser', { uid, email })
+      })
+      .then(() => {
         $nuxt.$router.push({ name: 'index' })
       })
       .catch(err => {
@@ -45,9 +44,11 @@ export const actions = {
   },
 
   signOut (context) {
-    signOut(auth)
+    userService.signUserOut()
       .then(() => {
         context.commit('setUser', null)
+      })
+      .then(() => {
         $nuxt.$router.push({ name: 'signin' })
       })
       .catch(err => {
