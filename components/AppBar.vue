@@ -1,15 +1,28 @@
 <template>
   <div>
     <v-app-bar
-      color="teal lighten-1"
-      dark
-      class="px-10"
+      color="white"
+      flat
+      class="px-lg-10"
     >
       <v-app-bar-title>
-        App Title
+        <nuxt-link to="/" class="home-link">
+          App Title
+        </nuxt-link>
       </v-app-bar-title>
 
       <v-spacer></v-spacer>
+
+      <div class="d-none d-sm-flex mr-6">
+        <nuxt-link
+          v-for="(item, index) in navigation"
+          :key="index"
+          to=""
+          class="mx-4 font-weight-bold link"
+        >
+          {{ item.title }}
+        </nuxt-link>
+      </div>
 
       <v-menu offset-y left>
         <!-- Menu button -->
@@ -17,7 +30,6 @@
           <v-app-bar-nav-icon
             v-bind="attrs"
             v-on="on"
-            class="box"
           ></v-app-bar-nav-icon>
         </template>
 
@@ -52,6 +64,12 @@
 export default {
   data () {
     return {
+      navigation: [
+        { title: 'Page 1', link: '' },
+        { title: 'Page 2', link: '' },
+        { title: 'Page 3', link: '' },
+        { title: 'Page 4', link: '' }
+      ],
       menu: [
         { title: 'Profile', icon: 'mdi-account-circle', action: '' },
         { title: 'Starred', icon: 'mdi-star', action: '' },
@@ -71,3 +89,18 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.home-link {
+  color: black;
+  text-decoration: none;
+  font-weight: bold;
+}
+.link {
+  color: #9E9E9E;
+  text-decoration: none;
+}
+.link:hover {
+  color: black;
+}
+</style>
