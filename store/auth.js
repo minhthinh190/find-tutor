@@ -1,40 +1,65 @@
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth'
-import { auth } from '~/firebase/config.js'
+import { userService } from '~/firebase/user'
+
+const userId = localStorage.getItem('uid')
 
 export const state = () => ({
-  userCredential: null
+  user: userId ? userId : null
 })
 
 export const getters = {
-  userCredential: state => state.userCredential
+  user: state => state.user
 }
 
 export const mutations = {
-  setUserCredential (state, data) {
-    state.userCredential = data
+  setUser (state, user) {
+    state.user = user
   }
 }
 
 export const actions = {
   signIn (context, { email, password }) {
-    signInWithEmailAndPassword(auth, email, password)
+    userService.signUserIn(email, password)
       .then(userCredential => {
-        context.commit('setUserCredential', userCredential.user)
-        console.log('Sign in successful!')
+        const { uid, email } = userCredential.user
+        context.commit('setUser', { uid, email })
+        return uid
       })
-      .catch(error => {
-        console.log(error)
+      .then(uid => {
+        localStorage.setItem('uid', uid)
+        $nuxt.$router.push({ name: 'index' })
+      })
+      .catch(err => {
+        console.log('Sign in error:', err)
       })
   },
 
   signUp (context, { email, password }) {
-    createUserWithEmailAndPassword(auth, email, password)
+    userService.signUserUp(email, password)
       .then(userCredential => {
-        context.commit('setUserCredential', userCredential.user)
-        console.log('Sign up successful!')
+        const { uid, email } = userCredential.user
+        context.commit('setUser', { uid, email })
+        return uid
       })
-      .catch(error => {
-        console.log(error)
+      .then(uid => {
+        localStorage.setItem('uid', uid)
+        $nuxt.$router.push({ name: 'index' })
+      })
+      .catch(err => {
+        console.log('Sign up error:', err)
+      })
+  },
+
+  signOut (context) {
+    userService.signUserOut()
+      .then(() => {
+        context.commit('setUser', null)
+      })
+      .then(() => {
+        localStorage.removeItem('uid')
+        $nuxt.$router.push({ name: 'signin' })
+      })
+      .catch(err => {
+        console.log('Sign out error:', err)
       })
   }
 }
