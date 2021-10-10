@@ -2,7 +2,7 @@
   <v-container fill-height>
     <v-row justify="center">
       <v-col cols="12" sm="6" md="6" lg="4">
-        <v-card class="pa-6" outlined>
+        <v-card class="pa-6" outlined tile>
           <v-card-title class="justify-center">
             <h3>Sign In</h3>
           </v-card-title>
@@ -40,6 +40,7 @@
                   color="teal lighten-1"
                   depressed
                   block
+                  tile
                   class="text-capitalize white--text"
                   @click="signIn"
                 >
@@ -90,7 +91,6 @@ export default {
           email: this.email,
           password: this.password
         })
-        this.$router.push({ name: 'index' })
       }
     }
   }
