@@ -94,7 +94,22 @@ export default {
           email: this.email,
           password: this.password
         })
+        .then(uid => {
+          localStorage.setItem('uid', uid)
+          $nuxt.$router.push({ name: 'index' })
+        })
+        .catch(err => {
+          console.log(err)
+          this.showNotification(err, 'error')
+        })
       }
+    },
+
+    showNotification (message, color) {
+      this.$store.dispatch('notification/showNotification', {
+        message,
+        color
+      })
     }
   }
 }
