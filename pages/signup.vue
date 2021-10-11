@@ -132,6 +132,13 @@ export default {
           email: this.email,
           password: this.password
         })
+        .then(uid => {
+          localStorage.setItem('uid', uid)
+          $nuxt.$router.push({ name: 'index' })
+        })
+        .catch(err => {
+          console.log('Sign up error:', err)
+        })
       }
     }
   }
