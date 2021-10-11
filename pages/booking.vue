@@ -21,7 +21,7 @@
         md="6"
         class="px-sm-16 px-md-12 px-lg-16"
       >
-        <v-form>
+        <v-form ref="form">
           <p class="text-h5">
             Fill out the form
           </p>
@@ -31,6 +31,7 @@
             color="green darken-1"
             dense
             outlined
+            :rules="inputRules"
           ></v-text-field>
 
           <v-text-field
@@ -38,6 +39,7 @@
             color="green darken-1"
             dense
             outlined
+            :rules="inputRules"
           ></v-text-field>
 
           <v-text-field
@@ -45,6 +47,7 @@
             color="green darken-1"
             dense
             outlined
+            :rules="inputRules"
           ></v-text-field>
 
           <v-text-field
@@ -52,6 +55,7 @@
             color="green darken-1"
             dense
             outlined
+            :rules="inputRules"
           ></v-text-field>
 
           <v-textarea
@@ -70,6 +74,7 @@
                 color="green darken-1"
                 depressed
                 class="pa-5 white--text"
+                @click="submit"
               >
                 Submit
               </v-btn>
@@ -82,8 +87,24 @@
 </template>
 
 <script>
+import msg from '~/util/message.js'
+
 export default {
   middleware: 'auth',
-  layout: 'appbar'
+  layout: 'appbar',
+  data () {
+    return {
+      inputRules: [
+        val => !!val || msg.form.inputRequired
+      ]
+    }
+  },
+  methods: {
+    submit () {
+      if (this.$refs.form.validate()) {
+        console.log('Submit')
+      }
+    }
+  }
 }
 </script>
