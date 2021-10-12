@@ -99,8 +99,7 @@ export default {
           $nuxt.$router.push({ name: 'index' })
         })
         .catch(err => {
-          console.log(err)
-          this.showNotification(err, 'error')
+          this.showNotification(err.code, 'error')
         })
       }
     },
