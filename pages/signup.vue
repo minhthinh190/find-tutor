@@ -2,8 +2,8 @@
   <v-container fill-height>
     <v-row justify="center">
       <v-col cols="12" sm="6" md="6" lg="4">
-        <v-card class="pa-6" outlined tile>
-          <v-card-title class="justify-center">
+        <v-card class="pa-6" outlined>
+          <v-card-title class="justify-center mb-4">
             <h3>Sign Up</h3>
           </v-card-title>
 
@@ -12,7 +12,9 @@
               <v-text-field
                 v-model="email"
                 label="Email"
-                color="teal lighten-1"
+                color="green darken-1"
+                dense
+                outlined
                 :rules="emailRules"
               ></v-text-field>
 
@@ -20,7 +22,9 @@
               <v-text-field
                 v-model="username"
                 label="Username"
-                color="teal lighten-1"
+                color="green darken-1"
+                dense
+                outlined
                 :rules="usernameRules"
               ></v-text-field>
               -->
@@ -28,7 +32,9 @@
               <v-text-field
                 v-model="password"
                 label="Password"
-                color="teal lighten-1"
+                color="green darken-1"
+                dense
+                outlined
                 :type="isPwShowed ? 'text' : 'password'"
                 :append-icon="isPwShowed ? 'mdi-eye' : 'mdi-eye-off'"
                 :rules="passwordRules"
@@ -38,7 +44,9 @@
               <v-text-field
                 label="Confirm Password"
                 ref="confirmPassword"
-                color="teal lighten-1"
+                color="green darken-1"
+                dense
+                outlined
                 :type="isCfPwShowed ? 'text' : 'password'"
                 :append-icon="isCfPwShowed ? 'mdi-eye' : 'mdi-eye-off'"
                 :rules="confirmPasswordRules"
@@ -51,11 +59,10 @@
             <v-row class="px-2 py-0">
               <v-col cols="12" sm=12 md="12" lg="12" align="center">
                 <v-btn
-                  color="teal lighten-1"
+                  color="green darken-1"
                   depressed
                   block
-                  tile
-                  class="text-capitalize white--text"
+                  class="py-5 text-capitalize white--text"
                   @click="signUp"
                 >
                   Sign Up
@@ -125,7 +132,21 @@ export default {
           email: this.email,
           password: this.password
         })
+        .then(uid => {
+          localStorage.setItem('uid', uid)
+          $nuxt.$router.push({ name: 'index' })
+        })
+        .catch(err => {
+          this.showNotification(err.code, 'error')
+        })
       }
+    },
+
+    showNotification (message, color) {
+      this.$store.dispatch('notification/showNotification', {
+        message,
+        color
+      })
     }
   }
 }
@@ -137,9 +158,9 @@ export default {
 }
 .link {
   text-decoration: none;
-  color: #26A69A;
+  color: #66BB6A;
 }
 .link:hover {
-  color: #00796B;
+  color: #43A047;
 }
 </style>

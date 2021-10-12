@@ -9,5 +9,8 @@ export default {
     invalidPwLength: 'Password must be more than 6 letters',
     confirmPwRequired: 'Please re-enter your password',
     pwNotMatch: 'Passwords do not match'
+  },
+  form: {
+    inputRequired: 'Please fill out the input'
   }
 }
