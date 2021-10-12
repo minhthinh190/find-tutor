@@ -137,9 +137,16 @@ export default {
           $nuxt.$router.push({ name: 'index' })
         })
         .catch(err => {
-          console.log('Sign up error:', err)
+          this.showNotification(err.code, 'error')
         })
       }
+    },
+
+    showNotification (message, color) {
+      this.$store.dispatch('notification/showNotification', {
+        message,
+        color
+      })
     }
   }
 }
