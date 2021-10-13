@@ -1,16 +1,18 @@
 <template>
-  <v-container class="py-7 pa-sm-16">
-    <v-row>
+  <v-container class="py-7 pa-sm-14">
+    <v-row justify="space-between">
       <v-col
         cols="12"
         sm="12"
         md="6"
-        class="px-sm-16 px-md-12 px-lg-16"
       >
         <div>
           <h2>Lorem ipsum dolor sit amet</h2>
           <p>
-            Duis a varius urna. Duis et cursus erat, vel euismod magna. Etiam rhoncus cursus porta. Vivamus sit amet tortor pretium.
+            Duis a varius urna. Duis et cursus erat, vel euismod magna. Etiam rhoncus cursus porta, vivamus sit amet tortor pretium.
+          </p>
+          <p>
+            Lorem a urna duis et erat vel etiam curus rhoncus.
           </p>
         </div>
       </v-col>
@@ -18,8 +20,7 @@
       <v-col
         cols="12"
         sm="12"
-        md="6"
-        class="px-sm-16 px-md-12 px-lg-16"
+        md="5"
       >
         <v-form ref="form">
           <p class="text-h5">
@@ -55,7 +56,6 @@
             color="green darken-1"
             dense
             outlined
-            :rules="inputRules"
           ></v-text-field>
 
           <v-textarea
@@ -108,3 +108,12 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.big-box {
+  border: 1px solid blue;
+}
+.box {
+  border: 1px solid red;
+}
+</style>
