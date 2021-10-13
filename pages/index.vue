@@ -1,5 +1,5 @@
 <template>
-  <v-container class="pa-16">
+  <v-container class="py-7 pa-sm-14">
     <v-row
       justify="center"
       class="py-5"
@@ -11,7 +11,7 @@
       justify="center"
       class="py-4"
     >
-      <nuxt-link to="/booking">
+      <nuxt-link to="/connect">
         <v-btn
           color="green darken-1"
           depressed
