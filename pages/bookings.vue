@@ -60,7 +60,10 @@
         :key="index"
       >
         <v-row>
-          <v-col cols="12" class="px-0">
+          <v-col
+            cols="12"
+            class="px-0"
+          >
             <v-card outlined>
               <v-card-title>
                 <nuxt-link
@@ -125,15 +128,6 @@ export default {
 </script>
 
 <style scoped>
-.big-box {
-  border: 1px solid blue;
-}
-.box {
-  border: 1px solid red;
-}
-.inside-box {
-  border: 1px solid limegreen;
-}
 .request-link {
   text-decoration: none;
   color: black;
