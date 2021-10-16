@@ -67,7 +67,6 @@ export default {
       navigation: [
         { title: 'Home', link: '/' },
         { title: 'Bookings', link: '/bookings' },
-        { title: 'Page 3', link: '' },
         { title: 'About', link: '' }
       ],
       menu: [
