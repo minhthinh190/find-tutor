@@ -11,13 +11,16 @@
       justify="center"
       class="py-4"
     >
-      <nuxt-link to="/connect">
+      <nuxt-link
+        to="/connect"
+        class="link"
+      >
         <v-btn
           color="green darken-1"
           depressed
           class="pa-5 white--text"
         >
-          Click Me
+          Let's Connect
         </v-btn>
       </nuxt-link>
     </v-row>
@@ -35,3 +38,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.link {
+  text-decoration: none;
+}
+</style>
