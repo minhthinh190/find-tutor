@@ -18,6 +18,8 @@
                 :rules="emailRules"
               ></v-text-field>
 
+              <v-spacer class="py-1" />
+
               <v-text-field
                 v-model="password"
                 label="Password"
@@ -29,6 +31,7 @@
                 :rules="passwordRules"
                 class="pb-0 mb-0"
                 @click:append="isPwShowed = !isPwShowed"
+                @keyup.enter="signIn"
               ></v-text-field>
 
               <nuxt-link to="" class="link">

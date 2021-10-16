@@ -18,6 +18,8 @@
                 :rules="emailRules"
               ></v-text-field>
 
+              <v-spacer class="py-1" />
+
               <!--
               <v-text-field
                 v-model="username"
@@ -41,6 +43,8 @@
                 @click:append="isPwShowed = !isPwShowed"
               ></v-text-field>
 
+              <v-spacer class="py-1" />
+
               <v-text-field
                 label="Confirm Password"
                 ref="confirmPassword"
@@ -51,6 +55,7 @@
                 :append-icon="isCfPwShowed ? 'mdi-eye' : 'mdi-eye-off'"
                 :rules="confirmPasswordRules"
                 @click:append="isCfPwShowed = !isCfPwShowed"
+                @keyup.enter="signUp"
               ></v-text-field>
             </v-form>
           </v-card-text>
