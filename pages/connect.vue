@@ -43,19 +43,21 @@
             :rules="inputRules"
           ></v-text-field>
 
+          <v-autocomplete
+            label="Format"
+            outlined
+            dense
+            color="green darken-1"
+            :items="formatOptions"
+            :rules="inputRules"
+          ></v-autocomplete>
+
           <v-text-field
             label="Contact"
             color="green darken-1"
             dense
             outlined
             :rules="inputRules"
-          ></v-text-field>
-
-          <v-text-field
-            label="Format"
-            color="green darken-1"
-            dense
-            outlined
           ></v-text-field>
 
           <v-textarea
@@ -96,7 +98,8 @@ export default {
     return {
       inputRules: [
         val => !!val || msg.form.inputRequired
-      ]
+      ],
+      formatOptions: ['Offline', 'Online']
     }
   },
   methods: {
@@ -108,12 +111,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.big-box {
-  border: 1px solid blue;
-}
-.box {
-  border: 1px solid red;
-}
-</style>
