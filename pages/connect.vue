@@ -28,6 +28,7 @@
           </p>
 
           <v-text-field
+            v-model="subject"
             label="Subject"
             color="green darken-1"
             dense
@@ -35,15 +36,8 @@
             :rules="inputRules"
           ></v-text-field>
 
-          <v-text-field
-            label="Address"
-            color="green darken-1"
-            dense
-            outlined
-            :rules="inputRules"
-          ></v-text-field>
-
           <v-autocomplete
+            v-model="format"
             label="Format"
             outlined
             dense
@@ -53,6 +47,16 @@
           ></v-autocomplete>
 
           <v-text-field
+            v-model="address"
+            label="Address"
+            color="green darken-1"
+            dense
+            outlined
+            :rules="inputRules"
+          ></v-text-field>
+
+          <v-text-field
+            v-model="contact"
             label="Contact"
             color="green darken-1"
             dense
@@ -61,6 +65,7 @@
           ></v-text-field>
 
           <v-textarea
+            v-model="description"
             label="Description"
             color="green darken-1"
             outlined
@@ -89,7 +94,7 @@
 </template>
 
 <script>
-import msg from '~/util/message.js'
+import msg from '~/util/message'
 
 export default {
   middleware: 'auth',
@@ -99,13 +104,22 @@ export default {
       inputRules: [
         val => !!val || msg.form.inputRequired
       ],
-      formatOptions: ['Offline', 'Online']
+      formatOptions: ['Offline', 'Online'],
+      subject: null,
+      format: null,
+      address: null,
+      contact: null,
+      description: null
     }
   },
   methods: {
     submit () {
       if (this.$refs.form.validate()) {
-        console.log('Submit')
+        console.log('subject:', this.subject)
+        console.log('format:', this.format)
+        console.log('address:', this.address)
+        console.log('contact:', this.contact)
+        console.log('description:', this.description)
       }
     }
   }
