@@ -115,11 +115,18 @@ export default {
   methods: {
     submit () {
       if (this.$refs.form.validate()) {
-        console.log('subject:', this.subject)
-        console.log('format:', this.format)
-        console.log('address:', this.address)
-        console.log('contact:', this.contact)
-        console.log('description:', this.description)
+        this.$store.dispatch('booking/sendBookingRequest', {
+          subject: this.subject,
+          format: this.format,
+          address: this.address,
+          contact: this.contact,
+          description: this.description
+        })
+          .then(() => {
+            console.log('send request succesfully!')
+          })
+        
+        this.$store.dispatch('booking/updateBookingListLength')
       }
     }
   }
