@@ -16,14 +16,36 @@ export const actions = {
       collection: 'user',
       docID: 'johndoe2@email.com',
       subCollection: 'bookings',
-      subDocID: '3'
+      subDocID: '9'
     }
-    return dbService.writeDataToSubDoc(
+    return dbService.addDataToSubDoc(
       destination.collection,
       destination.docID,
       destination.subCollection,
       destination.subDocID,
       request
+    )
+  },
+
+  async updateBookingListLength () {
+    let bookingCount = null
+
+    const destination = {
+      collection: 'user',
+      docID: 'johndoe2@email.com'
+    }
+    await dbService.getDataInDoc(destination.collection, destination.docID)
+      .then((docSnap) => {
+        bookingCount = docSnap.data().bookingCount
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+
+    dbService.updateDataInDoc(
+      destination.collection,
+      destination.docID,
+      { bookingCount: bookingCount + 1 }
     )
   }
 }
