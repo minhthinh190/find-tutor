@@ -95,6 +95,7 @@
 
 <script>
 import msg from '~/util/message'
+import { bookingAPI } from '~/api/bookings'
 
 export default {
   middleware: 'auth',
@@ -115,18 +116,21 @@ export default {
   methods: {
     submit () {
       if (this.$refs.form.validate()) {
-        this.$store.dispatch('booking/sendBookingRequest', {
+        const bookingData = {
           subject: this.subject,
           format: this.format,
           address: this.address,
           contact: this.contact,
           description: this.description
-        })
+        }
+
+        bookingAPI.createNewBooking(bookingData)
           .then(() => {
-            console.log('send request succesfully!')
+            console.log('Successful!')
           })
-        
-        this.$store.dispatch('booking/updateBookingListLength')
+          .catch((err) => {
+            console.log(err)
+          })
       }
     }
   }
