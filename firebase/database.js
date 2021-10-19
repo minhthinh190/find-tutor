@@ -28,12 +28,6 @@ const updateDataInDoc = (collection, docID, data) => {
   return updateDoc(docRef, data)
 }
 
-/*
-const fetchData = (collection, docID) => {
-  return getDoc(doc(db, collection, docID))
-}
-*/
-
 export const dbService = {
   getDataInDoc,
   addDataToDoc,
