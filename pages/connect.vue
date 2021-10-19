@@ -95,7 +95,7 @@
 
 <script>
 import msg from '~/util/message'
-import { bookingAPI } from '~/api/bookings'
+import { bookingAPI } from '~/api/booking'
 
 export default {
   middleware: 'auth',
