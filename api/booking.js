@@ -1,51 +1,51 @@
 import { dbService } from "~/firebase/database"
 
-const rootCollection = 'user'
-const userDoc = 'johndoe2@email.com'
-const collection = 'bookings'
+const _rootCollection = 'user'
+const _collection = 'bookings'
+// const userDoc = 'johndoe2@email.com'
 
-const getBookingIdCount = async () => {
-  const res = await dbService.getDataInDoc(rootCollection, userDoc)
+const getBookingIdCount = async (userDoc) => {
+  const res = await dbService.getDataInDoc(_rootCollection, userDoc)
   const bookingIdCount = res.data().bookingIdCount
   return bookingIdCount
 }
 
-const getNumberOfBookings = async () => {
-  const res = await dbService.getDataInDoc(rootCollection, userDoc)
+const getNumberOfBookings = async (userDoc) => {
+  const res = await dbService.getDataInDoc(_rootCollection, userDoc)
   const bookingCount = res.data().bookingCount
   return bookingCount
 }
 
-const updateNumberOfBookings = async () => {
-  const numberOfBookings = await getNumberOfBookings()
+const updateNumberOfBookings = async (userDoc) => {
+  const numberOfBookings = await getNumberOfBookings(userDoc)
 
-  dbService.updateDataInDoc(rootCollection, userDoc, {
+  dbService.updateDataInDoc(_rootCollection, userDoc, {
     bookingCount: numberOfBookings + 1
   })
 }
 
-const updateBookingIdCount = async () => {
-  const bookingIdCount = await getBookingIdCount()
+const updateBookingIdCount = async (userDoc) => {
+  const bookingIdCount = await getBookingIdCount(userDoc)
 
-  dbService.updateDataInDoc(rootCollection, userDoc, {
+  dbService.updateDataInDoc(_rootCollection, userDoc, {
     bookingIdCount: bookingIdCount + 1
   })
 }
 
-const createNewBooking = async (bookingData) => {
-  let currentBookingId = await getBookingIdCount()
-  currentBookingId += 1
+const createNewBooking = async (userDoc, bookingData) => {
+  let currentBookingId = await getBookingIdCount(userDoc)
+  currentBookingId++
 
   return dbService.addDataToSubDoc(
-    rootCollection,
+    _rootCollection,
     userDoc,
-    collection,
+    _collection,
     currentBookingId.toString(),
     bookingData
   )
     .then(async () => {
-      await updateBookingIdCount()
-      await updateNumberOfBookings()
+      await updateBookingIdCount(userDoc)
+      await updateNumberOfBookings(userDoc)
     })
 }
 
