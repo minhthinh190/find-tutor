@@ -81,9 +81,8 @@ export default {
       this[action]()
     },
     signOut () {
-      this.$store.dispatch('auth/signOut')
+      this.$store.dispatch('user/signOut')
         .then(() => {
-          localStorage.removeItem('uid')
           $nuxt.$router.push({ name: 'signin' })
         })
         .catch(err => {
