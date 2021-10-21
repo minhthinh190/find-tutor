@@ -133,12 +133,11 @@ export default {
   methods: {
     signUp () {
       if (this.$refs.form.validate()) {
-        this.$store.dispatch('auth/signUp', {
+        this.$store.dispatch('user/signUp', {
           email: this.email,
           password: this.password
         })
-        .then(uid => {
-          localStorage.setItem('uid', uid)
+        .then(() => {
           $nuxt.$router.push({ name: 'index' })
         })
         .catch(err => {
