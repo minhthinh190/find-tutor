@@ -96,6 +96,7 @@
 <script>
 import msg from '~/util/message'
 import { bookingAPI } from '~/api/booking'
+import { mapGetters } from 'vuex'
 
 export default {
   middleware: 'auth',
@@ -113,6 +114,11 @@ export default {
       description: null
     }
   },
+  computed: {
+    ...mapGetters('user', {
+      userEmail: 'userEmail'
+    })
+  },
   methods: {
     submit () {
       if (this.$refs.form.validate()) {
@@ -124,14 +130,22 @@ export default {
           description: this.description
         }
 
-        bookingAPI.createNewBooking(bookingData)
+        bookingAPI.createNewBooking(this.userEmail, bookingData)
           .then(() => {
-            console.log('Successful!')
+            this.showNotification('Your request sent!', 'success')
           })
           .catch((err) => {
             console.log(err)
+            this.showNotification(err, 'error')
           })
       }
+    },
+
+    showNotification (message, color) {
+      this.$store.dispatch('notification/showNotification', {
+        message,
+        color
+      })
     }
   }
 }
