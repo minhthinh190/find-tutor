@@ -1,4 +1,5 @@
 import { authService } from '~/firebase/auth'
+import { bookingAPI } from './booking'
 
 const signUserIn = (email, password) => {
   return authService.signUserIn(email, password)
@@ -16,6 +17,10 @@ const signUserUp = (email, password) => {
       const { uid, email } = res.user
       localStorage.setItem('uid', uid)
 
+      return { uid, email }
+    })
+    .then (async ({ uid, email }) => {
+      await bookingAPI.createBookingCounter(email)
       return { uid, email }
     })
 }
