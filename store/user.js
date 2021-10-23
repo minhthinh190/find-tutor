@@ -3,25 +3,24 @@ import { authAPI } from '~/api/auth'
 const userId = localStorage.getItem('uid')
 
 export const state = () => ({
-  user: {
-    id: userId ? userId : null,
-    email: null
-  }
+  id: userId ? userId : null,
+  email: null
 })
 
 export const getters = {
   userId: (state) => {
-    return state.user.id
+    return state.id
   },
 
   userEmail: (state) => {
-    return state.user.email
+    return state.email
   }
 }
 
 export const mutations = {
   setUser (state, user) {
-    state.user = user
+    state.id = user.id
+    state.email = user.email
   }
 }
 
@@ -43,7 +42,7 @@ export const actions = {
   signOut ({ commit }) {
     return authAPI.signUserOut()
       .then(() => {
-        commit('setUser', null)
+        commit('setUser', { id: null, email: null })
       })
   }
 }
