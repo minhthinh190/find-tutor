@@ -127,12 +127,16 @@ export default {
           format: this.format,
           address: this.address,
           contact: this.contact,
-          description: this.description
+          description: this.description,
+          tutors: [],
+          status: 'waiting',
+          createdDate: new Date().toLocaleDateString()
         }
 
         bookingAPI.createNewBooking(this.userEmail, bookingData)
           .then(() => {
             this.showNotification('Your request sent!', 'success')
+            this.$refs.form.reset()
           })
           .catch((err) => {
             console.log(err)
