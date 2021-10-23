@@ -5,7 +5,11 @@ export const state = () => ({
 export const getters = {
   numberOfBookings: (state) => {
     return state.list.length
-  } 
+  },
+
+  bookingList: (state) => {
+    return state.list
+  }
 }
 
 export const mutations = {
@@ -14,4 +18,8 @@ export const mutations = {
   }
 }
 
-export const actions = {}
+export const actions = {
+  getBookingList ({ commit }) {
+    
+  }
+}
