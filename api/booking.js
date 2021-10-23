@@ -2,7 +2,6 @@ import { dbService } from "~/firebase/database"
 
 const _rootCollection = 'user'
 const _collection = 'bookings'
-// const userDoc = 'johndoe2@email.com'
 
 const getBookingIdCount = async (userDoc) => {
   const res = await dbService.getDataInDoc(_rootCollection, userDoc)
