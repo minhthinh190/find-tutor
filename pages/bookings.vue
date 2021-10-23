@@ -70,7 +70,7 @@
                   to=""
                   class="request-link"
                 >
-                  {{ item.title }}
+                  {{ item.subject }}
                 </nuxt-link>
 
                 <v-spacer />
@@ -109,12 +109,12 @@ export default {
     return {
       filters: ['All', 'Finished', 'On-going', 'Waiting'],
       bookingList: [
-        { title: 'Request title', tutor: "this is tutor's name", status: 'Waiting', createdDate: '14/10/2021' },
-        { title: 'Request title', tutor: "this is tutor's name", status: 'On-going', createdDate: '06/09/2021' },
-        { title: 'Request title', tutor: "this is tutor's name", status: 'Finished', createdDate: '22/06/2021' },
-        { title: 'Request title', tutor: "this is tutor's name", status: 'Finished', createdDate: '30/03/2021' },
-        { title: 'Request title', tutor: "this is tutor's name", status: 'Finished', createdDate: '15/11/2020' },
-        { title: 'Request title', tutor: "this is tutor's name", status: 'Finished', createdDate: '15/03/2019' }
+        { subject: 'Subject', tutor: "this is tutor's name", status: 'Waiting', createdDate: '14/10/2021' },
+        { subject: 'Subject', tutor: "this is tutor's name", status: 'On-going', createdDate: '06/09/2021' },
+        { subject: 'Subject', tutor: "this is tutor's name", status: 'Finished', createdDate: '22/06/2021' },
+        { subject: 'Subject', tutor: "this is tutor's name", status: 'Finished', createdDate: '30/03/2021' },
+        { subject: 'Subject', tutor: "this is tutor's name", status: 'Finished', createdDate: '15/11/2020' },
+        { subject: 'Subject', tutor: "this is tutor's name", status: 'Finished', createdDate: '15/03/2019' }
       ],
       currentFilter: 'All'
     }
