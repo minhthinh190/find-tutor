@@ -3,6 +3,34 @@ import { dbService } from "~/firebase/database"
 const _rootCollection = 'user'
 const _collection = 'bookings'
 
+const createBookingCounter = async (userDoc) => {
+  await dbService.addDataToDoc(_rootCollection, userDoc, {
+    bookingCount: 0,
+    bookingIdCount: 0
+  })
+}
+
+const createNewBooking = async (userDoc, bookingData) => {
+  let currentBookingId = await getBookingIdCount(userDoc)
+  currentBookingId++
+
+  return dbService.addDataToSubDoc(
+    _rootCollection,
+    userDoc,
+    _collection,
+    currentBookingId.toString(),
+    bookingData
+  )
+    .then(async () => {
+      await updateBookingIdCount(userDoc)
+      await updateNumberOfBookings(userDoc)
+    })
+},
+
+///
+const getBookingList = async (userDoc) => {}
+///
+
 const getBookingIdCount = async (userDoc) => {
   const res = await dbService.getDataInDoc(_rootCollection, userDoc)
   const bookingIdCount = res.data().bookingIdCount
@@ -31,24 +59,8 @@ const updateBookingIdCount = async (userDoc) => {
   })
 }
 
-const createNewBooking = async (userDoc, bookingData) => {
-  let currentBookingId = await getBookingIdCount(userDoc)
-  currentBookingId++
-
-  return dbService.addDataToSubDoc(
-    _rootCollection,
-    userDoc,
-    _collection,
-    currentBookingId.toString(),
-    bookingData
-  )
-    .then(async () => {
-      await updateBookingIdCount(userDoc)
-      await updateNumberOfBookings(userDoc)
-    })
-}
-
 export const bookingAPI = {
-  getNumberOfBookings,
-  createNewBooking
+  createBookingCounter,
+  createNewBooking,
+  getNumberOfBookings
 }
