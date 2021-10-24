@@ -1,5 +1,5 @@
 export default function ({ store, redirect }) {
-  const isAuthenticated = store.state.auth.user ? true : false
+  const isAuthenticated = store.state.user.id ? true : false
 
   if (!isAuthenticated) {
     redirect({ name: 'signin' })

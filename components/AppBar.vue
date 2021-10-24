@@ -17,8 +17,8 @@
         <nuxt-link
           v-for="(item, index) in navigation"
           :key="index"
-          to=""
-          class="mx-4 font-weight-bold link"
+          :to="item.link"
+          class="mx-8 font-weight-bold nav"
         >
           {{ item.title }}
         </nuxt-link>
@@ -35,7 +35,7 @@
 
         <!-- Popup menu -->
         <v-card width="220">
-          <v-list dense nav class="">
+          <v-list dense nav>
             <v-list-item-group>
               <v-list-item
                 v-for="(item, index) in menu"
@@ -65,15 +65,12 @@ export default {
   data () {
     return {
       navigation: [
-        { title: 'Page 1', link: '' },
-        { title: 'Page 2', link: '' },
-        { title: 'Page 3', link: '' },
-        { title: 'Page 4', link: '' }
+        { title: 'Home', link: '/' },
+        { title: 'Bookings', link: '/bookings' },
+        { title: 'About', link: '' }
       ],
       menu: [
         { title: 'Profile', icon: 'mdi-account-circle', action: '' },
-        { title: 'Starred', icon: 'mdi-star', action: '' },
-        { title: 'Recent', icon: 'mdi-history', action: '' },
         { title: 'Account Settings', icon: 'mdi-cog', action: '' },
         { title: 'Sign Out', icon: 'mdi-logout', action: 'signOut' }
       ]
@@ -84,9 +81,8 @@ export default {
       this[action]()
     },
     signOut () {
-      this.$store.dispatch('auth/signOut')
+      this.$store.dispatch('user/signOut')
         .then(() => {
-          localStorage.removeItem('uid')
           $nuxt.$router.push({ name: 'signin' })
         })
         .catch(err => {
@@ -103,11 +99,8 @@ export default {
   text-decoration: none;
   font-weight: bold;
 }
-.link {
-  color: #9E9E9E;
-  text-decoration: none;
-}
-.link:hover {
+.nav {
   color: black;
+  text-decoration: none;
 }
 </style>

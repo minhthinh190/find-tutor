@@ -93,12 +93,11 @@ export default {
   methods: {
     signIn () {
       if (this.$refs.form.validate()) {
-        this.$store.dispatch('auth/signIn', {
+        this.$store.dispatch('user/signIn', {
           email: this.email,
           password: this.password
         })
-        .then(uid => {
-          localStorage.setItem('uid', uid)
+        .then(() => {
           $nuxt.$router.push({ name: 'index' })
         })
         .catch(err => {

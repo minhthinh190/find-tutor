@@ -1,9 +1,12 @@
-import { auth } from '~/firebase/config.js'
+import { app } from '~/firebase/config.js'
+import { getAuth } from 'firebase/auth'
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut
 } from 'firebase/auth'
+
+const auth = getAuth(app)
 
 const signUserIn = (email, password) => {
   return signInWithEmailAndPassword(auth, email, password)
@@ -17,7 +20,7 @@ const signUserOut = () => {
   return signOut(auth)
 }
 
-export const userService = {
+export const authService = {
   signUserIn,
   signUserUp,
   signUserOut
