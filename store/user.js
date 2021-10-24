@@ -1,10 +1,11 @@
 import { authAPI } from '~/api/auth'
 
 const userId = localStorage.getItem('uid')
+const userEmail = localStorage.getItem('email')
 
 export const state = () => ({
   id: userId ? userId : null,
-  email: null
+  email: userEmail ? userEmail : null
 })
 
 export const getters = {
