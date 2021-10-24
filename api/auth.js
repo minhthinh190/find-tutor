@@ -6,6 +6,7 @@ const signUserIn = (email, password) => {
     .then((res) => {
       const { uid, email } = res.user
       localStorage.setItem('uid', uid)
+      localStorage.setItem('email', email)
 
       return { uid, email }
     })
@@ -16,6 +17,7 @@ const signUserUp = (email, password) => {
     .then((res) => {
       const { uid, email } = res.user
       localStorage.setItem('uid', uid)
+      localStorage.setItem('email', email)
 
       return { uid, email }
     })
@@ -29,6 +31,7 @@ const signUserOut = () => {
   return authService.signUserOut()
     .then(() => {
       localStorage.removeItem('uid')
+      localStorage.removeItem('email')
     })
 }
 
