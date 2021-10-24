@@ -1,3 +1,5 @@
+import { initializeApp } from 'firebase/app'
+import { config } from '~/firebase/config'
 import {
   getFirestore,
   collection,
@@ -5,8 +7,12 @@ import {
   getDoc,
   getDocs,
   setDoc,
-  updateDoc
+  updateDoc,
+  query,
+  where
 } from 'firebase/firestore'
+
+initializeApp(config)
 
 const db = getFirestore()
 const _rootCollection = 'user'
@@ -37,7 +43,11 @@ const getBookingList = async (userDoc) => {
   const querySnapshot = await getDocs(
     collection(db, _rootCollection, userDoc, _collection)
   )
-  const bookingList = querySnapshot.map((doc) => doc.data())
+  const bookingList = []
+
+  querySnapshot.forEach((doc) => {
+    bookingList.push(doc.data())
+  })
   return bookingList
 }
 
@@ -75,9 +85,23 @@ const updateBookingIdCount = async (userDoc) => {
   })
 }
 
+const queryBookingByProperty = async (userDoc, property, value) => {
+  const queryRef = collection(db, _rootCollection, userDoc, _collection)
+  const q = query(queryRef, where(property, '==', value))
+
+  const querySnapshot = await getDocs(q)
+  const bookingList = []
+
+  querySnapshot.forEach((doc) => {
+    bookingList.push(doc.data())
+  })
+  return bookingList
+}
+
 export const bookingAPI = {
   createBookingCounter,
-  getBookingList,
   createNewBooking,
-  getNumberOfBookings
+  getBookingList,
+  getNumberOfBookings,
+  queryBookingByProperty
 }
