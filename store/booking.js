@@ -1,3 +1,5 @@
+import { bookingAPI } from '~/api/booking'
+
 export const state = () => ({
   list: null
 })
@@ -19,7 +21,15 @@ export const mutations = {
 }
 
 export const actions = {
-  getBookingList ({ commit }) {
-    
+  async getBookingList ({ commit, rootState }) {
+    const userEmail = rootState.user.email
+    const bookingList = await bookingAPI.getBookingList(userEmail)
+    commit('setList', bookingList)
+  },
+
+  async findBooking ({ commit, rootState }, { property, value }) {
+    const userEmail = rootState.user.email
+    const bookingList = await bookingAPI.queryBookingByProperty(userEmail, property, value)
+    commit('setList', bookingList)
   }
 }
