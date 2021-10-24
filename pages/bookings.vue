@@ -54,7 +54,15 @@
       </v-menu>
     </v-row>
 
-    <v-row>
+    <v-row v-if="bookingList === null || !bookingList.length">
+      <v-container>
+        <h2 class="text-center">
+          You don't have any request.
+        </h2>
+      </v-container>
+    </v-row>
+
+    <v-row v-else>
       <v-container
         v-for="(item, index) in bookingList"
         :key="index"
@@ -70,7 +78,7 @@
                   to=""
                   class="request-link"
                 >
-                  {{ item.subject }}
+                  {{ capitalizeFirstLetter(item.subject) }}
                 </nuxt-link>
 
                 <v-spacer />
@@ -83,15 +91,23 @@
               <v-card-subtitle>
                 Tutor:
                 <nuxt-link
+                  v-for="(tutor, index) in item.tutors"
+                  :key="index"
                   to=""
                   class="link"
                 >
-                  {{ item.tutor }}
+                  {{ tutor }}
+                  <span
+                    v-if="index !== item.tutors.length - 1"
+                    class="comma"
+                  >
+                    ,&nbsp;
+                  </span>
                 </nuxt-link>
               </v-card-subtitle>
 
               <v-card-text class="font-weight-bold">
-                {{ item.status }}
+                {{ capitalizeFirstLetter(item.status) }}
               </v-card-text>
             </v-card>
           </v-col>
@@ -102,26 +118,48 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   middleware: 'auth',
   layout: 'appbar',
   data () {
     return {
       filters: ['All', 'Finished', 'On-going', 'Waiting'],
-      bookingList: [
-        { subject: 'Subject', tutor: "this is tutor's name", status: 'Waiting', createdDate: '14/10/2021' },
-        { subject: 'Subject', tutor: "this is tutor's name", status: 'On-going', createdDate: '06/09/2021' },
-        { subject: 'Subject', tutor: "this is tutor's name", status: 'Finished', createdDate: '22/06/2021' },
-        { subject: 'Subject', tutor: "this is tutor's name", status: 'Finished', createdDate: '30/03/2021' },
-        { subject: 'Subject', tutor: "this is tutor's name", status: 'Finished', createdDate: '15/11/2020' },
-        { subject: 'Subject', tutor: "this is tutor's name", status: 'Finished', createdDate: '15/03/2019' }
-      ],
       currentFilter: 'All'
     }
   },
+  computed: {
+    ...mapState({
+      bookingList: state => state.booking.list
+    })
+  },
+  watch: {
+    currentFilter () {
+      this.filterBookings()
+    }
+  },
+  created () {
+    this.$store.dispatch('booking/getBookingList')
+  },
   methods: {
+    filterBookings () {
+      const property = 'status'
+      const value = this.currentFilter.toLowerCase()
+
+      if (value === 'all') {
+        this.$store.dispatch('booking/getBookingList')
+      } else {
+        this.$store.dispatch('booking/findBooking', { property, value })
+      }
+    },
+
     selectItem (item) {
       this.currentFilter = item
+    },
+
+    capitalizeFirstLetter (str) {
+      return str.charAt(0).toUpperCase() + str.slice(1)
     }
   }
 }
@@ -138,5 +176,8 @@ export default {
 }
 .link:hover {
   color: #43A047;
+}
+.comma {
+  color: black;
 }
 </style>
