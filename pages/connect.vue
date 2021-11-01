@@ -55,6 +55,42 @@
             :rules="inputRules"
           ></v-text-field>
 
+          <v-row>
+            <v-col>
+              <v-text-field
+                v-model="perWeek"
+                label="Sessions per week"
+                type="number"
+                color="green darken-1"
+                dense
+                outlined
+                :rules="inputRules"
+              ></v-text-field>
+            </v-col>
+
+            <v-col>
+              <v-text-field
+                v-model="duration"
+                label="Duration (mins)"
+                type="number"
+                color="green darken-1"
+                dense
+                outlined
+                :rules="inputRules"
+              ></v-text-field>
+            </v-col>
+          </v-row>
+
+          <v-text-field
+            v-model="time"
+            label="Time"
+            type="time"
+            color="green darken-1"
+            dense
+            outlined
+            :rules="inputRules"
+          ></v-text-field>
+
           <v-text-field
             v-model="contact"
             label="Contact"
@@ -110,6 +146,9 @@ export default {
       subject: null,
       format: null,
       address: null,
+      perWeek: null,
+      duration: null,
+      time: null,
       contact: null,
       description: null
     }
@@ -126,6 +165,9 @@ export default {
           subject: this.subject,
           format: this.format,
           address: this.address,
+          perWeek: this.perWeek,
+          duration: this.duration,
+          time: this.time,
           contact: this.contact,
           description: this.description,
           tutors: [],
