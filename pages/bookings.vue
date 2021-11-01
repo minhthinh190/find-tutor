@@ -75,7 +75,7 @@
             <v-card outlined>
               <v-card-title>
                 <nuxt-link
-                  to=""
+                  :to="{ name: 'booking-id', params: { id: item.id } }"
                   class="request-link"
                 >
                   {{ capitalizeFirstLetter(item.subject) }}
@@ -140,7 +140,7 @@ export default {
     }
   },
   created () {
-    this.$store.dispatch('booking/getBookingList')
+    this.$store.dispatch('booking/getBookings')
   },
   methods: {
     filterBookings () {
@@ -148,9 +148,9 @@ export default {
       const value = this.currentFilter.toLowerCase()
 
       if (value === 'all') {
-        this.$store.dispatch('booking/getBookingList')
+        this.$store.dispatch('booking/getBookings')
       } else {
-        this.$store.dispatch('booking/findBooking', { property, value })
+        this.$store.dispatch('booking/getBookingsByStatus', { property, value })
       }
     },
 
