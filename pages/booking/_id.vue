@@ -1,7 +1,8 @@
 <template>
   <v-container
     v-if="booking"
-    class="py-7 pa-sm-14"
+    fluid
+    class="py-7 pa-sm-16"
   >
     <v-row class="mb-4 box">
       <h2>
@@ -10,44 +11,48 @@
     </v-row>
 
     <v-row class="mb-4 box">
-      <v-col>
-        <v-chip
-          v-if="booking.status === 'waiting'"
-          label
-          dark
-          color="grey darken-1"
-        >
-          <span class="font-weight-bold">
-            {{ capitalizeFirstLetter(booking.status) }}
-          </span>
-        </v-chip>
+      <v-container>
+        <v-row>
+          <v-col>
+            <v-chip
+              v-if="booking.status === 'waiting'"
+              label
+              dark
+              color="grey darken-1"
+            >
+              <span class="font-weight-bold">
+                {{ capitalizeFirstLetter(booking.status) }}
+              </span>
+            </v-chip>
 
-        <v-chip
-          v-if="booking.status === 'finished'"
-          label
-          dark
-          color="success"
-        >
-          <span class="font-weight-bold">
-            {{ capitalizeFirstLetter(booking.status) }}
-          </span>
-        </v-chip>
+            <v-chip
+              v-if="booking.status === 'finished'"
+              label
+              dark
+              color="success"
+            >
+              <span class="font-weight-bold">
+                {{ capitalizeFirstLetter(booking.status) }}
+              </span>
+            </v-chip>
 
-        <v-chip
-          v-if="booking.status === 'on-going'"
-          label
-          dark
-          color="blue darken-2"
-        >
-          <span class="font-weight-bold">
-            {{ capitalizeFirstLetter(booking.status) }}
-          </span>
-        </v-chip>
-      </v-col>
+            <v-chip
+              v-if="booking.status === 'on-going'"
+              label
+              dark
+              color="blue darken-2"
+            >
+              <span class="font-weight-bold">
+                {{ capitalizeFirstLetter(booking.status) }}
+              </span>
+            </v-chip>
+          </v-col>
 
-      <v-col>
-        <p>{{ booking.createdDate }}</p>
-      </v-col>
+          <v-col>
+            <p>{{ booking.createdDate }}</p>
+          </v-col>
+        </v-row>
+      </v-container>
     </v-row>
 
     <v-row class="mb-4 box">
@@ -106,7 +111,7 @@
     </v-row>
 
     <v-row class="mb-4 box">
-      <v-container>
+      <v-container class="box">
         <v-row>
           <h4>Description</h4>
         </v-row>
@@ -147,10 +152,10 @@ export default {
 
 <style scoped>
 .box {
-  border: 1px solid white;
+  border: 1px solid red;
 }
 .col {
-  border: 1px solid white;
+  border: 1px solid blue;
   padding: 0;
 }
 </style>

@@ -1,6 +1,9 @@
 <template>
-  <v-container class="py-7 pa-sm-14">
-    <v-row class="mb-4">
+  <v-container
+    fluid
+    class="py-7 pa-sm-16 root-container"
+  >
+    <v-row class="mb-4 px-md-16">
       <p class="text-h5 ma-0">
         {{ currentFilter }}
       </p>
@@ -54,36 +57,43 @@
       </v-menu>
     </v-row>
 
-    <v-row v-if="bookingList === null || !bookingList.length">
-      <v-container>
+    <v-row
+      v-if="bookingList === null || !bookingList.length"
+      class="px-md-16"
+    >
+      <v-container fluid>
         <h2 class="text-center">
           You don't have any request.
         </h2>
       </v-container>
     </v-row>
 
-    <v-row v-else>
+    <v-row
+      v-else
+      class="px-md-16"
+    >
       <v-container
         v-for="(item, index) in bookingList"
         :key="index"
+        fluid
       >
         <v-row>
           <v-col
             cols="12"
             class="px-0"
           >
-            <v-card outlined>
+            <v-card elevation="0">
               <v-card-title>
                 <nuxt-link
                   :to="{ name: 'booking-id', params: { id: item.id } }"
-                  class="request-link"
+                  class="link"
                 >
                   {{ capitalizeFirstLetter(item.subject) }}
                 </nuxt-link>
 
                 <v-spacer />
 
-                <p class="ma-0 subtitle-1">
+                <p class="ma-0 subtitle-1 text--disabled">
                   {{ item.createdDate }}
                 </p>
               </v-card-title>
@@ -166,16 +176,15 @@ export default {
 </script>
 
 <style scoped>
-.request-link {
-  text-decoration: none;
-  color: black;
+.root-container {
+  background: #F5F5F5;
 }
 .link {
   text-decoration: none;
-  color: #66BB6A;
+  color: #00BFA5;
 }
 .link:hover {
-  color: #43A047;
+  filter: brightness(70%);
 }
 .comma {
   color: black;
