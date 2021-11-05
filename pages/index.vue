@@ -1,28 +1,60 @@
 <template>
-  <v-container class="py-7 pa-sm-14">
+  <v-container
+    fluid
+    class="py-7 pa-sm-16 root-container"
+  >
     <v-row
-      justify="center"
-      class="py-5"
+      justify="space-between"
+      class="px-md-16"
     >
-      <h1>Lorem ipsum dolor sit amet</h1>
-    </v-row>
-
-    <v-row
-      justify="center"
-      class="py-4"
-    >
-      <nuxt-link
-        to="/connect"
-        class="link"
+      <v-col
+        cols="12"
+        sm="12"
+        md="6"
+        class="pr-10 inside-box"
       >
-        <v-btn
-          color="green darken-1"
-          depressed
-          class="pa-5 white--text"
-        >
-          Let's Connect
-        </v-btn>
-      </nuxt-link>
+        <div>
+          <h1 class="pb-4">
+            Lorem ipsum dolor sit amet
+          </h1>
+          <p class="pb-4">
+            Lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum.
+          </p>
+
+          <nuxt-link
+            to="/connect"
+            class="link"
+          >
+            <v-btn
+              color="teal accent-4"
+              depressed
+              class="pa-5 white--text"
+            >
+              Let's Connect
+            </v-btn>
+          </nuxt-link>
+        </div>
+      </v-col>
+
+      <v-col
+        cols="12"
+        sm="12"
+        md="6"
+        class="pl-10 inside-box"
+      >
+        <div>
+          <p>Image Container</p>
+          <p>Image Container</p>
+          <p>Image Container</p>
+          <p>Image Container</p>
+          <p>Image Container</p>
+          <p>Image Container</p>
+          <p>Image Container</p>
+          <p>Image Container</p>
+          <p>Image Container</p>
+          <p>Image Container</p>
+        </div>
+      </v-col>
     </v-row>
   </v-container>
 </template>
@@ -42,5 +74,11 @@ export default {
 <style scoped>
 .link {
   text-decoration: none;
+}
+.inside-box {
+  border: 1px solid blue;
+}
+.root-container {
+  background: #F5F5F5;
 }
 </style>
