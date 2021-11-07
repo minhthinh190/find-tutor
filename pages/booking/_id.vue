@@ -2,7 +2,7 @@
   <v-container
     v-if="booking"
     fluid
-    class="py-7 pa-sm-16"
+    class="py-7 pa-sm-16 root-container"
   >
     <v-row class="mb-4 box">
       <h2>
