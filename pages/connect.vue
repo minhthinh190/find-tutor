@@ -1,7 +1,7 @@
 <template>
   <v-container
     fluid
-    class="py-7 pa-sm-16 box"
+    class="py-7 pa-sm-16 root-container"
   >
     <v-row
       justify="space-between"
@@ -37,28 +37,25 @@
           <v-text-field
             v-model="subject"
             label="Subject"
-            color="teal accent-4"
-            dense
-            outlined
+            solo
+            flat
             :rules="inputRules"
           ></v-text-field>
 
-          <v-autocomplete
+          <v-select
             v-model="format"
             label="Format"
-            outlined
-            dense
-            color="teal accent-4"
+            solo
+            flat
             :items="formatOptions"
             :rules="inputRules"
-          ></v-autocomplete>
+          ></v-select>
 
           <v-text-field
             v-model="address"
             label="Address"
-            color="teal accent-4"
-            dense
-            outlined
+            solo
+            flat
             :rules="inputRules"
           ></v-text-field>
 
@@ -68,9 +65,8 @@
                 v-model="perWeek"
                 label="Sessions per week"
                 type="number"
-                color="teal accent-4"
-                dense
-                outlined
+                solo
+                flat
                 :rules="inputRules"
               ></v-text-field>
             </v-col>
@@ -80,9 +76,8 @@
                 v-model="duration"
                 label="Duration (mins)"
                 type="number"
-                color="teal accent-4"
-                dense
-                outlined
+                solo
+                flat
                 :rules="inputRules"
               ></v-text-field>
             </v-col>
@@ -92,26 +87,24 @@
             v-model="time"
             label="Time"
             type="time"
-            color="teal accent-4"
-            dense
-            outlined
+            solo
+            flat
             :rules="inputRules"
           ></v-text-field>
 
           <v-text-field
             v-model="contact"
             label="Contact"
-            color="teal accent-4"
-            dense
-            outlined
+            solo
+            flat
             :rules="inputRules"
           ></v-text-field>
 
           <v-textarea
             v-model="description"
             label="Description"
-            color="teal accent-4"
-            outlined
+            solo
+            flat
             rows="4"
             no-resize
           ></v-textarea>
@@ -121,7 +114,7 @@
 
             <v-col class="text-right">
               <v-btn
-                color="teal accent-4"
+                color="teal darken-1"
                 depressed
                 class="pa-5 white--text"
                 @click="submit"
@@ -205,7 +198,9 @@ export default {
 </script>
 
 <style scoped>
+/*
 .box {
   border: 1px solid blue;
 }
+*/
 </style>
