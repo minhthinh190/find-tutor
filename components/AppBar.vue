@@ -19,7 +19,7 @@
           v-for="(item, index) in navigation"
           :key="index"
           :to="item.link"
-          class="mx-8 font-weight-bold nav"
+          class="mx-6 font-weight-bold nav"
         >
           {{ item.title }}
         </nuxt-link>
@@ -67,12 +67,13 @@ export default {
     return {
       navigation: [
         { title: 'Home', link: '/' },
+        { title: 'Search', link: '' },
         { title: 'About', link: '' }
       ],
       menu: [
-        { title: 'My bookings', icon: 'mdi-book-education-outline', action: 'goToBookingList' },
-        { title: 'My notifications', icon: 'mdi-bell-outline', action: '' },
-        { title: 'My Profile', icon: 'mdi-account-circle-outline', action: '' },
+        { title: 'My bookings', icon: 'mdi-book-education', action: 'goToBookingList' },
+        { title: 'My notifications', icon: 'mdi-bell', action: '' },
+        { title: 'My Profile', icon: 'mdi-account', action: '' },
         { title: 'Sign Out', icon: 'mdi-logout', action: 'signOut' }
       ]
     }
