@@ -11,7 +11,7 @@
         cols="12"
         sm="12"
         md="6"
-        class="pr-10 inside-box"
+        class="pr-md-10"
       >
         <div>
           <h1 class="pb-4">
@@ -26,7 +26,7 @@
             class="link"
           >
             <v-btn
-              color="teal accent-4"
+              color="teal darken-1"
               depressed
               class="pa-5 white--text"
             >
@@ -40,19 +40,14 @@
         cols="12"
         sm="12"
         md="6"
-        class="pl-10 inside-box"
+        class="pl-md-10"
       >
         <div>
-          <p>Image Container</p>
-          <p>Image Container</p>
-          <p>Image Container</p>
-          <p>Image Container</p>
-          <p>Image Container</p>
-          <p>Image Container</p>
-          <p>Image Container</p>
-          <p>Image Container</p>
-          <p>Image Container</p>
-          <p>Image Container</p>
+          <img
+            src="~/assets/images/cover_image.jpg"
+            alt="cover image"
+            class="cover-image"
+          />
         </div>
       </v-col>
     </v-row>
@@ -72,13 +67,16 @@ export default {
 </script>
 
 <style scoped>
+.box {
+  border: 1px solid red;
+}
 .link {
   text-decoration: none;
 }
 .inside-box {
   border: 1px solid blue;
 }
-.root-container {
-  background: #F5F5F5;
+.cover-image {
+  width: 100%;
 }
 </style>

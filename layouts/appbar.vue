@@ -3,6 +3,7 @@
     <v-main>
       <AppBar />
       <Nuxt />
+      <Footer />
     </v-main>
 
     <v-snackbar
@@ -29,10 +30,12 @@
 <script>
 import { mapState } from 'vuex'
 import AppBar from '~/components/AppBar'
+import Footer from '~/components/Footer'
 
 export default {
   components: {
-    AppBar
+    AppBar,
+    Footer
   },
   data () {
     return {
@@ -53,3 +56,9 @@ export default {
   }
 }
 </script>
+
+<style>
+.root-container {
+  background: #F5F5F5;
+}
+</style>

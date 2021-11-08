@@ -44,7 +44,7 @@
             <v-row class="px-2 py-0">
               <v-col cols="12" sm=12 md="12" lg="12" align="center">
                 <v-btn
-                  color="teal accent-4"
+                  color="teal darken-1"
                   depressed
                   block
                   class="py-5 text-capitalize white--text"
