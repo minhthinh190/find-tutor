@@ -1,8 +1,9 @@
 <template>
   <div>
     <v-app-bar
-      color="white"
+      color="teal accent-4"
       flat
+      dark
       class="px-lg-10"
     >
       <v-app-bar-title>
@@ -18,7 +19,7 @@
           v-for="(item, index) in navigation"
           :key="index"
           :to="item.link"
-          class="mx-8 font-weight-bold nav"
+          class="mx-6 font-weight-bold nav"
         >
           {{ item.title }}
         </nuxt-link>
@@ -66,12 +67,13 @@ export default {
     return {
       navigation: [
         { title: 'Home', link: '/' },
-        { title: 'Bookings', link: '/bookings' },
+        { title: 'Search', link: '' },
         { title: 'About', link: '' }
       ],
       menu: [
-        { title: 'Profile', icon: 'mdi-account-circle', action: '' },
-        { title: 'Account Settings', icon: 'mdi-cog', action: '' },
+        { title: 'My bookings', icon: 'mdi-book-education', action: 'goToBookingList' },
+        { title: 'My notifications', icon: 'mdi-bell', action: '' },
+        { title: 'My Profile', icon: 'mdi-account', action: '' },
         { title: 'Sign Out', icon: 'mdi-logout', action: 'signOut' }
       ]
     }
@@ -79,6 +81,9 @@ export default {
   methods: {
     invokeMenuAction (action) {
       this[action]()
+    },
+    goToBookingList () {
+      this.$router.push({ name: 'bookings' })
     },
     signOut () {
       this.$store.dispatch('user/signOut')
@@ -95,12 +100,12 @@ export default {
 
 <style scoped>
 .home-link {
-  color: black;
+  color: white;
   text-decoration: none;
   font-weight: bold;
 }
 .nav {
-  color: black;
+  color: white;
   text-decoration: none;
 }
 </style>

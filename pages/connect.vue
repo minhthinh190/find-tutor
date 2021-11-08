@@ -1,18 +1,24 @@
 <template>
-  <v-container class="py-7 pa-sm-14">
-    <v-row justify="space-between">
+  <v-container
+    fluid
+    class="py-7 pa-sm-16 root-container"
+  >
+    <v-row
+      justify="space-between"
+      class="px-md-16"
+    >
       <v-col
         cols="12"
         sm="12"
         md="6"
+        class="pr-16 box"
       >
         <div>
-          <h2>Lorem ipsum dolor sit amet</h2>
+          <h2 class="pb-4">
+            Lorem ipsum dolor sit amet
+          </h2>
           <p>
-            Duis a varius urna. Duis et cursus erat, vel euismod magna. Etiam rhoncus cursus porta, vivamus sit amet tortor pretium.
-          </p>
-          <p>
-            Lorem a urna duis et erat vel etiam curus rhoncus.
+            Duis a varius urna. Duis et cursus erat, vel euismod magna. Etiamaaaaa hocu cursus porta, vivamus sit amet tortor pretium. Duis a varius urna. Duis et cursus erat, vel euismod magna. Etiamaaaaa hocu cursus porta.
           </p>
         </div>
       </v-col>
@@ -20,7 +26,8 @@
       <v-col
         cols="12"
         sm="12"
-        md="5"
+        md="6"
+        class="box"
       >
         <v-form ref="form">
           <p class="text-h5">
@@ -30,28 +37,25 @@
           <v-text-field
             v-model="subject"
             label="Subject"
-            color="green darken-1"
-            dense
-            outlined
+            solo
+            flat
             :rules="inputRules"
           ></v-text-field>
 
-          <v-autocomplete
+          <v-select
             v-model="format"
             label="Format"
-            outlined
-            dense
-            color="green darken-1"
+            solo
+            flat
             :items="formatOptions"
             :rules="inputRules"
-          ></v-autocomplete>
+          ></v-select>
 
           <v-text-field
             v-model="address"
             label="Address"
-            color="green darken-1"
-            dense
-            outlined
+            solo
+            flat
             :rules="inputRules"
           ></v-text-field>
 
@@ -61,9 +65,8 @@
                 v-model="perWeek"
                 label="Sessions per week"
                 type="number"
-                color="green darken-1"
-                dense
-                outlined
+                solo
+                flat
                 :rules="inputRules"
               ></v-text-field>
             </v-col>
@@ -73,9 +76,8 @@
                 v-model="duration"
                 label="Duration (mins)"
                 type="number"
-                color="green darken-1"
-                dense
-                outlined
+                solo
+                flat
                 :rules="inputRules"
               ></v-text-field>
             </v-col>
@@ -85,26 +87,24 @@
             v-model="time"
             label="Time"
             type="time"
-            color="green darken-1"
-            dense
-            outlined
+            solo
+            flat
             :rules="inputRules"
           ></v-text-field>
 
           <v-text-field
             v-model="contact"
             label="Contact"
-            color="green darken-1"
-            dense
-            outlined
+            solo
+            flat
             :rules="inputRules"
           ></v-text-field>
 
           <v-textarea
             v-model="description"
             label="Description"
-            color="green darken-1"
-            outlined
+            solo
+            flat
             rows="4"
             no-resize
           ></v-textarea>
@@ -114,7 +114,7 @@
 
             <v-col class="text-right">
               <v-btn
-                color="green darken-1"
+                color="teal darken-1"
                 depressed
                 class="pa-5 white--text"
                 @click="submit"
@@ -196,3 +196,11 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+/*
+.box {
+  border: 1px solid blue;
+}
+*/
+</style>

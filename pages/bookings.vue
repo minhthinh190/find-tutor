@@ -1,118 +1,159 @@
 <template>
-  <v-container class="py-7 pa-sm-14">
-    <v-row class="mb-4">
-      <p class="text-h5 ma-0">
-        {{ currentFilter }}
-      </p>
-
-      <v-spacer />
-
-      <v-menu
-        offset-y
-        left
-        rounded="0"
+  <v-container
+    fluid
+    class="py-7 pa-sm-16 root-container"
+  >
+    <v-row class="mb-16 px-md-16">
+      <v-col
+        cols="12"
+        md="3"
+        class="pr-md-3 pa-0"
       >
-        <!-- Filter button -->
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn
-            v-bind="attrs"
-            v-on="on"
-            depressed
-            class="px-3"
-          >
-            <v-icon color="grey darken-2">
-              mdi-format-list-bulleted-square
+        <v-container
+          fluid
+          class="pa-0"
+        >
+          <v-card-title class="px-0 pt-0 pb-4">
+            <v-avatar
+              color="grey lighten-2"
+            ></v-avatar>
+
+            <h4 class="ml-3">Username</h4>
+          </v-card-title>
+          
+          <div class="px-4 py-2 nav-item">
+            <v-icon class="mr-3">
+              mdi-account
             </v-icon>
 
-            <v-divider
-              vertical
-              class="mx-2"
-            />
+            <nuxt-link to="" class="nav-link">
+              My profile
+            </nuxt-link>
+          </div>
 
-            <v-icon color="grey darken-2">
-              mdi-chevron-down
+          <div class="px-4 py-2 nav-item">
+            <v-icon class="mr-3">
+              mdi-bell
             </v-icon>
-          </v-btn>
-        </template>
 
-        <!-- Filter list -->
-        <v-list>
-          <v-list-item
+            <nuxt-link to="" class="nav-link">
+              Notifications
+            </nuxt-link>
+          </div>
+        </v-container>
+      </v-col>
+
+      <v-col
+        cols="12"
+        md="9"
+        class="pl-md-3 pa-0"
+      >
+        <!-- Filter -->
+        <v-tabs
+          v-model="currentFilter"
+          fixed-tabs
+          color="teal darken-1"
+          class="mb-4"
+        >
+          <v-tab
             v-for="item in filters"
             :key="item"
-            link
-            class="px-6"
-            @click="selectItem(item)"
+            class="text-capitalize"
           >
-            <v-list-item-content>
-              <v-list-item-title>
-                {{ item }}
-              </v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-        </v-list>
-      </v-menu>
-    </v-row>
+            {{ item }}
+          </v-tab>
+        </v-tabs>
 
-    <v-row v-if="bookingList === null || !bookingList.length">
-      <v-container>
-        <h2 class="text-center">
-          You don't have any request.
-        </h2>
-      </v-container>
-    </v-row>
-
-    <v-row v-else>
-      <v-container
-        v-for="(item, index) in bookingList"
-        :key="index"
-      >
-        <v-row>
-          <v-col
-            cols="12"
-            class="px-0"
-          >
-            <v-card outlined>
-              <v-card-title>
-                <nuxt-link
-                  :to="{ name: 'booking-id', params: { id: item.id } }"
-                  class="request-link"
-                >
-                  {{ capitalizeFirstLetter(item.subject) }}
-                </nuxt-link>
-
-                <v-spacer />
-
-                <p class="ma-0 subtitle-1">
-                  {{ item.createdDate }}
-                </p>
-              </v-card-title>
-
-              <v-card-subtitle>
-                Tutor:
-                <nuxt-link
-                  v-for="(tutor, index) in item.tutors"
-                  :key="index"
-                  to=""
-                  class="link"
-                >
-                  {{ tutor }}
-                  <span
-                    v-if="index !== item.tutors.length - 1"
-                    class="comma"
+        <v-container
+          v-if="bookingList === null || !bookingList.length"
+          fluid
+          class="py-0"
+        >
+          <v-row>
+            <v-col
+              cols="12"
+              class="px-0"
+            >
+              <v-card
+                elevation="0"
+                class="py-16"
+              >
+                <v-card-title class="py-16">
+                  <v-row
+                    justify="center"
+                    class="py-10"
                   >
-                    ,&nbsp;
-                  </span>
-                </nuxt-link>
-              </v-card-subtitle>
+                    <v-col
+                      cols="12"
+                      class="d-flex justify-center"
+                    >  
+                      <img
+                        src="~/assets/images/books.jpg"
+                        class="image"
+                      />
+                    </v-col>
 
-              <v-card-text class="font-weight-bold">
-                {{ capitalizeFirstLetter(item.status) }}
-              </v-card-text>
-            </v-card>
-          </v-col>
-        </v-row>
-      </v-container>
+                    You don't have any request.
+                  </v-row>
+                </v-card-title>
+              </v-card>
+            </v-col>
+          </v-row>
+        </v-container>
+        
+        <v-container
+          v-for="(item, index) in bookingList"
+          :key="index"
+          fluid
+          class="mb-2 py-0"
+        >
+          <v-row>
+            <v-col
+              cols="12"
+              class="px-0"
+            >
+              <v-card elevation="0">
+                <v-card-title>
+                  <nuxt-link
+                    :to="{ name: 'booking-id', params: { id: item.id } }"
+                    class="link"
+                  >
+                    {{ capitalizeFirstLetter(item.subject) }}
+                  </nuxt-link>
+
+                  <v-spacer />
+
+                  <p class="ma-0 subtitle-1 text--disabled">
+                    {{ item.createdDate }}
+                  </p>
+                </v-card-title>
+
+                <v-card-subtitle>
+                  Tutor:
+                  <nuxt-link
+                    v-for="(tutor, index) in item.tutors"
+                    :key="index"
+                    to=""
+                    class="link"
+                  >
+                    {{ tutor }}
+                    <span
+                      v-if="index !== item.tutors.length - 1"
+                      class="comma"
+                    >
+                      ,&nbsp;
+                    </span>
+                  </nuxt-link>
+                </v-card-subtitle>
+
+                <v-card-text class="font-weight-bold">
+                  {{ capitalizeFirstLetter(item.status) }}
+                </v-card-text>
+              </v-card>
+            </v-col>
+          </v-row>
+        </v-container>
+      </v-col>
     </v-row>
   </v-container>
 </template>
@@ -126,7 +167,7 @@ export default {
   data () {
     return {
       filters: ['All', 'Finished', 'On-going', 'Waiting'],
-      currentFilter: 'All'
+      currentFilter: 0
     }
   },
   computed: {
@@ -135,17 +176,17 @@ export default {
     })
   },
   watch: {
-    currentFilter () {
-      this.filterBookings()
+    currentFilter (val) {
+      this.filterBookings(val)
     }
   },
   created () {
     this.$store.dispatch('booking/getBookings')
   },
   methods: {
-    filterBookings () {
+    filterBookings (optionId) {
       const property = 'status'
-      const value = this.currentFilter.toLowerCase()
+      const value = this.filters[optionId].toLowerCase()
 
       if (value === 'all') {
         this.$store.dispatch('booking/getBookings')
@@ -166,18 +207,31 @@ export default {
 </script>
 
 <style scoped>
-.request-link {
-  text-decoration: none;
-  color: black;
+.box {
+  border: 1px solid red;
 }
 .link {
   text-decoration: none;
-  color: #66BB6A;
+  color: #00BFA5;
 }
 .link:hover {
-  color: #43A047;
+  filter: brightness(70%);
 }
 .comma {
   color: black;
+}
+.nav-item:hover {
+  cursor: pointer;
+  background: #EEEEEE;
+}
+.nav-item:hover .nav-link {
+  color: black;
+}
+.nav-link {
+  color: #757575;
+  text-decoration: none;
+}
+.image {
+  width: 150px;
 }
 </style>

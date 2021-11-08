@@ -12,7 +12,7 @@
               <v-text-field
                 v-model="email"
                 label="Email"
-                color="green darken-1"
+                color="teal accent-4"
                 dense
                 outlined
                 :rules="emailRules"
@@ -23,7 +23,7 @@
               <v-text-field
                 v-model="password"
                 label="Password"
-                color="green darken-1"
+                color="teal accent-4"
                 dense
                 outlined
                 :type="isPwShowed ? 'text' : 'password'"
@@ -44,7 +44,7 @@
             <v-row class="px-2 py-0">
               <v-col cols="12" sm=12 md="12" lg="12" align="center">
                 <v-btn
-                  color="green darken-1"
+                  color="teal darken-1"
                   depressed
                   block
                   class="py-5 text-capitalize white--text"
@@ -122,9 +122,9 @@ export default {
 }
 .link {
   text-decoration: none;
-  color: #66BB6A;
+  color: #00BFA5;
 }
 .link:hover {
-  color: #43A047;
+  filter: brightness(70%);
 }
 </style>

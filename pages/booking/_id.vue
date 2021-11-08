@@ -1,120 +1,165 @@
 <template>
   <v-container
     v-if="booking"
-    class="py-7 pa-sm-14"
+    fluid
+    class="py-7 pa-sm-16 root-container"
   >
-    <v-row class="mb-4 box">
-      <h2>
-        {{ capitalizeFirstLetter(booking.subject) }}
-      </h2>
-    </v-row>
-
-    <v-row class="mb-4 box">
-      <v-col>
-        <v-chip
-          v-if="booking.status === 'waiting'"
-          label
-          dark
-          color="grey darken-1"
+    <v-row class="mb-16 px-md-16">
+      <v-col
+        cols="12"
+        md="3"
+        class="pr-md-3 pa-0"
+      >
+        <v-container
+          fluid
+          class="pa-0"
         >
-          <span class="font-weight-bold">
-            {{ capitalizeFirstLetter(booking.status) }}
-          </span>
-        </v-chip>
+          <v-card-title class="px-0 pt-0 pb-4">
+            <v-avatar
+              color="grey lighten-2"
+            ></v-avatar>
 
-        <v-chip
-          v-if="booking.status === 'finished'"
-          label
-          dark
-          color="success"
-        >
-          <span class="font-weight-bold">
-            {{ capitalizeFirstLetter(booking.status) }}
-          </span>
-        </v-chip>
+            <h4 class="ml-3">Username</h4>
+          </v-card-title>
+          
+          <div class="px-4 py-2 nav-item">
+            <v-icon class="mr-3">
+              mdi-account
+            </v-icon>
 
-        <v-chip
-          v-if="booking.status === 'on-going'"
-          label
-          dark
-          color="blue darken-2"
-        >
-          <span class="font-weight-bold">
-            {{ capitalizeFirstLetter(booking.status) }}
-          </span>
-        </v-chip>
+            <nuxt-link to="" class="nav-link">
+              My profile
+            </nuxt-link>
+          </div>
+
+          <div class="px-4 py-2 nav-item">
+            <v-icon class="mr-3">
+              mdi-bell
+            </v-icon>
+
+            <nuxt-link to="" class="nav-link">
+              Notifications
+            </nuxt-link>
+          </div>
+        </v-container>
       </v-col>
 
-      <v-col>
-        <p>{{ booking.createdDate }}</p>
+      <v-col
+        cols="12"
+        md="9"
+        class="pl-md-3 pa-0"
+      >
+        <v-container fluid class="">
+          <v-row class="mb-4">
+            <v-col cols="6">
+              <v-chip
+                color="primary"
+                outlined
+                small
+              >
+                {{ capitalizeFirstLetter(booking.status) }}
+              </v-chip>
+            </v-col>
+
+            <v-col cols="6">
+              <p class="ma-0 text-right subtitle-2 created-date">
+                Created date: {{ booking.createdDate }}
+              </p>
+            </v-col>
+          </v-row>
+
+          <v-row class="mb-4">
+            <v-col cols="12">
+              <v-sheet
+                color="white"
+                height="50"
+                class="px-4 py-3 v-sheet--custom"
+              >
+                <p>
+                  <span class="font-weight-bold">
+                    Tutor:&nbsp;
+                  </span>
+
+                  <nuxt-link
+                    v-for="(tutor, index) in booking.tutors"
+                    :key="index"
+                    to=""
+                    class="link"
+                  >
+                    {{ tutor }}
+                    <span
+                      v-if="index !== booking.tutors.length - 1"
+                      class="comma"
+                    >
+                      ,&nbsp;
+                    </span>
+                  </nuxt-link>
+                </p>
+              </v-sheet>
+            </v-col>
+          </v-row>
+
+          <v-row class="mb-4">
+            <v-col cols="12">
+              <v-data-table
+                :headers="headers"
+                :items="generateDetailsTableData()"
+                hide-default-footer
+              ></v-data-table>
+            </v-col>
+          </v-row>
+
+          <v-row class="mb-4">
+            <v-col cols="12">
+              <v-card elevation="0">
+                <div class="px-4 pt-4 pb-0">
+                  <p class="ma-0 font-weight-bold">
+                    Description
+                  </p>
+                </div>
+
+                <v-card-text class="pt-2">
+                  {{ booking.description }}
+                </v-card-text>
+              </v-card>
+            </v-col>
+          </v-row>
+
+          <v-row class="mb-4">
+            <v-col cols="12">
+              <v-sheet
+                color="white"
+                height="50"
+                class="px-4 py-3 v-sheet--custom"
+              >
+                <p>
+                  <span class="font-weight-bold">
+                    Address:&nbsp;
+                  </span>
+                  {{ booking.address }}
+                </p>
+              </v-sheet>
+            </v-col>
+          </v-row>
+
+          <v-row>
+            <v-col cols="12">
+              <v-sheet
+                color="white"
+                height="50"
+                class="px-4 py-3 v-sheet--custom"
+              >
+                <p>
+                  <span class="font-weight-bold">
+                    Contact:&nbsp;
+                  </span>
+                  {{ booking.contact }}
+                </p>
+              </v-sheet>
+            </v-col>
+          </v-row>
+        </v-container>
       </v-col>
-    </v-row>
-
-    <v-row class="mb-4 box">
-      <v-container>
-        <v-row>
-          <v-col>
-            <p>
-              <span class="font-weight-bold">
-                Format:
-              </span>
-              {{ booking.format }}
-            </p>
-          </v-col>
-
-          <v-col>
-            <p>
-              <span class="font-weight-bold">
-                Address:
-              </span>
-              {{ booking.address }}
-            </p>
-          </v-col>
-        </v-row>
-
-        <v-row>
-          <v-col>
-            <p>
-              <span class="font-weight-bold">
-                Sessions per week:
-              </span>
-              {{ booking.perWeek }}
-            </p>
-          </v-col>
-
-          <v-col>
-            <p>
-              <span class="font-weight-bold">
-                Duration:
-              </span>
-              {{ booking.duration }} mins
-            </p>
-          </v-col>
-        </v-row>
-
-        <v-row>
-          <v-col>
-            <p>
-              <span class="font-weight-bold">
-                Time:
-              </span>
-              {{ booking.time }}
-            </p>
-          </v-col>
-        </v-row>
-      </v-container>
-    </v-row>
-
-    <v-row class="mb-4 box">
-      <v-container>
-        <v-row>
-          <h4>Description</h4>
-        </v-row>
-
-        <v-row>
-          <p>{{ booking.description }}</p>
-        </v-row>
-      </v-container>
     </v-row>
   </v-container>
 </template>
@@ -125,6 +170,17 @@ import { mapState } from 'vuex'
 export default {
   middleware: 'auth',
   layout: 'appbar',
+  data () {
+    return {
+      headers: [
+        { text: 'Subject', value: 'subject', align: 'start', sortable: false },
+        { text: 'Format', value: 'format', align: 'start', sortable: false },
+        { text: 'Time', value: 'time', align: 'start', sortable: false },
+        { text: 'Per week', value: 'perWeek', align: 'start', sortable: false },
+        { text: 'Duration', value: 'duration', align: 'start', sortable: false }
+      ]
+    }
+  },
   computed: {
     bookingId () {
       return this.$route.params.id
@@ -140,6 +196,18 @@ export default {
   methods: {
     capitalizeFirstLetter (str) {
       return str.charAt(0).toUpperCase() + str.slice(1)
+    },
+    generateDetailsTableData () {
+      const data = [
+        {
+          subject: this.booking.subject,
+          format: this.booking.format,
+          time: this.booking.time,
+          perWeek: this.booking.perWeek,
+          duration: this.booking.duration
+        }
+      ]
+      return data
     }
   }
 }
@@ -147,10 +215,37 @@ export default {
 
 <style scoped>
 .box {
-  border: 1px solid white;
+  border: 1px solid red;
 }
 .col {
-  border: 1px solid white;
   padding: 0;
+}
+.link {
+  text-decoration: none;
+  color: #00BFA5;
+}
+.link:hover {
+  filter: brightness(70%);
+}
+.comma {
+  color: black;
+}
+.nav-item:hover {
+  cursor: pointer;
+  background: #EEEEEE;
+}
+.nav-item:hover .nav-link {
+  color: black;
+}
+.nav-link {
+  color: #757575;
+  text-decoration: none;
+}
+.v-sheet--custom {
+  border-radius: 5px;
+}
+.created-date {
+  font-weight: normal;
+  color: #757575;
 }
 </style>
