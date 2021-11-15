@@ -8,7 +8,7 @@
     >
       <v-app-bar-title>
         <nuxt-link to="/" class="home-link">
-          App Title
+          Find Tutor
         </nuxt-link>
       </v-app-bar-title>
 
