@@ -7,125 +7,136 @@
       justify="space-between"
       class="px-md-16"
     >
+      <!-- Description -->
       <v-col
         cols="12"
         sm="12"
         md="6"
-        class="pr-16 box"
+        class="pr-16"
       >
         <div>
-          <h2 class="pb-4">
+          <h2 class="py-6">
             Lorem ipsum dolor sit amet
           </h2>
           <p>
-            Duis a varius urna. Duis et cursus erat, vel euismod magna. Etiamaaaaa hocu cursus porta, vivamus sit amet tortor pretium. Duis a varius urna. Duis et cursus erat, vel euismod magna. Etiamaaaaa hocu cursus porta.
+            Duis a varius urna. Duis et cursus erat, vel euismod magna. Etiama hocu cursus porta, vivamus sit amet tortor pretium. Duis a varius urna. Duis et cursus erat, vel euismod magna. Etiamaaaaa hocu cursus porta.
           </p>
         </div>
       </v-col>
 
-      <v-col
-        cols="12"
-        sm="12"
-        md="6"
-        class="box"
-      >
+      <!--  Request Form -->
+      <v-col cols="12" sm="12" md="6">
         <v-form ref="form">
-          <p class="text-h5">
-            Fill out the form
-          </p>
+          <v-sheet class="px-8 py-7">
+            <p class="text-h5 mb-7 form-title">
+              <strong>Fill out the form</strong>
+            </p>
 
-          <v-text-field
-            v-model="subject"
-            label="Subject"
-            solo
-            flat
-            :rules="inputRules"
-          ></v-text-field>
+            <v-text-field
+              v-model="subject"
+              label="Subject"
+              color="teal accent-4"
+              outlined
+              dense
+              :rules="inputRules"
+            ></v-text-field>
 
-          <v-select
-            v-model="format"
-            label="Format"
-            solo
-            flat
-            :items="formatOptions"
-            :rules="inputRules"
-          ></v-select>
+            <v-select
+              v-model="format"
+              label="Format"
+              color="teal accent-4"
+              outlined
+              dense
+              :items="formatOptions"
+              :rules="inputRules"
+            ></v-select>
 
-          <v-text-field
-            v-model="address"
-            label="Address"
-            solo
-            flat
-            :rules="inputRules"
-          ></v-text-field>
+            <v-text-field
+              v-model="address"
+              label="Address"
+              color="teal accent-4"
+              outlined
+              dense
+              :rules="inputRules"
+            ></v-text-field>
 
-          <v-row>
-            <v-col>
-              <v-text-field
-                v-model="perWeek"
-                label="Sessions per week"
-                type="number"
-                solo
-                flat
-                :rules="inputRules"
-              ></v-text-field>
-            </v-col>
+            <v-row>
+              <v-col>
+                <v-text-field
+                  v-model="perWeek"
+                  label="Sessions per week"
+                  type="number"
+                  color="teal accent-4"
+                  outlined
+                  dense
+                  hide-spin-buttons
+                  :rules="inputRules"
+                ></v-text-field>
+              </v-col>
 
-            <v-col>
-              <v-text-field
-                v-model="duration"
-                label="Duration (mins)"
-                type="number"
-                solo
-                flat
-                :rules="inputRules"
-              ></v-text-field>
-            </v-col>
-          </v-row>
+              <v-col>
+                <v-text-field
+                  v-model="duration"
+                  label="Duration (mins)"
+                  type="number"
+                  color="teal accent-4"
+                  outlined
+                  dense
+                  hide-spin-buttons
+                  :rules="inputRules"
+                ></v-text-field>
+              </v-col>
+            </v-row>
 
-          <v-text-field
-            v-model="time"
-            label="Time"
-            type="time"
-            solo
-            flat
-            :rules="inputRules"
-          ></v-text-field>
+            <v-text-field
+              v-model="time"
+              label="Time"
+              type="time"
+              color="teal accent-4"
+              outlined
+              dense
+              :rules="inputRules"
+            ></v-text-field>
 
-          <v-text-field
-            v-model="contact"
-            label="Contact"
-            solo
-            flat
-            :rules="inputRules"
-          ></v-text-field>
+            <v-text-field
+              v-model="contact"
+              label="Contact"
+              color="teal accent-4"
+              outlined
+              dense
+              :rules="inputRules"
+            ></v-text-field>
 
-          <v-textarea
-            v-model="description"
-            label="Description"
-            solo
-            flat
-            rows="4"
-            no-resize
-          ></v-textarea>
+            <v-textarea
+              v-model="description"
+              label="Description"
+              color="teal accent-4"
+              outlined
+              dense
+              rows="4"
+              no-resize
+            ></v-textarea>
 
-          <v-row>
-            <v-spacer />
+            <v-row>
+              <v-spacer />
 
-            <v-col class="text-right">
-              <v-btn
-                color="teal darken-1"
-                depressed
-                class="pa-5 white--text"
-                @click="submit"
-              >
-                Submit
-              </v-btn>
-            </v-col>
-          </v-row>
+              <v-col class="text-right">
+                <v-btn
+                  color="teal darken-1"
+                  depressed
+                  class="pa-5 white--text"
+                  @click="submit"
+                >
+                  Submit
+                </v-btn>
+              </v-col>
+            </v-row>
+          </v-sheet>
         </v-form>
       </v-col>
     </v-row>
+
+    <v-spacer class="my-16"/>
   </v-container>
 </template>
 
@@ -198,9 +209,7 @@ export default {
 </script>
 
 <style scoped>
-/*
-.box {
-  border: 1px solid blue;
+.form-title {
+  color: #757575;
 }
-*/
 </style>
