@@ -67,6 +67,7 @@
                   color="teal darken-1"
                   depressed
                   block
+                  :loading="isSigningUp"
                   class="py-5 text-capitalize white--text"
                   @click="signUp"
                 >
@@ -122,7 +123,8 @@ export default {
         val => !!val || msg.auth.confirmPwRequired,
         val => (val && val.length > 6) || msg.auth.invalidPwLength,
         val => (val && val === this.password) || msg.auth.pwNotMatch
-      ]
+      ],
+      isSigningUp: false
     }
   },
   watch: {
@@ -133,14 +135,18 @@ export default {
   methods: {
     signUp () {
       if (this.$refs.form.validate()) {
+        this.isSigningUp = true
+
         this.$store.dispatch('user/signUp', {
           email: this.email,
           password: this.password
         })
         .then(() => {
           $nuxt.$router.push({ name: 'index' })
+          this.isSigningUp = false
         })
         .catch(err => {
+          this.isSigningUp = false
           this.showNotification(err.code, 'error')
         })
       }
