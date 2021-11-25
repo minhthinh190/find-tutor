@@ -19,6 +19,23 @@ const _rootCollection = 'user'
 const _collection = 'bookings'
 
 // Private API
+const getAppRequestIdCount = async () => {
+  const docRef = doc(db, _rootCollection, 'management')
+  const res = await getDoc(docRef)
+  const appRequestIdCount = res.data().requestIdCounter
+
+  return appRequestIdCount
+}
+
+const increaseAppRequestIdCount = async () => {
+  const appRequestIdCount = await getAppRequestIdCount()
+  const docRef = doc(db, _rootCollection, 'management')
+
+  updateDoc(docRef, {
+    requestIdCounter: appRequestIdCount + 1
+  })
+}
+
 const getBookingIdCount = async (userDoc) => {
   const docRef = doc(db, _rootCollection, userDoc)
   const res = await getDoc(docRef)
@@ -55,15 +72,17 @@ const createBookingCounter = async (userDoc) => {
 }
 
 const createNewBooking = async (userDoc, bookingData) => {
+  const appWideId = await getAppRequestIdCount()
   const currentBookingId = await getBookingIdCount(userDoc)
   const newBookingId = currentBookingId + 1
 
   const docRef = doc(db, _rootCollection, userDoc, _collection, newBookingId.toString())
 
-  return setDoc(docRef, { id: newBookingId, ...bookingData })
+  return setDoc(docRef, { id: appWideId + 1, ...bookingData })
     .then(async () => {
       await updateBookingIdCount(userDoc)
       await updateNumberOfBookings(userDoc)
+      await increaseAppRequestIdCount()
     })
 }
 
