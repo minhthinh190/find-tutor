@@ -18,6 +18,34 @@ const db = getFirestore()
 const _rootCollection = 'user'
 const _collection = 'bookings'
 
+// Private API
+const getBookingIdCount = async (userDoc) => {
+  const docRef = doc(db, _rootCollection, userDoc)
+  const res = await getDoc(docRef)
+  const bookingIdCount = res.data().bookingIdCount
+
+  return bookingIdCount
+}
+
+const updateNumberOfBookings = async (userDoc) => {
+  const numberOfBookings = await getNumberOfBookings(userDoc)
+  const docRef = doc(db, _rootCollection, userDoc)
+
+  updateDoc(docRef, {
+    bookingCount: numberOfBookings + 1
+  })
+}
+
+const updateBookingIdCount = async (userDoc) => {
+  const bookingIdCount = await getBookingIdCount(userDoc)
+  const docRef = doc(db, _rootCollection, userDoc)
+
+  updateDoc(docRef, {
+    bookingIdCount: bookingIdCount + 1
+  })
+}
+
+// Public API
 const createBookingCounter = async (userDoc) => {
   const docRef = doc(db, _rootCollection, userDoc)
   await setDoc(docRef, {
@@ -51,38 +79,12 @@ const getBookingList = async (userDoc) => {
   return bookingList
 }
 
-const getBookingIdCount = async (userDoc) => {
-  const docRef = doc(db, _rootCollection, userDoc)
-  const res = await getDoc(docRef)
-  const bookingIdCount = res.data().bookingIdCount
-
-  return bookingIdCount
-}
-
 const getNumberOfBookings = async (userDoc) => {
   const docRef = doc(db, _rootCollection, userDoc)
   const res = await getDoc(docRef)
   const bookingCount = res.data().bookingCount
 
   return bookingCount
-}
-
-const updateNumberOfBookings = async (userDoc) => {
-  const numberOfBookings = await getNumberOfBookings(userDoc)
-  const docRef = doc(db, _rootCollection, userDoc)
-
-  updateDoc(docRef, {
-    bookingCount: numberOfBookings + 1
-  })
-}
-
-const updateBookingIdCount = async (userDoc) => {
-  const bookingIdCount = await getBookingIdCount(userDoc)
-  const docRef = doc(db, _rootCollection, userDoc)
-
-  updateDoc(docRef, {
-    bookingIdCount: bookingIdCount + 1
-  })
 }
 
 const queryBookingByProperty = async (userDoc, property, value) => {
