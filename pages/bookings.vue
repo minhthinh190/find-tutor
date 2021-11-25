@@ -112,7 +112,7 @@
               cols="12"
               class="px-0"
             >
-              <v-card elevation="0">
+              <v-card flat tile>
                 <v-card-title>
                   <nuxt-link
                     :to="{ name: 'booking-id', params: { id: item.id } }"
