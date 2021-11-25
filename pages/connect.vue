@@ -124,6 +124,7 @@
                 <v-btn
                   color="teal darken-1"
                   depressed
+                  :loading="isSending"
                   class="pa-5 white--text"
                   @click="submit"
                 >
@@ -150,6 +151,7 @@ export default {
   layout: 'appbar',
   data () {
     return {
+      isSending: false,
       inputRules: [
         val => !!val || msg.form.inputRequired
       ],
@@ -172,8 +174,10 @@ export default {
   methods: {
     submit () {
       if (this.$refs.form.validate()) {
+        this.isSending = true
+
         const bookingData = {
-          subject: this.subject,
+          subject: this.subject.toLowerCase(),
           format: this.format,
           address: this.address,
           perWeek: this.perWeek,
@@ -188,11 +192,12 @@ export default {
 
         bookingAPI.createNewBooking(this.userEmail, bookingData)
           .then(() => {
+            this.isSending = false
             this.showNotification('Your request sent!', 'success')
             this.$refs.form.reset()
           })
           .catch((err) => {
-            console.log(err)
+            this.isSending = false
             this.showNotification(err, 'error')
           })
       }
