@@ -19,46 +19,29 @@ const _rootCollection = 'user'
 const _collection = 'bookings'
 
 // Private API
-const getAppRequestIdCount = async () => {
+const getBookingIdCount = async () => {
   const docRef = doc(db, _rootCollection, 'management')
   const res = await getDoc(docRef)
-  const appRequestIdCount = res.data().requestIdCounter
-
-  return appRequestIdCount
-}
-
-const increaseAppRequestIdCount = async () => {
-  const appRequestIdCount = await getAppRequestIdCount()
-  const docRef = doc(db, _rootCollection, 'management')
-
-  updateDoc(docRef, {
-    requestIdCounter: appRequestIdCount + 1
-  })
-}
-
-const getBookingIdCount = async (userDoc) => {
-  const docRef = doc(db, _rootCollection, userDoc)
-  const res = await getDoc(docRef)
-  const bookingIdCount = res.data().bookingIdCount
+  const bookingIdCount = res.data().bookingIdCounter
 
   return bookingIdCount
 }
 
-const updateNumberOfBookings = async (userDoc) => {
+const updateBookingIdCount = async () => {
+  const bookingIdCount = await getBookingIdCount()
+  const docRef = doc(db, _rootCollection, 'management')
+
+  updateDoc(docRef, {
+    bookingIdCounter: bookingIdCount + 1
+  })
+}
+
+const updateUserBookingQuantity = async (userDoc) => {
   const numberOfBookings = await getNumberOfBookings(userDoc)
   const docRef = doc(db, _rootCollection, userDoc)
 
   updateDoc(docRef, {
     bookingCount: numberOfBookings + 1
-  })
-}
-
-const updateBookingIdCount = async (userDoc) => {
-  const bookingIdCount = await getBookingIdCount(userDoc)
-  const docRef = doc(db, _rootCollection, userDoc)
-
-  updateDoc(docRef, {
-    bookingIdCount: bookingIdCount + 1
   })
 }
 
@@ -72,17 +55,21 @@ const createBookingCounter = async (userDoc) => {
 }
 
 const createNewBooking = async (userDoc, bookingData) => {
-  const appWideId = await getAppRequestIdCount()
-  const currentBookingId = await getBookingIdCount(userDoc)
-  const newBookingId = currentBookingId + 1
+  const bookingIdCount = await getBookingIdCount()
+  const newBookingId = bookingIdCount + 1
 
-  const docRef = doc(db, _rootCollection, userDoc, _collection, newBookingId.toString())
+  const docRef = doc(
+    db,
+    _rootCollection,
+    userDoc,
+    _collection,
+    newBookingId.toString()
+  )
 
-  return setDoc(docRef, { id: appWideId + 1, ...bookingData })
+  return setDoc(docRef, { id: newBookingId, ...bookingData })
     .then(async () => {
-      await updateBookingIdCount(userDoc)
-      await updateNumberOfBookings(userDoc)
-      await increaseAppRequestIdCount()
+      await updateUserBookingQuantity(userDoc)
+      await updateBookingIdCount()
     })
 }
 
