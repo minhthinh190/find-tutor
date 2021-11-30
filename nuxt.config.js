@@ -6,7 +6,7 @@ export default {
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    titleTemplate: '%s - find-tutor',
+    titleTemplate: 'Find Tutor',
     title: 'find-tutor',
     htmlAttrs: {
       lang: 'en'

@@ -177,6 +177,7 @@ export default {
         this.isSending = true
 
         const bookingData = {
+          email: this.userEmail,
           subject: this.subject.toLowerCase(),
           format: this.format,
           address: this.address,
