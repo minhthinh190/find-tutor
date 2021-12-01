@@ -8,7 +8,7 @@
       <v-col
         cols="12"
         md="3"
-        class="pr-md-3 pa-0"
+        class="pr-md-6 pa-0"
       >
         <v-container
           fluid
@@ -47,11 +47,11 @@
       <v-col
         cols="12"
         md="9"
-        class="pl-md-3 pa-0"
+        class="pa-0"
       >
         <v-container fluid class="">
           <v-row class="mb-4">
-            <v-col cols="6">
+            <v-col cols="6" class="pl-3">
               <v-chip
                 color="primary"
                 outlined
@@ -68,8 +68,9 @@
             </v-col>
           </v-row>
 
+          <!-- Tutor List -->
           <v-row class="mb-4">
-            <v-col cols="12">
+            <v-col cols="12" class="pl-3">
               <v-sheet
                 color="white"
                 height="50"
@@ -99,8 +100,9 @@
             </v-col>
           </v-row>
 
+          <!-- Format & Time -->
           <v-row class="mb-4">
-            <v-col cols="12">
+            <v-col cols="12" class="pl-3">
               <v-data-table
                 :headers="headers"
                 :items="generateDetailsTableData()"
@@ -110,8 +112,9 @@
             </v-col>
           </v-row>
 
+          <!-- Description -->
           <v-row class="mb-4">
-            <v-col cols="12">
+            <v-col cols="12" class="pl-3">
               <v-card flat tile>
                 <div class="px-4 pt-4 pb-0">
                   <p class="ma-0 font-weight-bold">
@@ -126,8 +129,9 @@
             </v-col>
           </v-row>
 
+          <!-- Address -->
           <v-row class="mb-4">
-            <v-col cols="12">
+            <v-col cols="12" class="pl-3">
               <v-sheet
                 color="white"
                 height="50"
@@ -143,8 +147,9 @@
             </v-col>
           </v-row>
 
-          <v-row>
-            <v-col cols="12">
+          <!-- Contact -->
+          <v-row class="mb-8">
+            <v-col cols="12" class="pl-3">
               <v-sheet
                 color="white"
                 height="50"
@@ -159,20 +164,109 @@
               </v-sheet>
             </v-col>
           </v-row>
+
+          <!-- Applying Tutor List -->
+          <v-row class="mb-16">
+            <v-col cols="12" class="mb-1 pl-3">
+              <h3>Applying Tutors</h3>
+            </v-col>
+
+            <v-col
+              v-for="n in 4"
+              :key="n"
+              cols="12"
+              lg="3"
+              md="4"
+              class="pr-0"
+            >
+              <v-card flat tile>
+                <v-card-subtitle>
+                  <p class="ma-0">
+                    <strong>{{ 1010 + n}}</strong>
+                  </p>
+                </v-card-subtitle>
+
+                <v-img
+                  height="150"
+                  src="https://picsum.photos/id/11/500/300"
+                  class="mx-4"
+                ></v-img>
+                
+                <v-card-text>
+                  <p class="ma-0 tutor-name">
+                    <strong>Tutor Name</strong>
+                  </p>
+                  <v-spacer class="mb-1"/>
+                  <p class="ma-0">
+                    <strong>Date of birth: </strong>20/09/1994
+                  </p>
+                  <v-spacer class="mb-1"/>
+                  <p class="ma-0">
+                    <strong>Hometown: </strong>Chicago
+                  </p>
+                </v-card-text>
+
+                <v-card-actions class="px-4 pb-3">
+                  <v-btn
+                    depressed
+                    class="text-capitalize"
+                  >
+                    Reject
+                  </v-btn>
+
+                  <v-spacer />
+
+                  <v-btn
+                    depressed
+                    color="teal darken-1"
+                    class="text-capitalize white--text"
+                    @click.stop="isDialogShowed = true"
+                  >
+                    Accept
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-col>
+          </v-row>
         </v-container>
       </v-col>
     </v-row>
+
+    <!-- Tutor Acceptance Confirm Dialog -->
+    <confirm-dialog
+      :isDialogShowed="isDialogShowed"
+      :isConfirming="isHiring"
+      v-on:close-dialog="isDialogShowed = false"
+    >
+      <template #dialogTitle>
+        Accepting Confirmation
+      </template>
+
+      <template #dialogContent>
+        Are you sure to hire this tutor?
+      </template>
+
+      <template #confirmBtnText>
+        Accept
+      </template>
+    </confirm-dialog>
   </v-container>
 </template>
 
 <script>
 import { mapState } from 'vuex'
+import ConfirmDialog from '~/components/ConfirmDialog'
 
 export default {
   middleware: 'auth',
   layout: 'appbar',
+  components: {
+    ConfirmDialog
+  },
   data () {
     return {
+      isDialogShowed: false,
+      isHiring: false,
       headers: [
         { text: 'Subject', value: 'subject', align: 'start', sortable: false },
         { text: 'Format', value: 'format', align: 'start', sortable: false },
@@ -245,6 +339,10 @@ export default {
 .created-date {
   font-weight: normal;
   color: #757575;
+}
+.tutor-name {
+  font-size: 16px;
+  color: #00BFA5;
 }
 </style>
 
