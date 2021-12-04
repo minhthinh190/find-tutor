@@ -136,7 +136,7 @@
                     to=""
                     class="link"
                   >
-                    {{ tutor }}
+                    {{ tutor.email }}
                     <span
                       v-if="index !== item.tutors.length - 1"
                       class="comma"
