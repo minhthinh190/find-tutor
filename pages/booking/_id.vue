@@ -8,7 +8,7 @@
       <v-col
         cols="12"
         md="3"
-        class="pr-md-3 pa-0"
+        class="pr-md-6 pa-0"
       >
         <v-container
           fluid
@@ -47,11 +47,11 @@
       <v-col
         cols="12"
         md="9"
-        class="pl-md-3 pa-0"
+        class="pa-0"
       >
         <v-container fluid class="">
           <v-row class="mb-4">
-            <v-col cols="6">
+            <v-col cols="6" class="pl-3">
               <v-chip
                 color="primary"
                 outlined
@@ -68,8 +68,9 @@
             </v-col>
           </v-row>
 
-          <v-row class="mb-4">
-            <v-col cols="12">
+          <!-- Tutor List -->
+          <v-row v-if="getAcceptedTutorEmails().length" class="mb-4">
+            <v-col cols="12" class="pl-3">
               <v-sheet
                 color="white"
                 height="50"
@@ -86,7 +87,7 @@
                     to=""
                     class="link"
                   >
-                    {{ tutor }}
+                    {{ tutor.email }}
                     <span
                       v-if="index !== booking.tutors.length - 1"
                       class="comma"
@@ -99,8 +100,9 @@
             </v-col>
           </v-row>
 
+          <!-- Format & Time -->
           <v-row class="mb-4">
-            <v-col cols="12">
+            <v-col cols="12" class="pl-3">
               <v-data-table
                 :headers="headers"
                 :items="generateDetailsTableData()"
@@ -110,8 +112,9 @@
             </v-col>
           </v-row>
 
+          <!-- Description -->
           <v-row class="mb-4">
-            <v-col cols="12">
+            <v-col cols="12" class="pl-3">
               <v-card flat tile>
                 <div class="px-4 pt-4 pb-0">
                   <p class="ma-0 font-weight-bold">
@@ -126,8 +129,9 @@
             </v-col>
           </v-row>
 
+          <!-- Address -->
           <v-row class="mb-4">
-            <v-col cols="12">
+            <v-col cols="12" class="pl-3">
               <v-sheet
                 color="white"
                 height="50"
@@ -143,8 +147,9 @@
             </v-col>
           </v-row>
 
-          <v-row>
-            <v-col cols="12">
+          <!-- Contact -->
+          <v-row class="mb-8">
+            <v-col cols="12" class="pl-3">
               <v-sheet
                 color="white"
                 height="50"
@@ -159,27 +164,122 @@
               </v-sheet>
             </v-col>
           </v-row>
+
+          <!-- Applying Tutor List -->
+          <v-row v-if="applyingTutors.length" class="mb-16">
+            <v-col cols="12" class="mb-1 pl-3">
+              <h3>Applying Tutors</h3>
+            </v-col>
+
+            <v-col
+              v-for="(tutor, index) in applyingTutors"
+              :key="index"
+              cols="12"
+              lg="3"
+              md="4"
+              class="pr-0"
+            >
+              <v-card flat tile>
+                <v-card-subtitle>
+                  <p class="ma-0">
+                    <strong>{{ tutor.id }}</strong>
+                  </p>
+                </v-card-subtitle>
+
+                <v-img
+                  height="150"
+                  src="https://picsum.photos/id/11/500/300"
+                  class="mx-4"
+                ></v-img>
+                
+                <v-card-text>
+                  <p class="ma-0 tutor-name">
+                    <strong>{{ tutor.name }}</strong>
+                  </p>
+                  <v-spacer class="mb-1"/>
+                  <p class="ma-0">
+                    <strong>Date of birth: </strong>
+                    {{ tutor.birthDate + '/' + tutor.birthMonth + '/' + tutor.birthYear }}
+                  </p>
+                  <v-spacer class="mb-1"/>
+                  <p class="ma-0">
+                    <strong>Hometown: </strong>
+                    {{ tutor.hometown }}
+                  </p>
+                </v-card-text>
+
+                <v-card-actions class="px-4 pb-3">
+                  <v-btn
+                    depressed
+                    class="text-capitalize"
+                    @click="rejectTutor(tutor)"
+                  >
+                    Reject
+                  </v-btn>
+
+                  <v-spacer />
+
+                  <v-btn
+                    depressed
+                    color="teal darken-1"
+                    class="text-capitalize white--text"
+                    @click.stop="isDialogShowed = true; selectedTutor = tutor.email"
+                  >
+                    Accept
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-col>
+          </v-row>
         </v-container>
       </v-col>
     </v-row>
+
+    <!-- Tutor Acceptance Confirm Dialog -->
+    <confirm-dialog
+      :isDialogShowed="isDialogShowed"
+      :isConfirming="isHiring"
+      v-on:close-dialog="isDialogShowed = false"
+      v-on:confirm="hireTutor"
+    >
+      <template #dialogTitle>
+        Accepting Confirmation
+      </template>
+
+      <template #dialogContent>
+        Are you sure to hire this tutor?
+      </template>
+
+      <template #confirmBtnText>
+        Accept
+      </template>
+    </confirm-dialog>
   </v-container>
 </template>
 
 <script>
 import { mapState } from 'vuex'
+import { bookingAPI } from '~/api/booking'
+import ConfirmDialog from '~/components/ConfirmDialog'
 
 export default {
   middleware: 'auth',
   layout: 'appbar',
+  components: {
+    ConfirmDialog
+  },
   data () {
     return {
+      isDialogShowed: false,
+      isHiring: false,
       headers: [
         { text: 'Subject', value: 'subject', align: 'start', sortable: false },
         { text: 'Format', value: 'format', align: 'start', sortable: false },
         { text: 'Time', value: 'time', align: 'start', sortable: false },
         { text: 'Per week', value: 'perWeek', align: 'start', sortable: false },
         { text: 'Duration', value: 'duration', align: 'start', sortable: false }
-      ]
+      ],
+      selectedTutor: null
     }
   },
   computed: {
@@ -187,12 +287,15 @@ export default {
       return this.$route.params.id
     },
     ...mapState({
-      booking: state => state.booking.booking
+      userEmail: state => state.user.email,
+      booking: state => state.booking.booking,
+      applyingTutors: state => state.tutor.applyingTutors
     }),
   },
-  created () {
+  async created () {
     const id = this.bookingId
-    this.$store.dispatch('booking/getBookingById', { id })
+    await this.$store.dispatch('booking/getBookingById', { id })
+    await this.getApplyingTutorsData()
   },
   methods: {
     capitalizeFirstLetter (str) {
@@ -209,6 +312,95 @@ export default {
         }
       ]
       return data
+    },
+    getApplyingTutorEmails () {
+      let applyingTutorEmails = []
+
+      this.booking.tutors.forEach((tutor) => {
+        if (tutor.status === 'applying') {
+          applyingTutorEmails.push(tutor.email)
+        }
+      })
+      return applyingTutorEmails
+    },
+    getAcceptedTutorEmails () {
+      let acceptedTutorEmails = []
+
+      this.booking.tutors.forEach((tutor) => {
+        if (tutor.status === 'accepted') {
+          acceptedTutorEmails.push(tutor.email)
+        }
+      })
+      return acceptedTutorEmails
+    },
+    getApplyingTutorsData () {
+      const applyingTutorEmails = this.getApplyingTutorEmails()
+      this.$store.dispatch(
+        'tutor/getApplyingTutors', applyingTutorEmails
+      )
+    },
+    async hireTutor () {
+      this.isHiring = true
+
+      const bookingId = this.bookingId.toString()
+      const tutors = [
+        { email: this.selectedTutor, status: 'accepted' }
+      ]
+
+      await bookingAPI.updateBookingTutorData(
+        this.userEmail,
+        bookingId,
+        tutors
+      )
+        .then(async () => {
+          const id = this.bookingId
+          await this.$store.dispatch('booking/getBookingById', { id })
+          await this.getApplyingTutorsData()
+
+          this.isHiring = false
+          this.isDialogShowed = false
+        })
+        .catch((err) => {
+          this.isHiring = false
+          this.isDialogShowed = false
+          this.showNotification(err.code, 'error')
+        })
+
+      await bookingAPI.updateBookingStatus(
+        this.userEmail,
+        bookingId,
+        'on-going'
+      )
+    },
+    async rejectTutor (tutor) {
+      let tutors = []
+      const bookingId = this.bookingId.toString()
+
+      this.booking.tutors.forEach((element) => {
+        if (element.email !== tutor.email) {
+          tutors.push(element)
+        }
+      })
+      await bookingAPI.updateBookingTutorData(
+        this.userEmail,
+        bookingId,
+        tutors
+      )
+        .then(async () => {
+          const id = this.bookingId
+          await this.$store.dispatch('booking/getBookingById', { id })
+          await this.getApplyingTutorsData()
+        })
+        .catch((err) => {
+          this.showNotification(err.code, 'error')
+        })
+    },
+    //
+    showNotification (message, color) {
+      this.$store.dispatch('notification/showNotification', {
+        message,
+        color
+      })
     }
   }
 }
@@ -245,6 +437,10 @@ export default {
 .created-date {
   font-weight: normal;
   color: #757575;
+}
+.tutor-name {
+  font-size: 16px;
+  color: #00BFA5;
 }
 </style>
 
