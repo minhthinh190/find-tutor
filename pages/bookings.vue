@@ -133,7 +133,7 @@
                   <nuxt-link
                     v-for="(tutor, index) in item.tutors"
                     :key="index"
-                    to=""
+                    :to="{ name: 'tutor-id', params: { id: 1000 } }"
                     class="link"
                   >
                     {{ tutor.email }}
