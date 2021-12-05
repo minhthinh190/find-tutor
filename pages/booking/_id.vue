@@ -212,6 +212,7 @@
                   <v-btn
                     depressed
                     class="text-capitalize"
+                    @click="rejectTutor(tutor)"
                   >
                     Reject
                   </v-btn>
@@ -352,12 +353,12 @@ export default {
         tutors
       )
         .then(async () => {
-          this.isHiring = false
-          this.isDialogShowed = false
-
           const id = this.bookingId
           await this.$store.dispatch('booking/getBookingById', { id })
           await this.getApplyingTutorsData()
+
+          this.isHiring = false
+          this.isDialogShowed = false
         })
         .catch((err) => {
           this.isHiring = false
@@ -365,12 +366,34 @@ export default {
           this.showNotification(err.code, 'error')
         })
 
-      // need refactoring
       await bookingAPI.updateBookingStatus(
         this.userEmail,
         bookingId,
         'on-going'
       )
+    },
+    async rejectTutor (tutor) {
+      let tutors = []
+      const bookingId = this.bookingId.toString()
+
+      this.booking.tutors.forEach((element) => {
+        if (element.email !== tutor.email) {
+          tutors.push(element)
+        }
+      })
+      await bookingAPI.updateBookingTutorData(
+        this.userEmail,
+        bookingId,
+        tutors
+      )
+        .then(async () => {
+          const id = this.bookingId
+          await this.$store.dispatch('booking/getBookingById', { id })
+          await this.getApplyingTutorsData()
+        })
+        .catch((err) => {
+          this.showNotification(err.code, 'error')
+        })
     },
     //
     showNotification (message, color) {
