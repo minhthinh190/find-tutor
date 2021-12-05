@@ -49,7 +49,7 @@
         md="9"
         class="pa-0"
       >
-        <v-container fluid class="">
+        <v-container fluid>
           <v-row class="mb-4">
             <v-col cols="6" class="pl-3">
               <v-chip
