@@ -12,7 +12,7 @@
               <v-img
                 contain
                 height="250"
-                class="mx-auto box"
+                class="mx-auto img-placeholder"
               ></v-img>
             </v-col>
           </v-row>
@@ -22,26 +22,26 @@
           <v-row>
             <v-col class="pa-0">
               <v-card flat tile class="pb-3">
-                <v-card-title>Aleksandra Sunny</v-card-title>
+                <v-card-title>{{ tutor.name }}</v-card-title>
 
                 <v-card-subtitle class="py-1">
                   <v-icon small class="mr-1">mdi-calendar-range</v-icon>
-                  10/10/1990
+                  {{ tutor.birthDate + '/' + tutor.birthMonth + '/' + tutor.birthYear}}
                 </v-card-subtitle>
 
                 <v-card-subtitle class="py-1">
                   <v-icon small class="mr-1">mdi-map-marker</v-icon>
-                  San Francisco
+                  {{ tutor.hometown }}
                 </v-card-subtitle>
 
                 <v-card-subtitle class="py-1">
                   <v-icon small class="mr-1">mdi-phone</v-icon>
-                  19001000
+                  {{ tutor.phone }}
                 </v-card-subtitle>
 
                 <v-card-subtitle class="py-1">
                   <v-icon small class="mr-1">mdi-email</v-icon>
-                  tutor@email.com
+                  {{ tutor.email }}
                 </v-card-subtitle>
 
                 <v-spacer class="my-2"/>
@@ -53,7 +53,7 @@
                     color="teal darken-1"
                     class="text-capitalize white--text"
                   >
-                    Click
+                    Book
                   </v-btn>
                 </v-card-actions>
               </v-card>
@@ -77,7 +77,7 @@
                   <span class="font-weight-bold">
                     Tutor ID:&nbsp;
                   </span>
-                  <span class="tutor-id">1035</span>
+                  <span class="tutor-id">{{ tutor.id }}</span>
                 </p>
               </v-sheet>
             </v-col>
@@ -92,17 +92,19 @@
                 <v-card-text>
                   <p class="ma-0">
                     <span class="custom-card-title">Current Job:</span>
-                    <span class="ml-1 custom-card-text">Student</span>
+                    <span class="ml-1 custom-card-text">
+                      {{ tutor.currentJob }}
+                    </span>
                   </p>
                   <v-spacer class="my-1"/>
                   <p class="ma-0">
                     <span class="custom-card-title">School:</span>
-                    <span class="ml-1 custom-card-text">Dai hoc Khoa hoc Xa hoi va Nhan van - DHQG TPHCM</span>
+                    <span class="ml-1 custom-card-text">{{ tutor.school }}</span>
                   </p>
                   <v-spacer class="my-1"/>
                   <p class="ma-0">
                     <span class="custom-card-title">Faculty/Class:</span>
-                    <span class="ml-1 custom-card-text">Quan he Quoc te</span>
+                    <span class="ml-1 custom-card-text">{{ tutor.faculty }}</span>
                   </p>
                 </v-card-text>
               </v-card>
@@ -116,14 +118,10 @@
             <v-col class="pa-0">
               <v-card flat tile>
                 <v-card-title class="pt-3 pb-0 custom-card-title">
-                  Description
+                  Self Introduction
                 </v-card-title>
                 <v-card-text class="">
-                  Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet.<br>
-                  Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet.<br>
-                  Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet.<br>
-                  Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet.<br>
-                  Lorem ipsum dolor sit amet.
+                  {{ tutor.selfIntroduction }}
                 </v-card-text>
               </v-card>
             </v-col>
@@ -141,25 +139,9 @@
                     label
                     color="blue darken-1"
                     text-color="white"
-                    class="mr-1 mb-1"
+                    class="mr-1 mb-1 px-5"
                   >
-                    Achievement 1
-                  </v-chip>
-                  <v-chip
-                    label
-                    color="blue darken-1"
-                    text-color="white"
-                    class="mr-1 mb-1"
-                  >
-                    Achievement 2
-                  </v-chip>
-                  <v-chip
-                    label
-                    color="blue darken-1"
-                    text-color="white"
-                    class="mr-1 mb-1"
-                  >
-                    Achievement 3
+                    {{ tutor.achievement }}
                   </v-chip>
                 </v-card-text>
               </v-card>
@@ -195,7 +177,7 @@
                 </v-card-title>
                 <v-data-table
                   :headers="timetableHeaders"
-                  :items="timetableData"
+                  :items="tutor.freeTime"
                   hide-default-footer
                 >
                   <template v-slot:[`item.morning`]="{ item }">
@@ -244,7 +226,7 @@
                   <span class="font-weight-bold">
                     Format:&nbsp;
                   </span>
-                  Online, Offline
+                  {{ displayTeachingFormat(tutor.format) }}
                 </p>
               </v-sheet>
             </v-col>
@@ -256,6 +238,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   middleware: 'auth',
   layout: 'appbar',
@@ -272,31 +256,61 @@ export default {
         { text: 'Afternoon', value: 'afternoon', align: '', sortable: false },
         { text: 'Evening', value: 'evening', align: '', sortable: false }
       ],
-      // fake fee table data
-      feeTableData: [
-        { subject: 'Math', level: '10, 11, 12', fee: '120,000' },
-        { subject: 'Physics', level: '10, 11, 12', fee: '120,000' },
-        { subject: 'Chemistry', level: '10, 11, 12', fee: '120,000' },
-        { subject: 'Biology', level: '10, 11, 12', fee: '120,000' }
-      ],
-      // fake timetable data
-      timetableData: [
-        { weekday: 'Monday', morning: false, afternoon: false, evening: true },
-        { weekday: 'Tuesday', morning: false, afternoon: false, evening: true },
-        { weekday: 'Wednesday', morning: false, afternoon: false, evening: true },
-        { weekday: 'Thursday', morning: false, afternoon: false, evening: true },
-        { weekday: 'Friday', morning: false, afternoon: false, evening: true },
-        { weekday: 'Saturday', morning: true, afternoon: true, evening: true },
-        { weekday: 'Sunday', morning: true, afternoon: true, evening: true }
-      ]
+      feeTableData: [],
+    }
+  },
+  computed: {
+    tutorId () {
+      return this.$route.params.id
+    },
+    tutorEmail () {
+      return this.$route.params.email
+    },
+    ...mapState({
+      tutor: state => state.tutor.tutorProfile
+    })
+  },
+  async mounted () {
+    await this.$store.dispatch('tutor/getTutorProfile', this.tutorEmail)
+    this.generateFeeTableData()
+  },
+  methods: {
+    displayTeachingFormat (value) {
+      let format = ''
+      switch (value) {
+        case 'both':
+          format = 'Offline & Online'
+          break
+        case 'offline':
+          format = 'Offline'
+          break
+        case 'online':
+          format = 'Online'
+      }
+      return format
+    },
+    generateFeeTableData () {
+      this.tutor.fee.forEach((item) => {
+        if (item.subject !== '') {
+          this.feeTableData.push(
+            {
+              subject: item.subject,
+              level: item.level.reduce((prevLevel, currentLevel) => {
+                return prevLevel.toString() + ', ' + currentLevel.toString()
+              }),
+              fee: item.fee
+            }
+          )
+        }
+      })
     }
   }
 }
 </script>
 
 <style>
-.box {
-  border: 1px solid red;
+.img-placeholder {
+  background: #E0E0E0;
 }
 .tutor-id {
   color: #00BFA5;
