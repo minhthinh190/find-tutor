@@ -2,7 +2,7 @@ import { tutorAPI } from '~/api/tutor'
 
 export const state = () => ({
   applyingTutors: [],
-  tutorProfile: null
+  tutorProfile: {}
 })
 
 export const getters = {}
