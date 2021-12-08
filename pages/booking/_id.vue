@@ -50,15 +50,18 @@
         class="pa-0"
       >
         <v-container fluid>
-          <v-row class="mb-4">
+          <v-row class="mb-1">
             <v-col cols="6" class="pl-3">
-              <v-chip
-                color="primary"
-                outlined
-                small
+              <div
+                class="px-2 py-1 status-label"
+                :class="{
+                  'status-label--waiting': booking.status === 'waiting',
+                  'status-label--on-going': booking.status === 'on-going',
+                  'status-label--finished': booking.status === 'finished'
+                }" 
               >
                 {{ capitalizeFirstLetter(booking.status) }}
-              </v-chip>
+              </div>
             </v-col>
 
             <v-col cols="6">
@@ -441,6 +444,21 @@ export default {
 .tutor-name {
   font-size: 16px;
   color: #00BFA5;
+}
+.status-label {
+  width: fit-content;
+  font-size: 13px;
+  font-weight: bold;
+  color: #263238;
+}
+.status-label--waiting {
+  background: #E57373;
+}
+.status-label--on-going {
+  background: #E6EE9C;
+}
+.status-label--finished {
+  background: #80CBC4;
 }
 </style>
 
