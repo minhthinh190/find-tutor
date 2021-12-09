@@ -67,7 +67,7 @@ export default {
     return {
       navigation: [
         { title: 'Home', link: '/' },
-        { title: 'Search', link: '' },
+        { title: 'Search', link: '/search' },
         { title: 'About', link: '' }
       ],
       menu: [
