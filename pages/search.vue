@@ -19,6 +19,7 @@
           depressed
           color="teal darken-1"
           class="ml-1 py-5 white--text"
+          @click="fetchTutorDocs"
         >
           <v-icon>mdi-magnify</v-icon>
         </v-btn>
@@ -386,7 +387,7 @@
                         dense
                         half-increments
                         readonly
-                        value="4.5"
+                        :value="4.5"
                         background-color="yellow darken-3"
                         color="yellow darken-3"
                         class="mr-2"
@@ -429,6 +430,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import AppBar from '~/components/AppBar'
 
 export default {
@@ -440,6 +442,18 @@ export default {
   data () {
     return {
       page: 1
+    }
+  },
+  computed: {
+    ...mapGetters({
+      tutors: 'tutor/paginatedTutors'
+    })
+  },
+  methods: {
+    async fetchTutorDocs () {
+      await this.$store.dispatch('tutor/getTutors')
+      this.$store.dispatch('tutor/paginateTutorList')
+      console.log('tutors:', this.tutors)
     }
   }
 }
