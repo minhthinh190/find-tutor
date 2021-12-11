@@ -19,7 +19,7 @@
           depressed
           color="teal darken-1"
           class="ml-1 py-5 white--text"
-          @click="fetchTutorDocs"
+          @click="generateTutorTitle(tutors[0][0].fee)"
         >
           <v-icon>mdi-magnify</v-icon>
         </v-btn>
@@ -306,8 +306,8 @@
         <v-container fluid>
           <!-- Tutor Card -->
           <v-row
-            v-for="n in 5"
-            :key="n"
+            v-for="(tutor, index) in tutors[page - 1]"
+            :key="index"
           >
             <v-col class="pr-0 py-0">
               <div class="py-3 tutor-card">
@@ -327,13 +327,13 @@
                       <v-row>
                         <v-col cols="10" class="pa-0">
                           <p class="ma-0 service-title">
-                            <strong>Lorem ipsum dolor sit amet</strong>
+                            <strong>{{ generateTutorTitle(tutor.fee) }}</strong>
                           </p>
                         </v-col>
 
                         <v-col cols="2" class="pa-0">
                           <p class="ma-0 text-right">
-                            <strong>1320</strong>
+                            <strong>{{ tutor.id }}</strong>
                           </p>
                         </v-col>
                       </v-row>
@@ -343,7 +343,7 @@
 
                     <!-- Name -->
                     <p class="ma-0">
-                      <strong>John Connor</strong>
+                      <strong>{{ tutor.name }}</strong>
                     </p>
 
                     <!-- DoB & Location -->
@@ -353,7 +353,7 @@
                           mdi-calendar-range
                         </v-icon>
                         <p class="ma-0">
-                          20/02/1995
+                          {{ tutor.birthDate + '/' + tutor.birthMonth + '/' + tutor.birthYear }}
                         </p>
                       </div>
 
@@ -362,7 +362,7 @@
                           mdi-map-marker
                         </v-icon>
                         <p class="ma-0">
-                          Los Angeles
+                          {{ tutor.hometown }}
                         </p>
                       </div>
                     </div>
@@ -371,7 +371,7 @@
 
                     <!-- Self Introduction -->
                     <p class="tutor-introduction ma-0">
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur dolor iure cumque deleniti eos sequi, quia ducimus expedita et illum corrupti sed quam eaque officiis. Officiis eos eligendi at earum. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur dolor iure cumque deleniti eos sequi, quia ducimus expedita et illum corrupti sed quam eaque officiis. Officiis eos eligendi at earum.
+                      {{ shortenTutorDesc(tutor.selfIntroduction) }}
                     </p>
 
                     <v-spacer class="mb-2"/>
@@ -393,13 +393,19 @@
                         class="mr-2"
                       ></v-rating>
 
-                      <p class="ma-0 rating-quantity">(150)</p>
+                      <p class="ma-0 rating-quantity">
+                        ( {{ Math.floor(Math.random() * 50) + 1 }} )
+                      </p>
                     </div>
 
                     <!-- Achievement -->
                     <div class="mt-2 d-flex">
-                      <div class="achievement-label">
-                        Thủ khoa
+                      <div
+                        v-for="(achievement, index) in tutor.achievement"
+                        :key="index"
+                        class="mr-2 achievement-label"
+                      >
+                        {{ achievement }}
                       </div>
                     </div>
                   </v-col>
@@ -419,7 +425,7 @@
         <v-pagination
           v-model="page"
           color="teal darken-1"
-          :length="5"
+          :length="tutors.length"
         ></v-pagination>
       </v-col>
     </v-row>
@@ -449,11 +455,54 @@ export default {
       tutors: 'tutor/paginatedTutors'
     })
   },
+  async mounted () {
+    await this.getTutors()
+  },
   methods: {
-    async fetchTutorDocs () {
+    async getTutors () {
       await this.$store.dispatch('tutor/getTutors')
       this.$store.dispatch('tutor/paginateTutorList')
-      console.log('tutors:', this.tutors)
+    },
+    generateTutorTitle (feeData) {
+      // get subjects from tutor
+      let subjects = []
+
+      feeData.forEach((item) => {
+        subjects.push(item.subject)
+      })
+      subjects = [...new Set(subjects)]
+      subjects.pop()
+      console.log('subjects:', subjects)
+
+      // create introduction title for tutor card
+      let title = ''
+      subjects.forEach((subject) => {
+        // check last subject or not
+        console.log('last item:', subjects.slice(-1).pop())
+        if (subject !== subjects.slice(-1).pop()) {
+          title = title + subject + ', '
+        } else {
+          title = title + subject
+        }
+      })
+      title = "Gia sư chuyên dạy kèm môn " + title
+
+      return title
+    },
+    shortenTutorDesc (desc) {
+      const threshold = 450
+      let shortDesc = ''
+
+      if (desc.length <= threshold) {
+        shortDesc = desc
+      } else {
+        for (let i = 0; i< threshold; i++) {
+          shortDesc = shortDesc + desc[i]
+        }
+        shortDesc = shortDesc + '...'
+      }
+
+      return shortDesc
     }
   }
 }
