@@ -6,13 +6,25 @@ import {
   collection,
   doc,
   getDoc,
-  getDocs
+  getDocs,
+  query,
+  where
 } from 'firebase/firestore'
 
 initializeApp(config)
 
 const db = getFirestore()
 const _rootCollection = 'tutor'
+
+// Check existence function
+const isIncluded = (obj, arr) => {
+  for (let i = 0; i < arr.length; i++) {
+    if (obj.id === arr[i].id) {
+      return true
+    }
+  }
+  return false
+}
 
 // Private API
 const getAllTutorDocs = async () => {
@@ -26,6 +38,48 @@ const getAllTutorDocs = async () => {
     }
   })
   return tutorDocs
+}
+
+const queryTutorsByGender = async (genderArr) => {
+  const queryRef = collection(db, _rootCollection)
+  const q = query(queryRef, where('gender', 'in', genderArr))
+
+  const querySnapshot = await getDocs(q)
+  const tutors = []
+
+  querySnapshot.forEach((doc) => {
+    tutors.push(doc.data())
+  })
+  return tutors
+}
+
+const queryTutorsByCurrentJob = async (currentJobArr) => {
+  const queryRef = collection(db, _rootCollection)
+  const q = query(queryRef, where('currentJob', 'in', currentJobArr))
+
+  const querySnapshot = await getDocs(q)
+  const tutors = []
+
+  querySnapshot.forEach((doc) => {
+    tutors.push(doc.data())
+  })
+  return tutors
+}
+
+const queryTutorsByAchievement = async (achievementArr) => {
+  const queryRef = collection(db, _rootCollection)
+  const q = query(
+    queryRef,
+    where('achievement', 'array-contains-any', achievementArr)
+  )
+
+  const querySnapshot = await getDocs(q)
+  const tutors = []
+
+  querySnapshot.forEach((doc) => {
+    tutors.push(doc.data())
+  })
+  return tutors
 }
 
 // Public API
@@ -58,8 +112,47 @@ const getApplyingTutors = async (tutorDocs) => {
   return applyingTutors
 }
 
+const queryTutors = async (queryObj) => {
+  let result = []
+
+  let tutorsByGender = []
+  let tutorsByCurrentJob = []
+  let tutorsByAchievement = []
+
+  if (queryObj.gender.length) {
+    tutorsByGender = await queryTutorsByGender(queryObj.gender)
+  }
+  if (queryObj.currentJob.length) {
+    tutorsByCurrentJob = await queryTutorsByCurrentJob(queryObj.currentJob)
+  }
+  if (queryObj.achievement.length) {
+    tutorsByAchievement = await queryTutorsByAchievement(queryObj.achievement)
+  }
+
+  // merge into 1 array and remove duplicates
+  let tutors = [...tutorsByGender, ...tutorsByCurrentJob, ...tutorsByAchievement]
+  tutors = [
+    ...new Map(tutors.map(item => [item['id'], item])).values()
+  ]
+
+  // check tutor existence
+  tutors.forEach((tutor) => {
+    if (
+      isIncluded(tutor, tutorsByGender) &&
+      isIncluded(tutor, tutorsByCurrentJob) &&
+      isIncluded(tutor, tutorsByAchievement)
+    ) {
+      result.push(tutor)
+    }
+  })
+  console.log('result:', result)
+
+  return result
+}
+
 export const tutorAPI = {
   getTutor,
   getAllTutors,
-  getApplyingTutors
+  getApplyingTutors,
+  queryTutors
 }
