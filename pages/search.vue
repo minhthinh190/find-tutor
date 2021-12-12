@@ -19,7 +19,7 @@
           depressed
           color="teal darken-1"
           class="ml-1 py-5 white--text"
-          @click="generateTutorTitle(tutors[0][0].fee)"
+          @click="queryTutors"
         >
           <v-icon>mdi-magnify</v-icon>
         </v-btn>
@@ -58,7 +58,7 @@
         <v-select
           label="Subject"
           color="teal lighten-1"
-          :items="['Math', 'Physics', 'Chemistry']"
+          :items="subjects"
         ></v-select>
       </v-col>
 
@@ -91,15 +91,19 @@
 
               <v-expansion-panel-content>
                 <v-checkbox
+                  v-model="query.gender"
                   hide-details
                   label="Male"
+                  value="male"
                   color="teal lighten-1"
                   class="mx-0 mt-0 mb-2"
                 ></v-checkbox>
 
                 <v-checkbox
+                  v-model="query.gender"
                   hide-details
                   label="Female"
+                  value="female"
                   color="teal lighten-1"
                   class="ma-0"
                 ></v-checkbox>
@@ -116,23 +120,29 @@
 
               <v-expansion-panel-content>
                 <v-checkbox
+                  v-model="query.currentJob"
                   hide-details
                   label="Student"
+                  value="student"
                   color="teal lighten-1"
                   class="mx-0 mt-0 mb-2"
                 ></v-checkbox>
 
                 <v-checkbox
+                  v-model="query.currentJob"
                   hide-details
                   label="Graduated"
+                  value="graduated"
                   color="teal lighten-1"
                   class="mx-0 mt-0 mb-2"
                 ></v-checkbox>
 
                 <v-checkbox
+                  v-model="query.currentJob"
                   hide-details
-                  color="teal lighten-1"
                   label="Teacher"
+                  value="teacher"
+                  color="teal lighten-1"
                   class="ma-0"
                 ></v-checkbox>
               </v-expansion-panel-content>
@@ -148,50 +158,64 @@
 
               <v-expansion-panel-content>
                 <v-checkbox
+                  v-model="query.achievement"
                   hide-details
                   label="Thủ khoa đại học"
+                  value="Thủ khoa đại học"
                   color="teal lighten-1"
                   class="mx-0 mt-0 mb-2"
                 ></v-checkbox>
 
                 <v-checkbox
+                  v-model="query.achievement"
                   hide-details
                   label="Học sinh giỏi QG"
+                  value="Học sinh giỏi Quốc gia"
                   color="teal lighten-1"
                   class="mx-0 mt-0 mb-2"
                 ></v-checkbox>
 
                 <v-checkbox
+                  v-model="query.achievement"
                   hide-details
                   label="Học sinh giỏi T/TP"
+                  value="Học sinh giỏi Tỉnh/TP"
                   color="teal lighten-1"
                   class="mx-0 mt-0 mb-2"
                 ></v-checkbox>
 
                 <v-checkbox
+                  v-model="query.achievement"
                   hide-details
                   label="Huy chương quốc tế"
+                  value="Huy chương quốc tế"
                   color="teal lighten-1"
                   class="mx-0 mt-0 mb-2"
                 ></v-checkbox>
 
                 <v-checkbox
+                  v-model="query.achievement"
                   hide-details
                   label="Học bổng"
+                  value="Học bổng"
                   color="teal lighten-1"
                   class="mx-0 mt-0 mb-2"
                 ></v-checkbox>
 
                 <v-checkbox
+                  v-model="query.achievement"
                   hide-details
                   label="Du học sinh"
+                  value="Du học sinh"
                   color="teal lighten-1"
                   class="mx-0 mt-0 mb-2"
                 ></v-checkbox>
 
                 <v-checkbox
+                  v-model="query.achievement"
                   hide-details
                   label="Học sinh THPT chuyên"
+                  value="Học sinh trường THPT chuyên"
                   color="teal lighten-1"
                   class="ma-0"
                 ></v-checkbox>
@@ -222,7 +246,7 @@
                       readonly
                       background-color="yellow darken-3"
                       color="yellow darken-3"
-                      value="4.5"
+                      :value="4.5"
                       class="mr-1"
                     ></v-rating>
 
@@ -243,7 +267,7 @@
                       readonly
                       background-color="yellow darken-3"
                       color="yellow darken-3"
-                      value="4"
+                      :value="4"
                       class="mr-1"
                     ></v-rating>
 
@@ -264,7 +288,7 @@
                       readonly
                       background-color="yellow darken-3"
                       color="yellow darken-3"
-                      value="3.5"
+                      :value="3.5"
                       class="mr-1"
                     ></v-rating>
 
@@ -285,7 +309,7 @@
                       readonly
                       background-color="yellow darken-3"
                       color="yellow darken-3"
-                      value="3"
+                      :value="3"
                       class="mr-1"
                     ></v-rating>
 
@@ -447,7 +471,22 @@ export default {
   },
   data () {
     return {
-      page: 1
+      page: 1,
+      subjects: [
+        'Toán',
+        'Vật lý',
+        'Hóa học',
+        'Sinh học',
+        'Ngữ văn',
+        'Tiếng Anh',
+        'IELTS',
+        'TOEIC'
+      ],
+      query: {
+        gender: [],
+        currentJob: [],
+        achievement: []
+      }
     }
   },
   computed: {
@@ -463,6 +502,11 @@ export default {
       await this.$store.dispatch('tutor/getTutors')
       this.$store.dispatch('tutor/paginateTutorList')
     },
+    async queryTutors () {
+      console.log('fetching...')
+      await this.$store.dispatch('tutor/queryTutors', this.query)
+      this.$store.dispatch('tutor/paginateTutorList')
+    },
     generateTutorTitle (feeData) {
       // get subjects from tutor
       let subjects = []
@@ -472,13 +516,12 @@ export default {
       })
       subjects = [...new Set(subjects)]
       subjects.pop()
-      console.log('subjects:', subjects)
 
       // create introduction title for tutor card
       let title = ''
+
       subjects.forEach((subject) => {
         // check last subject or not
-        console.log('last item:', subjects.slice(-1).pop())
         if (subject !== subjects.slice(-1).pop()) {
           title = title + subject + ', '
         } else {
