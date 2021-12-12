@@ -12,7 +12,7 @@
           hide-details
           prepend-inner-icon="mdi-magnify"
           color="teal lighten-1"
-          placeholder="Search for tutors by name, ID, school"
+          placeholder="Tìm kiếm theo tên hoặc mã gia sư"
         ></v-text-field>
 
         <v-btn
@@ -28,6 +28,7 @@
 
     <v-spacer class="mt-14"/>
 
+    <!--
     <v-row
       justify="space-between"
       class="mx-md-16"
@@ -46,6 +47,7 @@
         </div>
       </v-col>
     </v-row>
+    -->
 
     <v-spacer class="mb-4"/>
 
@@ -56,12 +58,13 @@
         class="py-0"
       >
         <v-select
-          label="Subject"
+          label="Môn học"
           color="teal lighten-1"
           :items="subjects"
         ></v-select>
       </v-col>
 
+      <!--
       <v-col
         cols="1"
         class="py-0"
@@ -72,6 +75,7 @@
           :items="[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]"
         ></v-select>
       </v-col>
+      -->
     </v-row>
 
     <!-- Tutor List -->
@@ -86,14 +90,14 @@
             <!-- Gender -->
             <v-expansion-panel>
               <v-expansion-panel-header class="px-3">
-                <h3>Gender</h3>
+                <h3>Giới tính</h3>
               </v-expansion-panel-header>
 
               <v-expansion-panel-content>
                 <v-checkbox
                   v-model="query.gender"
                   hide-details
-                  label="Male"
+                  label="Nam"
                   value="male"
                   color="teal lighten-1"
                   class="mx-0 mt-0 mb-2"
@@ -102,7 +106,7 @@
                 <v-checkbox
                   v-model="query.gender"
                   hide-details
-                  label="Female"
+                  label="Nữ"
                   value="female"
                   color="teal lighten-1"
                   class="ma-0"
@@ -115,14 +119,14 @@
             <!-- Current Job -->
             <v-expansion-panel>
               <v-expansion-panel-header class="px-3">
-                <h3>Current Job</h3>
+                <h3>Nghề nghiệp</h3>
               </v-expansion-panel-header>
 
               <v-expansion-panel-content>
                 <v-checkbox
                   v-model="query.currentJob"
                   hide-details
-                  label="Student"
+                  label="Sinh viên"
                   value="student"
                   color="teal lighten-1"
                   class="mx-0 mt-0 mb-2"
@@ -131,7 +135,7 @@
                 <v-checkbox
                   v-model="query.currentJob"
                   hide-details
-                  label="Graduated"
+                  label="Đã tốt nghiệp"
                   value="graduated"
                   color="teal lighten-1"
                   class="mx-0 mt-0 mb-2"
@@ -140,7 +144,7 @@
                 <v-checkbox
                   v-model="query.currentJob"
                   hide-details
-                  label="Teacher"
+                  label="Giáo viên"
                   value="teacher"
                   color="teal lighten-1"
                   class="ma-0"
@@ -153,7 +157,7 @@
             <!-- Achievement -->
             <v-expansion-panel>
               <v-expansion-panel-header class="px-3">
-                <h3>Achievement</h3>
+                <h3>Đặc điểm nổi bật</h3>
               </v-expansion-panel-header>
 
               <v-expansion-panel-content>
@@ -227,7 +231,7 @@
             <!-- Ratings -->
             <v-expansion-panel>
               <v-expansion-panel-header class="px-3">
-                <h3>Ratings</h3>
+                <h3>Đánh giá</h3>
               </v-expansion-panel-header>
 
               <v-expansion-panel-content>
@@ -250,7 +254,7 @@
                       class="mr-1"
                     ></v-rating>
 
-                    <p class="ma-0 rating-score-label">4.5 & up</p>
+                    <p class="ma-0 rating-score-label">&#8805; 4.5</p>
                   </div>
 
                   <!-- 4.0 & up -->
@@ -271,7 +275,7 @@
                       class="mr-1"
                     ></v-rating>
 
-                    <p class="ma-0 rating-score-label">4.0 & up</p>
+                    <p class="ma-0 rating-score-label">&#8805; 4.0</p>
                   </div>
 
                   <!-- 3.5 & up -->
@@ -292,7 +296,7 @@
                       class="mr-1"
                     ></v-rating>
 
-                    <p class="ma-0 rating-score-label">3.5 & up</p>
+                    <p class="ma-0 rating-score-label">&#8805; 3.5</p>
                   </div>
 
                   <!-- 3.0 & up -->
@@ -313,7 +317,7 @@
                       class="mr-1"
                     ></v-rating>
 
-                    <p class="ma-0 rating-score-label">3.0 & up</p>
+                    <p class="ma-0 rating-score-label">&#8805; 3.0</p>
                   </div>
                 </v-radio-group>
               </v-expansion-panel-content>

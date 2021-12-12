@@ -28,7 +28,7 @@
             </v-icon>
 
             <nuxt-link to="" class="nav-link">
-              My profile
+              Tài khoản của tôi
             </nuxt-link>
           </div>
 
@@ -38,7 +38,7 @@
             </v-icon>
 
             <nuxt-link to="" class="nav-link">
-              Notifications
+              Thông báo
             </nuxt-link>
           </div>
         </v-container>
@@ -60,13 +60,13 @@
                   'status-label--finished': booking.status === 'finished'
                 }" 
               >
-                {{ capitalizeFirstLetter(booking.status) }}
+                {{ translateStatus(booking.status) }}
               </div>
             </v-col>
 
             <v-col cols="6">
               <p class="ma-0 text-right subtitle-2 created-date">
-                Created date: {{ booking.createdDate }}
+                Ngày tạo: {{ booking.createdDate }}
               </p>
             </v-col>
           </v-row>
@@ -81,7 +81,7 @@
               >
                 <p>
                   <span class="font-weight-bold">
-                    Tutor:&nbsp;
+                    Gia sư:&nbsp;
                   </span>
 
                   <nuxt-link
@@ -121,7 +121,7 @@
               <v-card flat tile>
                 <div class="px-4 pt-4 pb-0">
                   <p class="ma-0 font-weight-bold">
-                    Description
+                    Mô tả
                   </p>
                 </div>
 
@@ -142,7 +142,7 @@
               >
                 <p>
                   <span class="font-weight-bold">
-                    Address:&nbsp;
+                    Địa chỉ:&nbsp;
                   </span>
                   {{ booking.address }}
                 </p>
@@ -160,7 +160,7 @@
               >
                 <p>
                   <span class="font-weight-bold">
-                    Contact:&nbsp;
+                    Liên hệ:&nbsp;
                   </span>
                   {{ booking.contact }}
                 </p>
@@ -276,11 +276,11 @@ export default {
       isDialogShowed: false,
       isHiring: false,
       headers: [
-        { text: 'Subject', value: 'subject', align: 'start', sortable: false },
-        { text: 'Format', value: 'format', align: 'start', sortable: false },
-        { text: 'Time', value: 'time', align: 'start', sortable: false },
-        { text: 'Per week', value: 'perWeek', align: 'start', sortable: false },
-        { text: 'Duration', value: 'duration', align: 'start', sortable: false }
+        { text: 'Môn học', value: 'subject', align: 'start', sortable: false },
+        { text: 'Hình thức', value: 'format', align: 'start', sortable: false },
+        { text: 'Thời gian', value: 'time', align: 'start', sortable: false },
+        { text: 'Số buổi/tuần', value: 'perWeek', align: 'start', sortable: false },
+        { text: 'Thời lượng', value: 'duration', align: 'start', sortable: false }
       ],
       selectedTutor: null
     }
@@ -301,6 +301,23 @@ export default {
     await this.getApplyingTutorsData()
   },
   methods: {
+    translateStatus (status) {
+      let vnStatus = null
+
+      switch (status) {
+        case 'waiting':
+          vnStatus = 'Đang chờ'
+          break
+        case 'on-going':
+          vnStatus = 'Đang tiến hành'
+          break
+        case 'finished':
+          vnStatus = 'Hoàn tất'
+          break
+      }
+
+      return vnStatus
+    },
     capitalizeFirstLetter (str) {
       return str.charAt(0).toUpperCase() + str.slice(1)
     },
@@ -311,7 +328,7 @@ export default {
           format: this.booking.format,
           time: this.booking.time,
           perWeek: this.booking.perWeek,
-          duration: this.booking.duration + ' (mins)'
+          duration: this.booking.duration + ' (phút)'
         }
       ]
       return data

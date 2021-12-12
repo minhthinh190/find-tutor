@@ -8,20 +8,20 @@
     >
       <v-app-bar-title>
         <nuxt-link to="/" class="home-link">
-          App Title
+          Find Tutor
         </nuxt-link>
       </v-app-bar-title>
 
       <v-spacer></v-spacer>
 
-      <div class="d-none d-sm-flex mr-6">
+      <div class="d-none d-sm-flex mr-1">
         <nuxt-link
           v-for="(item, index) in navigation"
           :key="index"
           :to="item.link"
-          class="mx-6 font-weight-bold nav"
+          class="mx-3 font-weight-bold nav"
         >
-          {{ item.title }}
+          <v-icon>{{ item.icon }}</v-icon>
         </nuxt-link>
       </div>
 
@@ -66,15 +66,14 @@ export default {
   data () {
     return {
       navigation: [
-        { title: 'Home', link: '/' },
-        { title: 'Search', link: '/search' },
-        { title: 'About', link: '' }
+        { icon: 'mdi-home', link: '/' },
+        { icon: 'mdi-magnify', link: '/search' }
       ],
       menu: [
-        { title: 'My bookings', icon: 'mdi-book-education', action: 'goToBookingList' },
-        { title: 'My notifications', icon: 'mdi-bell', action: '' },
-        { title: 'My Profile', icon: 'mdi-account', action: '' },
-        { title: 'Sign Out', icon: 'mdi-logout', action: 'signOut' }
+        { title: 'Danh sách yêu cầu', icon: 'mdi-book-education', action: 'goToBookingList' },
+        { title: 'Thông báo', icon: 'mdi-bell', action: '' },
+        { title: 'Tài khoản của tôi', icon: 'mdi-account', action: '' },
+        { title: 'Đăng xuất', icon: 'mdi-logout', action: 'signOut' }
       ]
     }
   },
@@ -99,6 +98,9 @@ export default {
 </script>
 
 <style scoped>
+.box {
+  border: 1px solid red;
+}
 .home-link {
   color: white;
   text-decoration: none;

@@ -27,7 +27,7 @@
             </v-icon>
 
             <nuxt-link to="" class="nav-link">
-              My profile
+              Tài khoản của tôi
             </nuxt-link>
           </div>
 
@@ -37,7 +37,7 @@
             </v-icon>
 
             <nuxt-link to="" class="nav-link">
-              Notifications
+              Thông báo
             </nuxt-link>
           </div>
         </v-container>
@@ -56,7 +56,7 @@
           class="mb-4"
         >
           <v-tab
-            v-for="item in filters"
+            v-for="item in vnFilters"
             :key="item"
             class="text-capitalize"
           >
@@ -93,7 +93,7 @@
                       />
                     </v-col>
 
-                    You don't have any request.
+                    Bạn chưa có yêu cầu nào.
                   </v-row>
                 </v-card-title>
               </v-card>
@@ -169,6 +169,7 @@ export default {
   layout: 'appbar',
   data () {
     return {
+      vnFilters: ['Tất cả', 'Hoàn tất', 'Đang tiến hành', 'Đang chờ'],
       filters: ['All', 'Finished', 'On-going', 'Waiting'],
       currentFilter: 0
     }

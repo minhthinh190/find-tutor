@@ -53,7 +53,7 @@
                     color="teal darken-1"
                     class="text-capitalize white--text"
                   >
-                    Book
+                    Thuê gia sư
                   </v-btn>
                 </v-card-actions>
               </v-card>
@@ -75,7 +75,7 @@
               >
                 <p>
                   <span class="font-weight-bold">
-                    Tutor ID:&nbsp;
+                    Mã gia sư:&nbsp;
                   </span>
                   <span class="tutor-id">{{ tutor.id }}</span>
                 </p>
@@ -91,19 +91,19 @@
               <v-card flat tile>
                 <v-card-text>
                   <p class="ma-0">
-                    <span class="custom-card-title">Current Job:</span>
+                    <span class="custom-card-title">Nghề nghiệp:</span>
                     <span class="ml-1 custom-card-text">
                       {{ tutor.currentJob }}
                     </span>
                   </p>
                   <v-spacer class="my-1"/>
                   <p class="ma-0">
-                    <span class="custom-card-title">School:</span>
+                    <span class="custom-card-title">Trường:</span>
                     <span class="ml-1 custom-card-text">{{ tutor.school }}</span>
                   </p>
                   <v-spacer class="my-1"/>
                   <p class="ma-0">
-                    <span class="custom-card-title">Faculty/Class:</span>
+                    <span class="custom-card-title">Khoa/Lớp:</span>
                     <span class="ml-1 custom-card-text">{{ tutor.faculty }}</span>
                   </p>
                 </v-card-text>
@@ -118,7 +118,7 @@
             <v-col class="pa-0">
               <v-card flat tile>
                 <v-card-title class="pt-3 pb-0 custom-card-title">
-                  Self Introduction
+                  Tự giới thiệu
                 </v-card-title>
                 <v-card-text class="">
                   {{ tutor.selfIntroduction }}
@@ -133,7 +133,7 @@
           <v-row>
             <v-col class="pa-0">
               <v-card flat tile>
-                <v-card-title class="pt-3 pb-2 custom-card-title">Achievement</v-card-title>
+                <v-card-title class="pt-3 pb-2 custom-card-title">Đặc điểm nổi bật</v-card-title>
                 <v-card-text>
                   <v-chip
                     label
@@ -155,7 +155,7 @@
             <v-col class="pa-0">
               <v-card flat tile>
                 <v-card-title class="pt-3 pb-0 custom-card-title">
-                  Fee Table
+                  Bảng học phí
                 </v-card-title>
                 <v-data-table
                   :headers="feeTableHeaders"
@@ -173,7 +173,7 @@
             <v-col class="pa-0">
               <v-card flat tile>
                 <v-card-title class="pt-3 pb-0 custom-card-title">
-                  Timetable
+                  Thời gian rảnh
                 </v-card-title>
                 <v-data-table
                   :headers="timetableHeaders"
@@ -224,7 +224,7 @@
               >
                 <p>
                   <span class="font-weight-bold">
-                    Format:&nbsp;
+                    Nhận dạy theo hình thức:&nbsp;
                   </span>
                   {{ displayTeachingFormat(tutor.format) }}
                 </p>
@@ -246,15 +246,15 @@ export default {
   data () {
     return {
       feeTableHeaders: [
-        { text: 'Subject', value: 'subject', align: '', sortable: false },
-        { text: 'Level', value: 'level', align: '', sortable: false },
-        { text: 'Fee/session (VND)', value: 'fee', align: '', sortable: false }
+        { text: 'Môn học', value: 'subject', align: '', sortable: false },
+        { text: 'Lớp', value: 'level', align: '', sortable: false },
+        { text: 'Học phí/buổi', value: 'fee', align: '', sortable: false }
       ],
       timetableHeaders: [
-        { text: 'Weekday', value: 'weekday', align: '', sortable: false },
-        { text: 'Morning', value: 'morning', align: '', sortable: false },
-        { text: 'Afternoon', value: 'afternoon', align: '', sortable: false },
-        { text: 'Evening', value: 'evening', align: '', sortable: false }
+        { text: 'Ngày trong tuần', value: 'weekday', align: '', sortable: false },
+        { text: 'Sáng', value: 'morning', align: '', sortable: false },
+        { text: 'Chiều', value: 'afternoon', align: '', sortable: false },
+        { text: 'Tối', value: 'evening', align: '', sortable: false }
       ],
       feeTableData: [],
     }

@@ -4,7 +4,7 @@
       <v-col cols="12" sm="6" md="6" lg="4">
         <v-card class="pa-6" outlined>
           <v-card-title class="justify-center mb-4">
-            <h3>Sign Up</h3>
+            <h3>Đăng ký</h3>
           </v-card-title>
 
           <v-card-text>
@@ -33,7 +33,7 @@
 
               <v-text-field
                 v-model="password"
-                label="Password"
+                label="Mật khẩu"
                 color="teal accent-4"
                 dense
                 outlined
@@ -46,7 +46,7 @@
               <v-spacer class="py-1" />
 
               <v-text-field
-                label="Confirm Password"
+                label="Nhập lại mật khẩu"
                 ref="confirmPassword"
                 color="teal accent-4"
                 dense
@@ -71,15 +71,15 @@
                   class="py-5 text-capitalize white--text"
                   @click="signUp"
                 >
-                  Sign Up
+                  Đăng ký
                 </v-btn>
               </v-col>
 
               <v-col cols="12" sm="12" md="12" lg="12" align="center" class="pb-0">
                 <p>
-                  Already have an account?
+                  Đã có tài khoản?
                   <nuxt-link to="/signin" class="link">
-                    Sign in
+                    Đăng nhập
                   </nuxt-link>
                 </p>
               </v-col>

@@ -4,37 +4,19 @@
     class="py-7 pa-sm-16 root-container"
   >
     <v-row
-      justify="space-between"
+      justify="center"
       class="px-md-16"
     >
-      <!-- Description -->
-      <v-col
-        cols="12"
-        sm="12"
-        md="6"
-        class="pr-16"
-      >
-        <div>
-          <h2 class="py-6">
-            Lorem ipsum dolor sit amet
-          </h2>
-          <p>
-            Duis a varius urna. Duis et cursus erat, vel euismod magna. Etiama hocu cursus porta, vivamus sit amet tortor pretium. Duis a varius urna. Duis et cursus erat, vel euismod magna. Etiamaaaaa hocu cursus porta.
-          </p>
-        </div>
-      </v-col>
-
-      <!--  Request Form -->
       <v-col cols="12" sm="12" md="6">
         <v-form ref="form">
-          <v-sheet class="px-8 py-7">
+          <v-sheet class="px-12 py-9">
             <p class="text-h5 mb-7 form-title">
-              <strong>Fill out the form</strong>
+              <strong>Đăng ký tìm gia sư</strong>
             </p>
 
             <v-text-field
               v-model="subject"
-              label="Subject"
+              label="Môn học"
               color="teal accent-4"
               outlined
               dense
@@ -43,7 +25,7 @@
 
             <v-select
               v-model="format"
-              label="Format"
+              label="Hình thức học"
               color="teal accent-4"
               outlined
               dense
@@ -53,7 +35,7 @@
 
             <v-text-field
               v-model="address"
-              label="Address"
+              label="Địa chỉ"
               color="teal accent-4"
               outlined
               dense
@@ -64,7 +46,7 @@
               <v-col>
                 <v-text-field
                   v-model="perWeek"
-                  label="Sessions per week"
+                  label="Số buổi"
                   type="number"
                   color="teal accent-4"
                   outlined
@@ -77,7 +59,7 @@
               <v-col>
                 <v-text-field
                   v-model="duration"
-                  label="Duration (mins)"
+                  label="Thời lượng 1 ca học (phút)"
                   type="number"
                   color="teal accent-4"
                   outlined
@@ -90,7 +72,7 @@
 
             <v-text-field
               v-model="time"
-              label="Time"
+              label="Thời gian"
               type="time"
               color="teal accent-4"
               outlined
@@ -100,7 +82,7 @@
 
             <v-text-field
               v-model="contact"
-              label="Contact"
+              label="Số điện thoại"
               color="teal accent-4"
               outlined
               dense
@@ -109,7 +91,7 @@
 
             <v-textarea
               v-model="description"
-              label="Description"
+              label="Mô tả"
               color="teal accent-4"
               outlined
               dense
@@ -128,7 +110,7 @@
                   class="pa-5 white--text"
                   @click="submit"
                 >
-                  Submit
+                  Đăng ký ngay
                 </v-btn>
               </v-col>
             </v-row>
