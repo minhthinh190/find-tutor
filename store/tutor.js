@@ -46,6 +46,11 @@ export const actions = {
     commit('setPaginatedTutors', paginatedTutorList)
   },
 
+  async queryTutors ({ commit }, queryObj) {
+    const tutors = await tutorAPI.queryTutors(queryObj)
+    commit('setTutors', tutors)
+  },
+
   async getTutors ({ commit }) {
     const tutors = await tutorAPI.getAllTutors()
     commit('setTutors', tutors)
