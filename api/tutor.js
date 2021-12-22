@@ -106,7 +106,7 @@ const getApplyingTutors = async (tutorDocs) => {
   let applyingTutors = []
 
   for (const tutorDoc of tutorDocs) {
-    const tutorProfile = await getTutorProfile(tutorDoc)
+    const tutorProfile = await getTutor(tutorDoc)
     applyingTutors.push(tutorProfile)
   }
   return applyingTutors
