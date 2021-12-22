@@ -171,7 +171,7 @@
           <!-- Applying Tutor List -->
           <v-row v-if="applyingTutors.length" class="mb-16">
             <v-col cols="12" class="mb-1 pl-3">
-              <h3>Applying Tutors</h3>
+              <h3>Danh sách gia sư ứng tuyển</h3>
             </v-col>
 
             <v-col
@@ -191,7 +191,7 @@
 
                 <v-img
                   height="150"
-                  src="https://picsum.photos/id/11/500/300"
+                  :src="tutor.avatar"
                   class="mx-4"
                 ></v-img>
                 
@@ -201,12 +201,12 @@
                   </p>
                   <v-spacer class="mb-1"/>
                   <p class="ma-0">
-                    <strong>Date of birth: </strong>
+                    <strong>Ngày sinh: </strong>
                     {{ tutor.birthDate + '/' + tutor.birthMonth + '/' + tutor.birthYear }}
                   </p>
                   <v-spacer class="mb-1"/>
                   <p class="ma-0">
-                    <strong>Hometown: </strong>
+                    <strong>Quê quán: </strong>
                     {{ tutor.hometown }}
                   </p>
                 </v-card-text>
@@ -217,7 +217,7 @@
                     class="text-capitalize"
                     @click="rejectTutor(tutor)"
                   >
-                    Reject
+                    Từ chối
                   </v-btn>
 
                   <v-spacer />
@@ -228,7 +228,7 @@
                     class="text-capitalize white--text"
                     @click.stop="isDialogShowed = true; selectedTutor = tutor.email"
                   >
-                    Accept
+                    Chấp nhận
                   </v-btn>
                 </v-card-actions>
               </v-card>
@@ -246,15 +246,19 @@
       v-on:confirm="hireTutor"
     >
       <template #dialogTitle>
-        Accepting Confirmation
+        Xác nhận thuê gia sư
       </template>
 
       <template #dialogContent>
-        Are you sure to hire this tutor?
+        Đồng ý thuê gia sư này?
       </template>
 
       <template #confirmBtnText>
-        Accept
+        Đồng ý
+      </template>
+
+      <template #cancelBtnText>
+        Hủy
       </template>
     </confirm-dialog>
   </v-container>
@@ -337,6 +341,7 @@ export default {
       let applyingTutorEmails = []
 
       this.booking.tutors.forEach((tutor) => {
+        console.log(tutor)
         if (tutor.status === 'applying') {
           applyingTutorEmails.push(tutor.email)
         }
