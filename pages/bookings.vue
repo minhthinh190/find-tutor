@@ -150,7 +150,7 @@
                 </v-card-subtitle>
 
                 <v-card-text class="font-weight-bold">
-                  {{ capitalizeFirstLetter(item.status) }}
+                  {{ translateBookingStatus(item.status) }}
                 </v-card-text>
               </v-card>
             </v-col>
@@ -201,6 +201,24 @@ export default {
 
     selectItem (item) {
       this.currentFilter = item
+    },
+
+    translateBookingStatus (originalStatus) {
+      let status = ''
+
+      switch (originalStatus) {
+        case 'waiting':
+          status = 'Đang chờ'
+          break
+        case 'on-going':
+          status = 'Đang tiến hành'
+          break
+        case 'finished':
+          status = 'Hoàn tất'
+          break
+      }
+
+      return status
     },
 
     capitalizeFirstLetter (str) {
