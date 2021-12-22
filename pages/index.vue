@@ -5,7 +5,7 @@
   >
     <v-row
       justify="space-between"
-      class="px-md-16"
+      class="mb-16 px-md-16"
     >
       <v-col
         cols="12"
@@ -15,10 +15,10 @@
       >
         <div>
           <h1 class="pb-4">
-            Lorem ipsum dolor sit amet
+            Tìm kiếm gia sư dễ dàng, nhanh chóng
           </h1>
           <p class="pb-4">
-            Lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum.
+            Tìm kiếm gia sư dạy kèm tại nhà hoặc online phù hợp với nhu cầu của bạn.
           </p>
 
           <nuxt-link
@@ -30,7 +30,7 @@
               depressed
               class="pa-5 white--text"
             >
-              Let's Connect
+              Tìm gia sư
             </v-btn>
           </nuxt-link>
         </div>

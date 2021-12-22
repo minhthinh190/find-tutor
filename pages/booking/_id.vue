@@ -28,7 +28,7 @@
             </v-icon>
 
             <nuxt-link to="" class="nav-link">
-              My profile
+              Tài khoản của tôi
             </nuxt-link>
           </div>
 
@@ -38,7 +38,7 @@
             </v-icon>
 
             <nuxt-link to="" class="nav-link">
-              Notifications
+              Thông báo
             </nuxt-link>
           </div>
         </v-container>
@@ -60,13 +60,13 @@
                   'status-label--finished': booking.status === 'finished'
                 }" 
               >
-                {{ capitalizeFirstLetter(booking.status) }}
+                {{ translateStatus(booking.status) }}
               </div>
             </v-col>
 
             <v-col cols="6">
               <p class="ma-0 text-right subtitle-2 created-date">
-                Created date: {{ booking.createdDate }}
+                Ngày tạo: {{ booking.createdDate }}
               </p>
             </v-col>
           </v-row>
@@ -81,7 +81,7 @@
               >
                 <p>
                   <span class="font-weight-bold">
-                    Tutor:&nbsp;
+                    Gia sư:&nbsp;
                   </span>
 
                   <nuxt-link
@@ -121,7 +121,7 @@
               <v-card flat tile>
                 <div class="px-4 pt-4 pb-0">
                   <p class="ma-0 font-weight-bold">
-                    Description
+                    Mô tả
                   </p>
                 </div>
 
@@ -142,7 +142,7 @@
               >
                 <p>
                   <span class="font-weight-bold">
-                    Address:&nbsp;
+                    Địa chỉ:&nbsp;
                   </span>
                   {{ booking.address }}
                 </p>
@@ -160,7 +160,7 @@
               >
                 <p>
                   <span class="font-weight-bold">
-                    Contact:&nbsp;
+                    Liên hệ:&nbsp;
                   </span>
                   {{ booking.contact }}
                 </p>
@@ -171,7 +171,7 @@
           <!-- Applying Tutor List -->
           <v-row v-if="applyingTutors.length" class="mb-16">
             <v-col cols="12" class="mb-1 pl-3">
-              <h3>Applying Tutors</h3>
+              <h3>Danh sách gia sư ứng tuyển</h3>
             </v-col>
 
             <v-col
@@ -191,7 +191,7 @@
 
                 <v-img
                   height="150"
-                  src="https://picsum.photos/id/11/500/300"
+                  :src="tutor.avatar"
                   class="mx-4"
                 ></v-img>
                 
@@ -201,12 +201,12 @@
                   </p>
                   <v-spacer class="mb-1"/>
                   <p class="ma-0">
-                    <strong>Date of birth: </strong>
+                    <strong>Ngày sinh: </strong>
                     {{ tutor.birthDate + '/' + tutor.birthMonth + '/' + tutor.birthYear }}
                   </p>
                   <v-spacer class="mb-1"/>
                   <p class="ma-0">
-                    <strong>Hometown: </strong>
+                    <strong>Quê quán: </strong>
                     {{ tutor.hometown }}
                   </p>
                 </v-card-text>
@@ -217,7 +217,7 @@
                     class="text-capitalize"
                     @click="rejectTutor(tutor)"
                   >
-                    Reject
+                    Từ chối
                   </v-btn>
 
                   <v-spacer />
@@ -228,7 +228,7 @@
                     class="text-capitalize white--text"
                     @click.stop="isDialogShowed = true; selectedTutor = tutor.email"
                   >
-                    Accept
+                    Chấp nhận
                   </v-btn>
                 </v-card-actions>
               </v-card>
@@ -246,15 +246,19 @@
       v-on:confirm="hireTutor"
     >
       <template #dialogTitle>
-        Accepting Confirmation
+        Xác nhận thuê gia sư
       </template>
 
       <template #dialogContent>
-        Are you sure to hire this tutor?
+        Đồng ý thuê gia sư này?
       </template>
 
       <template #confirmBtnText>
-        Accept
+        Đồng ý
+      </template>
+
+      <template #cancelBtnText>
+        Hủy
       </template>
     </confirm-dialog>
   </v-container>
@@ -276,11 +280,11 @@ export default {
       isDialogShowed: false,
       isHiring: false,
       headers: [
-        { text: 'Subject', value: 'subject', align: 'start', sortable: false },
-        { text: 'Format', value: 'format', align: 'start', sortable: false },
-        { text: 'Time', value: 'time', align: 'start', sortable: false },
-        { text: 'Per week', value: 'perWeek', align: 'start', sortable: false },
-        { text: 'Duration', value: 'duration', align: 'start', sortable: false }
+        { text: 'Môn học', value: 'subject', align: 'start', sortable: false },
+        { text: 'Hình thức', value: 'format', align: 'start', sortable: false },
+        { text: 'Thời gian', value: 'time', align: 'start', sortable: false },
+        { text: 'Số buổi/tuần', value: 'perWeek', align: 'start', sortable: false },
+        { text: 'Thời lượng', value: 'duration', align: 'start', sortable: false }
       ],
       selectedTutor: null
     }
@@ -301,6 +305,23 @@ export default {
     await this.getApplyingTutorsData()
   },
   methods: {
+    translateStatus (status) {
+      let vnStatus = null
+
+      switch (status) {
+        case 'waiting':
+          vnStatus = 'Đang chờ'
+          break
+        case 'on-going':
+          vnStatus = 'Đang tiến hành'
+          break
+        case 'finished':
+          vnStatus = 'Hoàn tất'
+          break
+      }
+
+      return vnStatus
+    },
     capitalizeFirstLetter (str) {
       return str.charAt(0).toUpperCase() + str.slice(1)
     },
@@ -311,7 +332,7 @@ export default {
           format: this.booking.format,
           time: this.booking.time,
           perWeek: this.booking.perWeek,
-          duration: this.booking.duration + ' (mins)'
+          duration: this.booking.duration + ' (phút)'
         }
       ]
       return data
@@ -320,6 +341,7 @@ export default {
       let applyingTutorEmails = []
 
       this.booking.tutors.forEach((tutor) => {
+        console.log(tutor)
         if (tutor.status === 'applying') {
           applyingTutorEmails.push(tutor.email)
         }
