@@ -1,11 +1,11 @@
 <template>
   <v-container
     fluid
-    class="py-7 pa-sm-16 root-container"
+    class="px-sm-16 pb-sm-16 root-container"
   >
     <v-row
       justify="space-between"
-      class="px-md-16"
+      class="mb-16 px-md-16"
     >
       <v-col
         cols="12"
@@ -13,12 +13,12 @@
         md="6"
         class="pr-md-10"
       >
-        <div>
+        <div class="d-flex flex-column justify-center intro-container">
           <h1 class="pb-4">
-            Lorem ipsum dolor sit amet
+            Tìm kiếm gia sư dễ dàng, nhanh chóng
           </h1>
           <p class="pb-4">
-            Lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum.
+            Tìm kiếm gia sư dạy kèm tại nhà hoặc online phù hợp với nhu cầu của bạn.
           </p>
 
           <nuxt-link
@@ -26,11 +26,12 @@
             class="link"
           >
             <v-btn
-              color="teal darken-1"
               depressed
+              tile
+              color="teal darken-1"
               class="pa-5 white--text"
             >
-              Let's Connect
+              Tìm gia sư
             </v-btn>
           </nuxt-link>
         </div>
@@ -73,8 +74,8 @@ export default {
 .link {
   text-decoration: none;
 }
-.inside-box {
-  border: 1px solid blue;
+.intro-container {
+  height: 100%;
 }
 .cover-image {
   width: 100%;

@@ -17,43 +17,46 @@
             </v-col>
           </v-row>
 
-          <v-spacer class="my-8"/>
+          <v-spacer class="my-4"/>
 
           <v-row>
             <v-col class="pa-0">
               <v-card flat tile class="pb-3">
-                <v-card-title>{{ tutor.name }}</v-card-title>
+                <v-card-title class="mb-3 px-0">
+                  {{ tutor.name }}
+                </v-card-title>
 
-                <v-card-subtitle class="py-1">
+                <v-card-subtitle class="px-0 py-1">
                   <v-icon small class="mr-1">mdi-calendar-range</v-icon>
                   {{ tutor.birthDate + '/' + tutor.birthMonth + '/' + tutor.birthYear}}
                 </v-card-subtitle>
 
-                <v-card-subtitle class="py-1">
+                <v-card-subtitle class="px-0 py-1">
                   <v-icon small class="mr-1">mdi-map-marker</v-icon>
                   {{ tutor.hometown }}
                 </v-card-subtitle>
 
-                <v-card-subtitle class="py-1">
+                <v-card-subtitle class="px-0 py-1">
                   <v-icon small class="mr-1">mdi-phone</v-icon>
                   {{ tutor.phone }}
                 </v-card-subtitle>
 
-                <v-card-subtitle class="py-1">
+                <v-card-subtitle class="px-0 py-1">
                   <v-icon small class="mr-1">mdi-email</v-icon>
                   {{ tutor.email }}
                 </v-card-subtitle>
 
                 <v-spacer class="my-2"/>
 
-                <v-card-actions class="px-4">
+                <v-card-actions class="px-0">
                   <v-btn
+                    tile
                     depressed
                     block
                     color="teal darken-1"
                     class="text-capitalize white--text"
                   >
-                    Book
+                    Thuê gia sư
                   </v-btn>
                 </v-card-actions>
               </v-card>
@@ -63,23 +66,21 @@
       </v-col>
 
       <!-- Experience & Services -->
-      <v-col cols="9">
+      <v-col cols="9" class="pl-8">
         <v-container fluid>
           <!-- Tutor ID -->
           <v-row>
             <v-col class="pa-0">
-              <v-sheet
-                color="white"
-                height="50"
-                class="px-4 py-3"
-              >
-                <p>
-                  <span class="font-weight-bold">
-                    Tutor ID:&nbsp;
-                  </span>
-                  <span class="tutor-id">{{ tutor.id }}</span>
-                </p>
-              </v-sheet>
+              <v-card flat tile outlined>
+                <v-card-text>
+                  <p class="ma-0">
+                    <span class="font-weight-bold black--text custom-card-title">
+                      Mã gia sư:&nbsp;
+                    </span>
+                    <span class="tutor-id">{{ tutor.id }}</span>
+                  </p>  
+                </v-card-text>
+              </v-card>
             </v-col>
           </v-row>
 
@@ -88,23 +89,23 @@
           <!-- Job & Education -->
           <v-row>
             <v-col class="pa-0">
-              <v-card flat tile>
+              <v-card flat tile outlined>
                 <v-card-text>
                   <p class="ma-0">
-                    <span class="custom-card-title">Current Job:</span>
-                    <span class="ml-1 custom-card-text">
+                    <span class="custom-card-title">Nghề nghiệp:</span>
+                    <span class="ml-1">
                       {{ tutor.currentJob }}
                     </span>
                   </p>
                   <v-spacer class="my-1"/>
                   <p class="ma-0">
-                    <span class="custom-card-title">School:</span>
-                    <span class="ml-1 custom-card-text">{{ tutor.school }}</span>
+                    <span class="custom-card-title">Trường:</span>
+                    <span class="ml-1">{{ tutor.school }}</span>
                   </p>
                   <v-spacer class="my-1"/>
                   <p class="ma-0">
-                    <span class="custom-card-title">Faculty/Class:</span>
-                    <span class="ml-1 custom-card-text">{{ tutor.faculty }}</span>
+                    <span class="custom-card-title">Khoa/Lớp:</span>
+                    <span class="ml-1">{{ tutor.faculty }}</span>
                   </p>
                 </v-card-text>
               </v-card>
@@ -116,9 +117,9 @@
           <!-- Tutor Description -->
           <v-row>
             <v-col class="pa-0">
-              <v-card flat tile>
+              <v-card flat tile outlined>
                 <v-card-title class="pt-3 pb-0 custom-card-title">
-                  Self Introduction
+                  Tự giới thiệu
                 </v-card-title>
                 <v-card-text class="">
                   {{ tutor.selfIntroduction }}
@@ -132,17 +133,18 @@
           <!-- Tutor Achievement -->
           <v-row>
             <v-col class="pa-0">
-              <v-card flat tile>
-                <v-card-title class="pt-3 pb-2 custom-card-title">Achievement</v-card-title>
+              <v-card flat tile outlined>
+                <v-card-title class="pt-3 pb-2 custom-card-title">
+                  Đặc điểm nổi bật
+                </v-card-title>
                 <v-card-text>
-                  <v-chip
-                    label
-                    color="blue darken-1"
-                    text-color="white"
-                    class="mr-1 mb-1 px-5"
+                  <div
+                    v-for="(achievement, index) in tutor.achievement"
+                    :key="index"
+                    class="mr-2 px-2 achievement-label"
                   >
-                    {{ tutor.achievement }}
-                  </v-chip>
+                    {{ achievement }}
+                  </div>
                 </v-card-text>
               </v-card>
             </v-col>
@@ -154,13 +156,14 @@
           <v-row>
             <v-col class="pa-0">
               <v-card flat tile>
-                <v-card-title class="pt-3 pb-0 custom-card-title">
-                  Fee Table
+                <v-card-title class="mb-2 pt-3 pb-0 custom-card-title">
+                  Bảng học phí
                 </v-card-title>
                 <v-data-table
+                  hide-default-footer
                   :headers="feeTableHeaders"
                   :items="feeTableData"
-                  hide-default-footer
+                  class="v-table--custom"
                 ></v-data-table>
               </v-card>
             </v-col>
@@ -172,13 +175,14 @@
           <v-row>
             <v-col class="pa-0">
               <v-card flat tile>
-                <v-card-title class="pt-3 pb-0 custom-card-title">
-                  Timetable
+                <v-card-title class="mb-2 pt-3 pb-0 custom-card-title">
+                  Thời gian rảnh
                 </v-card-title>
                 <v-data-table
+                  hide-default-footer
                   :headers="timetableHeaders"
                   :items="tutor.freeTime"
-                  hide-default-footer
+                  class="v-table--custom"
                 >
                   <template v-slot:[`item.morning`]="{ item }">
                     <v-checkbox
@@ -189,6 +193,7 @@
                       class="ma-0"
                     ></v-checkbox>
                   </template>
+
                   <template v-slot:[`item.afternoon`]="{ item }">
                     <v-checkbox
                       v-model="item.afternoon"
@@ -198,6 +203,7 @@
                       class="ma-0"
                     ></v-checkbox>
                   </template>
+
                   <template v-slot:[`item.evening`]="{ item }">
                     <v-checkbox
                       v-model="item.evening"
@@ -217,18 +223,16 @@
           <!-- Format -->
           <v-row>
             <v-col class="pa-0">
-              <v-sheet
-                color="white"
-                height="50"
-                class="px-4 py-3"
-              >
-                <p>
-                  <span class="font-weight-bold">
-                    Format:&nbsp;
-                  </span>
-                  {{ displayTeachingFormat(tutor.format) }}
-                </p>
-              </v-sheet>
+              <v-card flat tile outlined>
+                <v-card-text>
+                  <p class="ma-0">
+                    <span class="font-weight-bold black--text custom-card-title">
+                      Nhận dạy theo hình thức:&nbsp;
+                    </span>
+                    {{ displayTeachingFormat(tutor.format) }}
+                  </p>  
+                </v-card-text>
+              </v-card>
             </v-col>
           </v-row>
         </v-container>
@@ -246,15 +250,15 @@ export default {
   data () {
     return {
       feeTableHeaders: [
-        { text: 'Subject', value: 'subject', align: '', sortable: false },
-        { text: 'Level', value: 'level', align: '', sortable: false },
-        { text: 'Fee/session (VND)', value: 'fee', align: '', sortable: false }
+        { text: 'Môn học', value: 'subject', align: '', sortable: false },
+        { text: 'Lớp', value: 'level', align: '', sortable: false },
+        { text: 'Học phí/buổi', value: 'fee', align: '', sortable: false }
       ],
       timetableHeaders: [
-        { text: 'Weekday', value: 'weekday', align: '', sortable: false },
-        { text: 'Morning', value: 'morning', align: '', sortable: false },
-        { text: 'Afternoon', value: 'afternoon', align: '', sortable: false },
-        { text: 'Evening', value: 'evening', align: '', sortable: false }
+        { text: 'Ngày trong tuần', value: 'weekday', align: '', sortable: false },
+        { text: 'Sáng', value: 'morning', align: '', sortable: false },
+        { text: 'Chiều', value: 'afternoon', align: '', sortable: false },
+        { text: 'Tối', value: 'evening', align: '', sortable: false }
       ],
       feeTableData: [],
     }
@@ -309,6 +313,9 @@ export default {
 </script>
 
 <style>
+.box {
+  border: 1px solid red;
+}
 .img-placeholder {
   background: #E0E0E0;
 }
@@ -324,6 +331,14 @@ export default {
 }
 .custom-card-text {
   font-size: 16px;
-  color: black;
+}
+.achievement-label {
+  width: fit-content;
+  padding-top: 1px;
+  padding-bottom: 1px;
+  font-size: 13px;
+  font-weight: bold;
+  color: #263238;
+  background: #64B5F6;
 }
 </style>

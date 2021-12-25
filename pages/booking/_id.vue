@@ -28,7 +28,7 @@
             </v-icon>
 
             <nuxt-link to="" class="nav-link">
-              My profile
+              Tài khoản của tôi
             </nuxt-link>
           </div>
 
@@ -38,7 +38,7 @@
             </v-icon>
 
             <nuxt-link to="" class="nav-link">
-              Notifications
+              Thông báo
             </nuxt-link>
           </div>
         </v-container>
@@ -60,46 +60,46 @@
                   'status-label--finished': booking.status === 'finished'
                 }" 
               >
-                {{ capitalizeFirstLetter(booking.status) }}
+                {{ translateStatus(booking.status) }}
               </div>
             </v-col>
 
             <v-col cols="6">
-              <p class="ma-0 text-right subtitle-2 created-date">
-                Created date: {{ booking.createdDate }}
-              </p>
+              <div class="mt-1">
+                <p class="ma-0 text-right subtitle-2 created-date">
+                  Ngày tạo: {{ booking.createdDate }}
+                </p>
+              </div>
             </v-col>
           </v-row>
 
           <!-- Tutor List -->
           <v-row v-if="getAcceptedTutorEmails().length" class="mb-4">
             <v-col cols="12" class="pl-3">
-              <v-sheet
-                color="white"
-                height="50"
-                class="px-4 py-3 v-sheet--custom"
-              >
-                <p>
-                  <span class="font-weight-bold">
-                    Tutor:&nbsp;
-                  </span>
-
-                  <nuxt-link
-                    v-for="(tutor, index) in booking.tutors"
-                    :key="index"
-                    to=""
-                    class="link"
-                  >
-                    {{ tutor.email }}
-                    <span
-                      v-if="index !== booking.tutors.length - 1"
-                      class="comma"
-                    >
-                      ,&nbsp;
+              <v-card flat tile outlined>
+                <v-card-text>
+                  <p class="ma-0">
+                    <span class="font-weight-bold black--text custom-card-text">
+                      Gia sư:&nbsp;
                     </span>
-                  </nuxt-link>
-                </p>
-              </v-sheet>
+
+                    <nuxt-link
+                      v-for="(tutor, index) in booking.tutors"
+                      :key="index"
+                      to=""
+                      class="link"
+                    >
+                      {{ tutor.email }}
+                      <span
+                        v-if="index !== booking.tutors.length - 1"
+                        class="comma"
+                      >
+                        ,&nbsp;
+                      </span>
+                    </nuxt-link>
+                  </p>
+                </v-card-text>
+              </v-card>
             </v-col>
           </v-row>
 
@@ -107,9 +107,9 @@
           <v-row class="mb-4">
             <v-col cols="12" class="pl-3">
               <v-data-table
+                hide-default-footer
                 :headers="headers"
                 :items="generateDetailsTableData()"
-                hide-default-footer
                 class="v-table--custom"
               ></v-data-table>
             </v-col>
@@ -118,10 +118,10 @@
           <!-- Description -->
           <v-row class="mb-4">
             <v-col cols="12" class="pl-3">
-              <v-card flat tile>
+              <v-card flat tile outlined>
                 <div class="px-4 pt-4 pb-0">
-                  <p class="ma-0 font-weight-bold">
-                    Description
+                  <p class="ma-0 font-weight-bold custom-card-text">
+                    Mô tả
                   </p>
                 </div>
 
@@ -135,43 +135,39 @@
           <!-- Address -->
           <v-row class="mb-4">
             <v-col cols="12" class="pl-3">
-              <v-sheet
-                color="white"
-                height="50"
-                class="px-4 py-3 v-sheet--custom"
-              >
-                <p>
-                  <span class="font-weight-bold">
-                    Address:&nbsp;
-                  </span>
-                  {{ booking.address }}
-                </p>
-              </v-sheet>
+              <v-card flat tile outlined>
+                <v-card-text>
+                  <p class="ma-0">
+                    <span class="font-weight-bold black--text custom-card-text">
+                      Địa chỉ:&nbsp;
+                    </span>
+                    {{ booking.address }}
+                  </p>
+                </v-card-text>
+              </v-card>
             </v-col>
           </v-row>
 
           <!-- Contact -->
           <v-row class="mb-8">
             <v-col cols="12" class="pl-3">
-              <v-sheet
-                color="white"
-                height="50"
-                class="px-4 py-3 v-sheet--custom"
-              >
-                <p>
-                  <span class="font-weight-bold">
-                    Contact:&nbsp;
-                  </span>
-                  {{ booking.contact }}
-                </p>
-              </v-sheet>
+              <v-card flat tile outlined>
+                <v-card-text>
+                  <p class="ma-0">
+                    <span class="font-weight-bold black--text custom-card-text">
+                      Liên hệ:&nbsp;
+                    </span>
+                    {{ booking.contact }}
+                  </p>  
+                </v-card-text>
+              </v-card>
             </v-col>
           </v-row>
 
           <!-- Applying Tutor List -->
           <v-row v-if="applyingTutors.length" class="mb-16">
             <v-col cols="12" class="mb-1 pl-3">
-              <h3>Applying Tutors</h3>
+              <h3>Danh sách gia sư ứng tuyển</h3>
             </v-col>
 
             <v-col
@@ -182,8 +178,8 @@
               md="4"
               class="pr-0"
             >
-              <v-card flat tile>
-                <v-card-subtitle>
+              <v-card flat tile outlined>
+                <v-card-subtitle class="px-3 pt-3 pb-2">
                   <p class="ma-0">
                     <strong>{{ tutor.id }}</strong>
                   </p>
@@ -191,44 +187,46 @@
 
                 <v-img
                   height="150"
-                  src="https://picsum.photos/id/11/500/300"
-                  class="mx-4"
+                  :src="tutor.avatar"
+                  class="mx-3"
                 ></v-img>
                 
-                <v-card-text>
+                <v-card-text class="px-3">
                   <p class="ma-0 tutor-name">
                     <strong>{{ tutor.name }}</strong>
                   </p>
                   <v-spacer class="mb-1"/>
                   <p class="ma-0">
-                    <strong>Date of birth: </strong>
+                    <strong>Ngày sinh: </strong>
                     {{ tutor.birthDate + '/' + tutor.birthMonth + '/' + tutor.birthYear }}
                   </p>
                   <v-spacer class="mb-1"/>
                   <p class="ma-0">
-                    <strong>Hometown: </strong>
+                    <strong>Quê quán: </strong>
                     {{ tutor.hometown }}
                   </p>
                 </v-card-text>
 
-                <v-card-actions class="px-4 pb-3">
+                <v-card-actions class="px-3 pb-3">
                   <v-btn
+                    tile
                     depressed
                     class="text-capitalize"
                     @click="rejectTutor(tutor)"
                   >
-                    Reject
+                    Từ chối
                   </v-btn>
 
                   <v-spacer />
 
                   <v-btn
+                    tile
                     depressed
                     color="teal darken-1"
                     class="text-capitalize white--text"
                     @click.stop="isDialogShowed = true; selectedTutor = tutor.email"
                   >
-                    Accept
+                    Chấp nhận
                   </v-btn>
                 </v-card-actions>
               </v-card>
@@ -246,15 +244,19 @@
       v-on:confirm="hireTutor"
     >
       <template #dialogTitle>
-        Accepting Confirmation
+        Xác nhận thuê gia sư
       </template>
 
       <template #dialogContent>
-        Are you sure to hire this tutor?
+        Đồng ý thuê gia sư này?
       </template>
 
       <template #confirmBtnText>
-        Accept
+        Đồng ý
+      </template>
+
+      <template #cancelBtnText>
+        Hủy
       </template>
     </confirm-dialog>
   </v-container>
@@ -276,11 +278,11 @@ export default {
       isDialogShowed: false,
       isHiring: false,
       headers: [
-        { text: 'Subject', value: 'subject', align: 'start', sortable: false },
-        { text: 'Format', value: 'format', align: 'start', sortable: false },
-        { text: 'Time', value: 'time', align: 'start', sortable: false },
-        { text: 'Per week', value: 'perWeek', align: 'start', sortable: false },
-        { text: 'Duration', value: 'duration', align: 'start', sortable: false }
+        { text: 'Môn học', value: 'subject', align: 'start', sortable: false },
+        { text: 'Hình thức', value: 'format', align: 'start', sortable: false },
+        { text: 'Thời gian', value: 'time', align: 'start', sortable: false },
+        { text: 'Số buổi/tuần', value: 'perWeek', align: 'start', sortable: false },
+        { text: 'Thời lượng', value: 'duration', align: 'start', sortable: false }
       ],
       selectedTutor: null
     }
@@ -301,6 +303,23 @@ export default {
     await this.getApplyingTutorsData()
   },
   methods: {
+    translateStatus (status) {
+      let vnStatus = null
+
+      switch (status) {
+        case 'waiting':
+          vnStatus = 'Đang chờ'
+          break
+        case 'on-going':
+          vnStatus = 'Đang tiến hành'
+          break
+        case 'finished':
+          vnStatus = 'Hoàn tất'
+          break
+      }
+
+      return vnStatus
+    },
     capitalizeFirstLetter (str) {
       return str.charAt(0).toUpperCase() + str.slice(1)
     },
@@ -311,7 +330,7 @@ export default {
           format: this.booking.format,
           time: this.booking.time,
           perWeek: this.booking.perWeek,
-          duration: this.booking.duration + ' (mins)'
+          duration: this.booking.duration + ' (phút)'
         }
       ]
       return data
@@ -460,9 +479,16 @@ export default {
 .status-label--finished {
   background: #80CBC4;
 }
+.custom-card-text {
+  font-size: 16px;
+}
 </style>
 
 <style>
+.v-table--custom {
+  border: 1px solid #E0E0E0;
+  border-radius: 0;
+}
 .v-table--custom thead tr {
   background: white;
 }

@@ -1,27 +1,27 @@
 <template>
   <div>
     <v-app-bar
-      color="teal accent-4"
+      color="white"
+      elevation="1"
       flat
-      dark
       class="px-lg-10"
     >
-      <v-app-bar-title>
-        <nuxt-link to="/" class="home-link">
-          App Title
+      <v-app-bar-title class="text-no-wrap">
+        <nuxt-link to="/" class="home-link app-title">
+          Find Tutor
         </nuxt-link>
       </v-app-bar-title>
 
       <v-spacer></v-spacer>
 
-      <div class="d-none d-sm-flex mr-6">
+      <div class="d-none d-sm-flex mr-1">
         <nuxt-link
           v-for="(item, index) in navigation"
           :key="index"
           :to="item.link"
-          class="mx-6 font-weight-bold nav"
+          class="mx-3 font-weight-bold nav"
         >
-          {{ item.title }}
+          <v-icon color="black">{{ item.icon }}</v-icon>
         </nuxt-link>
       </div>
 
@@ -31,6 +31,7 @@
           <v-app-bar-nav-icon
             v-bind="attrs"
             v-on="on"
+            color="black"
           ></v-app-bar-nav-icon>
         </template>
 
@@ -66,15 +67,14 @@ export default {
   data () {
     return {
       navigation: [
-        { title: 'Home', link: '/' },
-        { title: 'Search', link: '/search' },
-        { title: 'About', link: '' }
+        { icon: 'mdi-home', link: '/' },
+        { icon: 'mdi-magnify', link: '/search' }
       ],
       menu: [
-        { title: 'My bookings', icon: 'mdi-book-education', action: 'goToBookingList' },
-        { title: 'My notifications', icon: 'mdi-bell', action: '' },
-        { title: 'My Profile', icon: 'mdi-account', action: '' },
-        { title: 'Sign Out', icon: 'mdi-logout', action: 'signOut' }
+        { title: 'Danh sách yêu cầu', icon: 'mdi-book-education', action: 'goToBookingList' },
+        { title: 'Thông báo', icon: 'mdi-bell', action: '' },
+        { title: 'Tài khoản của tôi', icon: 'mdi-account', action: '' },
+        { title: 'Đăng xuất', icon: 'mdi-logout', action: 'signOut' }
       ]
     }
   },
@@ -99,8 +99,13 @@ export default {
 </script>
 
 <style scoped>
+.box {
+  border: 1px solid red;
+}
+.app-title {
+  color: #00897B;
+}
 .home-link {
-  color: white;
   text-decoration: none;
   font-weight: bold;
 }

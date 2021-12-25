@@ -27,7 +27,7 @@
             </v-icon>
 
             <nuxt-link to="" class="nav-link">
-              My profile
+              Tài khoản của tôi
             </nuxt-link>
           </div>
 
@@ -37,7 +37,7 @@
             </v-icon>
 
             <nuxt-link to="" class="nav-link">
-              Notifications
+              Thông báo
             </nuxt-link>
           </div>
         </v-container>
@@ -46,7 +46,7 @@
       <v-col
         cols="12"
         md="9"
-        class="pl-md-3 pa-0"
+        class="pl-md-6 pa-0"
       >
         <!-- Filter -->
         <v-tabs
@@ -56,7 +56,7 @@
           class="mb-4"
         >
           <v-tab
-            v-for="item in filters"
+            v-for="item in vnFilters"
             :key="item"
             class="text-capitalize"
           >
@@ -76,7 +76,7 @@
             >
               <v-card
                 elevation="0"
-                class="py-16"
+                class="py-6"
               >
                 <v-card-title class="py-16">
                   <v-row
@@ -93,7 +93,7 @@
                       />
                     </v-col>
 
-                    You don't have any request.
+                    Bạn chưa có yêu cầu nào.
                   </v-row>
                 </v-card-title>
               </v-card>
@@ -112,7 +112,7 @@
               cols="12"
               class="px-0"
             >
-              <v-card flat tile>
+              <v-card flat tile outlined>
                 <v-card-title>
                   <nuxt-link
                     :to="{ name: 'booking-id', params: { id: item.id } }"
@@ -129,7 +129,7 @@
                 </v-card-title>
 
                 <v-card-subtitle>
-                  Tutor:
+                  Gia sư:
                   <nuxt-link
                     v-for="(tutor, index) in item.tutors"
                     :key="index"
@@ -149,8 +149,15 @@
                   </nuxt-link>
                 </v-card-subtitle>
 
-                <v-card-text class="font-weight-bold">
-                  {{ capitalizeFirstLetter(item.status) }}
+                <v-card-text
+                  class="ml-4 mb-4 px-2 py-0 font-weight-bold status-label"
+                  :class="{
+                    'status-label--waiting': item.status === 'waiting',
+                    'status-label--on-going': item.status === 'on-going',
+                    'status-label--finished': item.status === 'finished'
+                  }"
+                >
+                  {{ translateBookingStatus(item.status) }}
                 </v-card-text>
               </v-card>
             </v-col>
@@ -169,6 +176,7 @@ export default {
   layout: 'appbar',
   data () {
     return {
+      vnFilters: ['Tất cả', 'Hoàn tất', 'Đang tiến hành', 'Đang chờ'],
       filters: ['All', 'Finished', 'On-going', 'Waiting'],
       currentFilter: 0
     }
@@ -200,6 +208,24 @@ export default {
 
     selectItem (item) {
       this.currentFilter = item
+    },
+
+    translateBookingStatus (originalStatus) {
+      let status = ''
+
+      switch (originalStatus) {
+        case 'waiting':
+          status = 'Đang chờ'
+          break
+        case 'on-going':
+          status = 'Đang tiến hành'
+          break
+        case 'finished':
+          status = 'Hoàn tất'
+          break
+      }
+
+      return status
     },
 
     capitalizeFirstLetter (str) {
@@ -236,5 +262,20 @@ export default {
 }
 .image {
   width: 150px;
+}
+.status-label {
+  width: fit-content;
+  font-size: 13px;
+  font-weight: bold;
+  color: #263238;
+}
+.status-label--waiting {
+  background: #E57373;
+}
+.status-label--on-going {
+  background: #E6EE9C;
+}
+.status-label--finished {
+  background: #80CBC4;
 }
 </style>

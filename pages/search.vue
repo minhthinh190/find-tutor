@@ -3,74 +3,46 @@
     fluid
     class="py-7 pa-sm-16 root-container"
   >
-    <!-- Search Bar -->
-    <div class="py-5 elevation-1 search-container">
-      <div class="d-flex align-center search-bar">
+    <!-- Filters -->
+    <v-row class="mx-md-16 mt-4">
+      <v-col
+        cols="3"
+        class="pr-12 py-0"
+      >
+        <v-select
+          outlined
+          dense
+          hide-details
+          label="Môn học"
+          color="teal lighten-1"
+          :items="subjects"
+          class="v-input--custom"
+        ></v-select>
+      </v-col>
+
+      <v-col
+        cols="6"
+        class="pl-5 pr-0 py-0"
+      >
         <v-text-field
           outlined
           dense
           hide-details
+          single-line
+          color="teal lighten-1"
           prepend-inner-icon="mdi-magnify"
-          color="teal lighten-1"
-          placeholder="Search for tutors by name, ID, school"
+          label="Tìm theo tên hoặc mã gia sư"
+          class="v-input--custom"
         ></v-text-field>
+      </v-col>
 
-        <v-btn
-          depressed
-          color="teal darken-1"
-          class="ml-1 py-5 white--text"
-          @click="queryTutors"
-        >
-          <v-icon>mdi-magnify</v-icon>
-        </v-btn>
-      </div>
-    </div>
-
-    <v-spacer class="mt-14"/>
-
-    <v-row
-      justify="space-between"
-      class="mx-md-16"
-    >
       <v-col
-        cols="12"
-        class=""
+        cols="3"
+        class="px-0 py-0"
       >
-        <div>
-          <h1 class="pb-2">
-            Lorem ipsum dolor sit amet
-          </h1>
-          <p>
-            Lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum.
-          </p>
+        <div class="d-flex align-center justify-end result-quantity">
+          <p class="ma-0">150 kết quả</p>
         </div>
-      </v-col>
-    </v-row>
-
-    <v-spacer class="mb-4"/>
-
-    <!-- Filters -->
-    <v-row class="mx-md-16">
-      <v-col
-        cols="2"
-        class="py-0"
-      >
-        <v-select
-          label="Subject"
-          color="teal lighten-1"
-          :items="subjects"
-        ></v-select>
-      </v-col>
-
-      <v-col
-        cols="1"
-        class="py-0"
-      >
-        <v-select
-          label="Level"
-          color="teal lighten-1"
-          :items="[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]"
-        ></v-select>
       </v-col>
     </v-row>
 
@@ -78,22 +50,22 @@
     <v-row class="mx-md-16">
       <!-- Sub Filters -->
       <v-col
-        cols="2"
-        class="px-0"
+        cols="3"
+        class="pl-0 pr-8"
       >
         <v-container fluid class="pa-0">
           <v-expansion-panels tile flat accordion multiple>
             <!-- Gender -->
             <v-expansion-panel>
               <v-expansion-panel-header class="px-3">
-                <h3>Gender</h3>
+                <h3>Giới tính</h3>
               </v-expansion-panel-header>
 
               <v-expansion-panel-content>
                 <v-checkbox
                   v-model="query.gender"
                   hide-details
-                  label="Male"
+                  label="Nam"
                   value="male"
                   color="teal lighten-1"
                   class="mx-0 mt-0 mb-2"
@@ -102,7 +74,7 @@
                 <v-checkbox
                   v-model="query.gender"
                   hide-details
-                  label="Female"
+                  label="Nữ"
                   value="female"
                   color="teal lighten-1"
                   class="ma-0"
@@ -115,14 +87,14 @@
             <!-- Current Job -->
             <v-expansion-panel>
               <v-expansion-panel-header class="px-3">
-                <h3>Current Job</h3>
+                <h3>Nghề nghiệp</h3>
               </v-expansion-panel-header>
 
               <v-expansion-panel-content>
                 <v-checkbox
                   v-model="query.currentJob"
                   hide-details
-                  label="Student"
+                  label="Sinh viên"
                   value="student"
                   color="teal lighten-1"
                   class="mx-0 mt-0 mb-2"
@@ -131,7 +103,7 @@
                 <v-checkbox
                   v-model="query.currentJob"
                   hide-details
-                  label="Graduated"
+                  label="Đã tốt nghiệp"
                   value="graduated"
                   color="teal lighten-1"
                   class="mx-0 mt-0 mb-2"
@@ -140,7 +112,7 @@
                 <v-checkbox
                   v-model="query.currentJob"
                   hide-details
-                  label="Teacher"
+                  label="Giáo viên"
                   value="teacher"
                   color="teal lighten-1"
                   class="ma-0"
@@ -153,7 +125,7 @@
             <!-- Achievement -->
             <v-expansion-panel>
               <v-expansion-panel-header class="px-3">
-                <h3>Achievement</h3>
+                <h3>Đặc điểm nổi bật</h3>
               </v-expansion-panel-header>
 
               <v-expansion-panel-content>
@@ -169,7 +141,7 @@
                 <v-checkbox
                   v-model="query.achievement"
                   hide-details
-                  label="Học sinh giỏi QG"
+                  label="Học sinh giỏi Quốc gia"
                   value="Học sinh giỏi Quốc gia"
                   color="teal lighten-1"
                   class="mx-0 mt-0 mb-2"
@@ -178,7 +150,7 @@
                 <v-checkbox
                   v-model="query.achievement"
                   hide-details
-                  label="Học sinh giỏi T/TP"
+                  label="Học sinh giỏi Tỉnh/TP"
                   value="Học sinh giỏi Tỉnh/TP"
                   color="teal lighten-1"
                   class="mx-0 mt-0 mb-2"
@@ -227,7 +199,7 @@
             <!-- Ratings -->
             <v-expansion-panel>
               <v-expansion-panel-header class="px-3">
-                <h3>Ratings</h3>
+                <h3>Đánh giá</h3>
               </v-expansion-panel-header>
 
               <v-expansion-panel-content>
@@ -250,7 +222,7 @@
                       class="mr-1"
                     ></v-rating>
 
-                    <p class="ma-0 rating-score-label">4.5 & up</p>
+                    <p class="ma-0 rating-score-label">&#8805; 4.5</p>
                   </div>
 
                   <!-- 4.0 & up -->
@@ -271,7 +243,7 @@
                       class="mr-1"
                     ></v-rating>
 
-                    <p class="ma-0 rating-score-label">4.0 & up</p>
+                    <p class="ma-0 rating-score-label">&#8805; 4.0</p>
                   </div>
 
                   <!-- 3.5 & up -->
@@ -292,7 +264,7 @@
                       class="mr-1"
                     ></v-rating>
 
-                    <p class="ma-0 rating-score-label">3.5 & up</p>
+                    <p class="ma-0 rating-score-label">&#8805; 3.5</p>
                   </div>
 
                   <!-- 3.0 & up -->
@@ -313,7 +285,7 @@
                       class="mr-1"
                     ></v-rating>
 
-                    <p class="ma-0 rating-score-label">3.0 & up</p>
+                    <p class="ma-0 rating-score-label">&#8805; 3.0</p>
                   </div>
                 </v-radio-group>
               </v-expansion-panel-content>
@@ -324,8 +296,8 @@
 
       <!-- Tutor List -->
       <v-col
-        cols="10"
-        class="pl-6 pr-0 py-0"
+        cols="9"
+        class="mt-6 pl-2 pr-0 py-0"
       >
         <v-container fluid>
           <!-- Tutor Card -->
@@ -340,7 +312,8 @@
                   <v-col cols="3">
                     <v-img
                       height="250"
-                      class="img-placeholder"
+                      :src="tutor.avatar"
+                      class=""
                     ></v-img>
                   </v-col>
 
@@ -376,7 +349,7 @@
                         <v-icon small class="mr-2">
                           mdi-calendar-range
                         </v-icon>
-                        <p class="ma-0">
+                        <p class="ma-0 text--secondary">
                           {{ tutor.birthDate + '/' + tutor.birthMonth + '/' + tutor.birthYear }}
                         </p>
                       </div>
@@ -385,7 +358,7 @@
                         <v-icon small class="mr-2">
                           mdi-map-marker
                         </v-icon>
-                        <p class="ma-0">
+                        <p class="ma-0 text--secondary">
                           {{ tutor.hometown }}
                         </p>
                       </div>
@@ -418,7 +391,7 @@
                       ></v-rating>
 
                       <p class="ma-0 rating-quantity">
-                        ( {{ Math.floor(Math.random() * 50) + 1 }} )
+                        ({{ Math.floor(Math.random() * 50) + 1 }})
                       </p>
                     </div>
 
@@ -450,6 +423,7 @@
           v-model="page"
           color="teal darken-1"
           :length="tutors.length"
+          class="v-pagination--custom"
         ></v-pagination>
       </v-col>
     </v-row>
@@ -606,8 +580,28 @@ export default {
 .v-pagination::v-deep {
   box-shadow: none;
 }
+.v-input--custom {
+  border-radius: 0;
+}
+.result-quantity {
+  height: 100%;
+  font-weight: bold;
+  color: #757575;
+}
 /* Temporary */
 .img-placeholder {
   background: #E0E0E0;
+}
+</style>
+
+<style scoped>
+::v-deep .v-pagination__item {
+  border: 1px solid #BDBDBD;
+  border-radius: 0;
+  box-shadow: none;
+}
+::v-deep .v-pagination__navigation {
+  border-radius: 0;
+  box-shadow: none;
 }
 </style>
