@@ -1,7 +1,7 @@
 <template>
   <v-container
     fluid
-    class="py-7 pa-sm-16 root-container"
+    class="px-sm-16 pb-sm-16 root-container"
   >
     <v-row
       justify="center"
@@ -21,6 +21,7 @@
               outlined
               dense
               :rules="inputRules"
+              class="v-input--custom"
             ></v-text-field>
 
             <v-select
@@ -31,6 +32,7 @@
               dense
               :items="formatOptions"
               :rules="inputRules"
+              class="v-input--custom"
             ></v-select>
 
             <v-text-field
@@ -40,6 +42,7 @@
               outlined
               dense
               :rules="inputRules"
+              class="v-input--custom"
             ></v-text-field>
 
             <v-row>
@@ -53,6 +56,7 @@
                   dense
                   hide-spin-buttons
                   :rules="inputRules"
+                  class="v-input--custom"
                 ></v-text-field>
               </v-col>
 
@@ -66,6 +70,7 @@
                   dense
                   hide-spin-buttons
                   :rules="inputRules"
+                  class="v-input--custom"
                 ></v-text-field>
               </v-col>
             </v-row>
@@ -78,6 +83,7 @@
               outlined
               dense
               :rules="inputRules"
+              class="v-input--custom"
             ></v-text-field>
 
             <v-text-field
@@ -87,6 +93,7 @@
               outlined
               dense
               :rules="inputRules"
+              class="v-input--custom"
             ></v-text-field>
 
             <v-textarea
@@ -97,6 +104,7 @@
               dense
               rows="4"
               no-resize
+              class="v-input--custom"
             ></v-textarea>
 
             <v-row>
@@ -105,6 +113,7 @@
               <v-col class="text-right">
                 <v-btn
                   color="teal darken-1"
+                  tile
                   depressed
                   :loading="isSending"
                   class="pa-5 white--text"
@@ -199,5 +208,8 @@ export default {
 <style scoped>
 .form-title {
   color: #757575;
+}
+.v-input--custom {
+  border-radius: 0;
 }
 </style>

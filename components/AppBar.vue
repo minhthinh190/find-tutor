@@ -1,13 +1,13 @@
 <template>
   <div>
     <v-app-bar
-      color="teal accent-4"
+      color="white"
+      elevation="1"
       flat
-      dark
       class="px-lg-10"
     >
-      <v-app-bar-title>
-        <nuxt-link to="/" class="home-link">
+      <v-app-bar-title class="text-no-wrap">
+        <nuxt-link to="/" class="home-link app-title">
           Find Tutor
         </nuxt-link>
       </v-app-bar-title>
@@ -21,7 +21,7 @@
           :to="item.link"
           class="mx-3 font-weight-bold nav"
         >
-          <v-icon>{{ item.icon }}</v-icon>
+          <v-icon color="black">{{ item.icon }}</v-icon>
         </nuxt-link>
       </div>
 
@@ -31,6 +31,7 @@
           <v-app-bar-nav-icon
             v-bind="attrs"
             v-on="on"
+            color="black"
           ></v-app-bar-nav-icon>
         </template>
 
@@ -101,8 +102,10 @@ export default {
 .box {
   border: 1px solid red;
 }
+.app-title {
+  color: #00897B;
+}
 .home-link {
-  color: white;
   text-decoration: none;
   font-weight: bold;
 }
