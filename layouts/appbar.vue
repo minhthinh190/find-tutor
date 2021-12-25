@@ -60,6 +60,5 @@ export default {
 <style>
 .root-container {
   position: relative;
-  background: #F5F5F5;
 }
 </style>
