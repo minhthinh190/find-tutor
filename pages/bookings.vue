@@ -46,7 +46,7 @@
       <v-col
         cols="12"
         md="9"
-        class="pl-md-3 pa-0"
+        class="pl-md-6 pa-0"
       >
         <!-- Filter -->
         <v-tabs
@@ -76,7 +76,7 @@
             >
               <v-card
                 elevation="0"
-                class="py-16"
+                class="py-6"
               >
                 <v-card-title class="py-16">
                   <v-row
@@ -112,7 +112,7 @@
               cols="12"
               class="px-0"
             >
-              <v-card flat tile>
+              <v-card flat tile outlined>
                 <v-card-title>
                   <nuxt-link
                     :to="{ name: 'booking-id', params: { id: item.id } }"
@@ -129,7 +129,7 @@
                 </v-card-title>
 
                 <v-card-subtitle>
-                  Tutor:
+                  Gia sư:
                   <nuxt-link
                     v-for="(tutor, index) in item.tutors"
                     :key="index"
@@ -149,7 +149,14 @@
                   </nuxt-link>
                 </v-card-subtitle>
 
-                <v-card-text class="font-weight-bold">
+                <v-card-text
+                  class="ml-4 mb-4 px-2 py-0 font-weight-bold status-label"
+                  :class="{
+                    'status-label--waiting': item.status === 'waiting',
+                    'status-label--on-going': item.status === 'on-going',
+                    'status-label--finished': item.status === 'finished'
+                  }"
+                >
                   {{ translateBookingStatus(item.status) }}
                 </v-card-text>
               </v-card>
@@ -255,5 +262,20 @@ export default {
 }
 .image {
   width: 150px;
+}
+.status-label {
+  width: fit-content;
+  font-size: 13px;
+  font-weight: bold;
+  color: #263238;
+}
+.status-label--waiting {
+  background: #E57373;
+}
+.status-label--on-going {
+  background: #E6EE9C;
+}
+.status-label--finished {
+  background: #80CBC4;
 }
 </style>
