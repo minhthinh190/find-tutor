@@ -1,7 +1,7 @@
 <template>
   <v-container
     fluid
-    class="py-7 pa-sm-16 root-container"
+    class="px-sm-16 pb-sm-16 root-container"
   >
     <v-row
       justify="space-between"
@@ -13,7 +13,7 @@
         md="6"
         class="pr-md-10"
       >
-        <div>
+        <div class="d-flex flex-column justify-center intro-container">
           <h1 class="pb-4">
             Tìm kiếm gia sư dễ dàng, nhanh chóng
           </h1>
@@ -26,8 +26,9 @@
             class="link"
           >
             <v-btn
-              color="teal darken-1"
               depressed
+              tile
+              color="teal darken-1"
               class="pa-5 white--text"
             >
               Tìm gia sư
@@ -73,8 +74,8 @@ export default {
 .link {
   text-decoration: none;
 }
-.inside-box {
-  border: 1px solid blue;
+.intro-container {
+  height: 100%;
 }
 .cover-image {
   width: 100%;
