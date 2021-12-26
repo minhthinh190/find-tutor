@@ -131,12 +131,17 @@ const queryTutors = async (queryObj) => {
 
   // merge into 1 array and remove duplicates
   let tutors = [...tutorsByGender, ...tutorsByCurrentJob, ...tutorsByAchievement]
-  tutors = [
-    ...new Map(tutors.map(item => [item['id'], item])).values()
-  ]
+  tutors = [...new Map(tutors.map(item => [item['id'], item])).values()]
 
   // check tutor existence
   tutors.forEach((tutor) => {
+    /*
+    console.log('tutor name:', tutor.name)
+    console.log('gender:', isIncluded(tutor, tutorsByGender))
+    console.log('current job:', isIncluded(tutor, tutorsByCurrentJob))
+    console.log('achievement:', isIncluded(tutor, tutorsByAchievement))
+    console.log('')
+    */
     if (
       isIncluded(tutor, tutorsByGender) &&
       isIncluded(tutor, tutorsByCurrentJob) &&
@@ -145,7 +150,7 @@ const queryTutors = async (queryObj) => {
       result.push(tutor)
     }
   })
-  console.log('result:', result)
+  // console.log('result:', result)
 
   return result
 }
