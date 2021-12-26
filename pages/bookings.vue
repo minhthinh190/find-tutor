@@ -64,6 +64,24 @@
           </v-tab>
         </v-tabs>
 
+        <!-- Loader -->
+        <v-container v-if="isLoading" fluid class="py-0">
+          <v-row>
+            <v-col class="px-0">
+              <div
+                v-for="n in 3"
+                :key="n"
+              >
+                <v-skeleton-loader
+                  type="card"
+                  class="v-skeleton-loader--custom"
+                ></v-skeleton-loader>
+                <v-spacer class="my-6"/>
+              </div>
+            </v-col>
+          </v-row>
+        </v-container>
+
         <v-container
           v-if="bookingList === null || !bookingList.length"
           fluid
@@ -100,69 +118,72 @@
             </v-col>
           </v-row>
         </v-container>
-        
-        <v-container
-          v-for="(item, index) in bookingList"
-          :key="index"
-          fluid
-          class="mb-2 py-0"
-        >
-          <v-row>
-            <v-col
-              cols="12"
-              class="px-0"
-            >
-              <v-card flat tile outlined>
-                <v-card-title>
-                  <nuxt-link
-                    :to="{ name: 'booking-id', params: { id: item.id } }"
-                    class="link"
-                  >
-                    {{ capitalizeFirstLetter(item.subject) }}
-                  </nuxt-link>
 
-                  <v-spacer />
-
-                  <p class="ma-0 subtitle-1 text--disabled">
-                    {{ item.createdDate }}
-                  </p>
-                </v-card-title>
-
-                <v-card-subtitle>
-                  Gia sư:
-                  <nuxt-link
-                    v-for="(tutor, index) in item.tutors"
-                    :key="index"
-                    :to="{
-                      name: 'tutor-id',
-                      params: { id: 1000, email: tutor.email }
-                    }"
-                    class="link"
-                  >
-                    {{ tutor.email }}
-                    <span
-                      v-if="index !== item.tutors.length - 1"
-                      class="comma"
+        <!-- Booking List -->
+        <div v-if="!isLoading" class="mb-16 pb-16">
+          <v-container
+            v-for="(item, index) in bookingList"
+            :key="index"
+            fluid
+            class="mb-2 py-0"
+          >
+            <v-row>
+              <v-col
+                cols="12"
+                class="px-0"
+              >
+                <v-card flat tile outlined>
+                  <v-card-title>
+                    <nuxt-link
+                      :to="{ name: 'booking-id', params: { id: item.id } }"
+                      class="link"
                     >
-                      ,&nbsp;
-                    </span>
-                  </nuxt-link>
-                </v-card-subtitle>
+                      {{ capitalizeFirstLetter(item.subject) }}
+                    </nuxt-link>
 
-                <v-card-text
-                  class="ml-4 mb-4 px-2 py-0 font-weight-bold status-label"
-                  :class="{
-                    'status-label--waiting': item.status === 'waiting',
-                    'status-label--on-going': item.status === 'on-going',
-                    'status-label--finished': item.status === 'finished'
-                  }"
-                >
-                  {{ translateBookingStatus(item.status) }}
-                </v-card-text>
-              </v-card>
-            </v-col>
-          </v-row>
-        </v-container>
+                    <v-spacer />
+
+                    <p class="ma-0 subtitle-1 text--disabled">
+                      {{ item.createdDate }}
+                    </p>
+                  </v-card-title>
+
+                  <v-card-subtitle>
+                    Gia sư:
+                    <nuxt-link
+                      v-for="(tutor, index) in item.tutors"
+                      :key="index"
+                      :to="{
+                        name: 'tutor-id',
+                        params: { id: 1000, email: tutor.email }
+                      }"
+                      class="link"
+                    >
+                      {{ tutor.email }}
+                      <span
+                        v-if="index !== item.tutors.length - 1"
+                        class="comma"
+                      >
+                        ,&nbsp;
+                      </span>
+                    </nuxt-link>
+                  </v-card-subtitle>
+
+                  <v-card-text
+                    class="ml-4 mb-4 px-2 py-0 font-weight-bold status-label"
+                    :class="{
+                      'status-label--waiting': item.status === 'waiting',
+                      'status-label--on-going': item.status === 'on-going',
+                      'status-label--finished': item.status === 'finished'
+                    }"
+                  >
+                    {{ translateBookingStatus(item.status) }}
+                  </v-card-text>
+                </v-card>
+              </v-col>
+            </v-row>
+          </v-container>
+        </div>
       </v-col>
     </v-row>
   </v-container>
@@ -176,6 +197,7 @@ export default {
   layout: 'appbar',
   data () {
     return {
+      isLoading: false,
       vnFilters: ['Tất cả', 'Hoàn tất', 'Đang tiến hành', 'Đang chờ'],
       filters: ['All', 'Finished', 'On-going', 'Waiting'],
       currentFilter: 0
@@ -191,18 +213,26 @@ export default {
       this.filterBookings(val)
     }
   },
-  created () {
-    this.$store.dispatch('booking/getBookings')
+  async created () {
+    this.isLoading = true
+    await this.$store.dispatch('booking/getBookings')
+    this.isLoading = false
   },
   methods: {
-    filterBookings (optionId) {
+    async filterBookings (optionId) {
+      this.isLoading = true
       const property = 'status'
       const value = this.filters[optionId].toLowerCase()
 
       if (value === 'all') {
-        this.$store.dispatch('booking/getBookings')
+        await this.$store.dispatch('booking/getBookings')
+        this.isLoading = false
       } else {
-        this.$store.dispatch('booking/getBookingsByStatus', { property, value })
+        await this.$store.dispatch('booking/getBookingsByStatus', {
+          property,
+          value
+        })
+        this.isLoading = false
       }
     },
 
@@ -277,5 +307,8 @@ export default {
 }
 .status-label--finished {
   background: #80CBC4;
+}
+.v-skeleton-loader--custom {
+  border-radius: 0;
 }
 </style>
