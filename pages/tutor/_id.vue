@@ -6,7 +6,29 @@
     <v-row class="mb-16 px-md-16">
       <!-- Personal Info -->
       <v-col cols="3">
-        <v-container fluid>
+        <!-- Loader -->
+        <v-container v-if="isLoading" fluid>
+          <v-row>
+            <v-col class="pa-0">
+              <v-skeleton-loader
+                type="card"
+                class="v-skeleton-loader--custom"
+              ></v-skeleton-loader>
+
+              <v-skeleton-loader
+                type="card-heading"
+                class="v-skeleton-loader--custom"
+              ></v-skeleton-loader>
+
+              <v-skeleton-loader
+                type="card-heading"
+                class="v-skeleton-loader--custom"
+              ></v-skeleton-loader>
+            </v-col>
+          </v-row>
+        </v-container>
+
+        <v-container v-else fluid>
           <v-row>
             <v-col class="pa-0">
               <v-img
@@ -67,7 +89,25 @@
 
       <!-- Experience & Services -->
       <v-col cols="9" class="pl-8">
-        <v-container fluid>
+        <!-- Loader -->
+        <v-container v-if="isLoading" fluid>
+          <v-row>
+            <v-col class="px-0 py-0">
+              <div
+                v-for="n in 3"
+                :key="n"
+              >
+                <v-skeleton-loader
+                  type="card"
+                  class="v-skeleton-loader--custom"
+                ></v-skeleton-loader>
+                <v-spacer class="my-6"/>
+              </div>
+            </v-col>
+          </v-row>
+        </v-container>
+
+        <v-container v-else fluid>
           <!-- Tutor ID -->
           <v-row>
             <v-col class="pa-0">
@@ -94,7 +134,7 @@
                   <p class="ma-0">
                     <span class="custom-card-title">Nghề nghiệp:</span>
                     <span class="ml-1">
-                      {{ tutor.currentJob }}
+                      {{ translateCurrentJob(tutor.currentJob) }}
                     </span>
                   </p>
                   <v-spacer class="my-1"/>
@@ -138,12 +178,14 @@
                   Đặc điểm nổi bật
                 </v-card-title>
                 <v-card-text>
-                  <div
-                    v-for="(achievement, index) in tutor.achievement"
-                    :key="index"
-                    class="mr-2 px-2 achievement-label"
-                  >
-                    {{ achievement }}
+                  <div class="d-flex">
+                    <div
+                      v-for="(achievement, index) in tutor.achievement"
+                      :key="index"
+                      class="mr-2 px-2 achievement-label"
+                    >
+                      {{ achievement }}
+                    </div>
                   </div>
                 </v-card-text>
               </v-card>
@@ -249,6 +291,7 @@ export default {
   layout: 'appbar',
   data () {
     return {
+      isLoading: false,
       feeTableHeaders: [
         { text: 'Môn học', value: 'subject', align: '', sortable: false },
         { text: 'Lớp', value: 'level', align: '', sortable: false },
@@ -264,9 +307,6 @@ export default {
     }
   },
   computed: {
-    tutorId () {
-      return this.$route.params.id
-    },
     tutorEmail () {
       return this.$route.params.email
     },
@@ -275,10 +315,27 @@ export default {
     })
   },
   async mounted () {
+    this.isLoading = true
     await this.$store.dispatch('tutor/getTutorProfile', this.tutorEmail)
     this.generateFeeTableData()
+    this.isLoading = false
   },
   methods: {
+    translateCurrentJob (value) {
+      let currentJob = ''
+      switch (value) {
+        case 'student':
+          currentJob = 'Sinh viên'
+          break
+        case 'graduated':
+          currentJob = 'Đã tốt nghiệp'
+          break
+        case 'teacher':
+          currentJob = 'Giáo viên'
+          break
+      }
+      return currentJob
+    },
     displayTeachingFormat (value) {
       let format = ''
       switch (value) {
@@ -340,5 +397,8 @@ export default {
   font-weight: bold;
   color: #263238;
   background: #64B5F6;
+}
+.v-skeleton-loader--custom {
+  border-radius: 0;
 }
 </style>
