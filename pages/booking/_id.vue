@@ -49,7 +49,32 @@
         md="9"
         class="pa-0"
       >
-        <v-container fluid>
+        <!-- Loader -->
+        <v-container v-if="isLoading" fluid>
+          <v-row>
+            <v-col class="pl-3">
+              <v-skeleton-loader
+                type="heading"
+              ></v-skeleton-loader>
+
+              <v-spacer class="my-6"/>
+
+              <div
+                v-for="n in 2"
+                :key="n"
+              >
+                <v-skeleton-loader
+                  type="card"
+                  class="v-skeleton-loader--custom"
+                ></v-skeleton-loader>
+                <v-spacer class="my-6"/>
+              </div>
+            </v-col>
+          </v-row>
+        </v-container>
+
+        <!-- Booking Details-->
+        <v-container v-else fluid>
           <v-row class="mb-1">
             <v-col cols="6" class="pl-3">
               <div
@@ -275,6 +300,7 @@ export default {
   },
   data () {
     return {
+      isLoading: false,
       isDialogShowed: false,
       isHiring: false,
       headers: [
@@ -298,9 +324,11 @@ export default {
     }),
   },
   async created () {
+    this.isLoading = true
     const id = this.bookingId
     await this.$store.dispatch('booking/getBookingById', { id })
     await this.getApplyingTutorsData()
+    this.isLoading = false
   },
   methods: {
     translateStatus (status) {
@@ -481,6 +509,9 @@ export default {
 }
 .custom-card-text {
   font-size: 16px;
+}
+.v-skeleton-loader--custom {
+  border-radius: 0;
 }
 </style>
 

@@ -41,7 +41,15 @@
         class="px-0 py-0"
       >
         <div class="d-flex align-center justify-end result-quantity">
-          <p class="ma-0">150 kết quả</p>
+          <v-progress-circular
+            v-if="isLoading"
+            indeterminate
+            color="black"
+            :size="25"
+            :width="3"
+          ></v-progress-circular>
+
+          <p v-else class="ma-0">150 kết quả</p>
         </div>
       </v-col>
     </v-row>
@@ -294,12 +302,28 @@
         </v-container>
       </v-col>
 
-      <!-- Tutor List -->
-      <v-col
-        cols="9"
-        class="mt-6 pl-2 pr-0 py-0"
-      >
-        <v-container fluid>
+      <!-- Tutor List Container -->
+      <v-col cols="9" class="mt-6 pl-2 pr-0 py-0">
+        <!-- Loader -->
+        <v-container v-if="isLoading" fluid>
+          <v-row>
+            <v-col class="pr-0">
+              <div
+                v-for="n in 3"
+                :key="n"
+              >
+                <v-skeleton-loader
+                  type="card"
+                  class="v-skeleton-loader--custom"
+                ></v-skeleton-loader>
+                <v-spacer class="my-6"/>
+              </div>
+            </v-col>
+          </v-row>
+        </v-container>
+
+        <!-- Tutor List -->
+        <v-container v-else fluid>
           <!-- Tutor Card -->
           <v-row
             v-for="(tutor, index) in tutors[page - 1]"
@@ -417,7 +441,7 @@
     <v-spacer class="mb-16"/>
 
     <!-- Pagination -->
-    <v-row class="mx-md-16">
+    <v-row v-if="!isLoading" class="mx-md-16">
       <v-col>
         <v-pagination
           v-model="page"
@@ -445,6 +469,7 @@ export default {
   },
   data () {
     return {
+      isLoading: false,
       page: 1,
       subjects: [
         'Toán',
@@ -468,18 +493,33 @@ export default {
       tutors: 'tutor/paginatedTutors'
     })
   },
+  watch: {
+    query: {
+      handler () {
+        this.queryTutors();
+      },
+      deep: true
+    }
+  },
   async mounted () {
     await this.getTutors()
   },
   methods: {
     async getTutors () {
+      this.isLoading = true
+      //
       await this.$store.dispatch('tutor/getTutors')
       this.$store.dispatch('tutor/paginateTutorList')
+      //
+      this.isLoading = false
     },
     async queryTutors () {
-      console.log('fetching...')
+      this.isLoading = true
+      //
       await this.$store.dispatch('tutor/queryTutors', this.query)
       this.$store.dispatch('tutor/paginateTutorList')
+      //
+      this.isLoading = false
     },
     generateTutorTitle (feeData) {
       // get subjects from tutor
@@ -581,6 +621,9 @@ export default {
   box-shadow: none;
 }
 .v-input--custom {
+  border-radius: 0;
+}
+.v-skeleton-loader--custom {
   border-radius: 0;
 }
 .result-quantity {
