@@ -18,9 +18,13 @@ const _rootCollection = 'tutor'
 
 // Check existence function
 const isIncluded = (obj, arr) => {
-  for (let i = 0; i < arr.length; i++) {
-    if (obj.id === arr[i].id) {
-      return true
+  if (!arr.length) {
+    return true
+  } else {
+    for (let i = 0; i < arr.length; i++) {
+      if (obj.id === arr[i].id) {
+        return true
+      }
     }
   }
   return false
@@ -38,6 +42,39 @@ const getAllTutorDocs = async () => {
     }
   })
   return tutorDocs
+}
+
+const queryTutorsById = async (tutorId) => {
+  const queryRef = collection(db, _rootCollection)
+  const q = query(
+    queryRef,
+    where('id', '==', parseInt(tutorId))
+  )
+
+  const querySnapshot = await getDocs(q)
+  const tutors = []
+
+  querySnapshot.forEach((doc) => {
+    tutors.push(doc.data())
+  })
+  return tutors
+}
+
+const queryTutorsByName = async (tutorName) => {
+  const queryRef = collection(db, _rootCollection)
+  const q = query(
+    queryRef,
+    where('name', '>=', tutorName),
+    where('name', '<=', tutorName + '\uf8ff')
+  )
+
+  const querySnapshot = await getDocs(q)
+  const tutors = []
+
+  querySnapshot.forEach((doc) => {
+    tutors.push(doc.data())
+  })
+  return tutors
 }
 
 const queryTutorsByGender = async (genderArr) => {
@@ -67,6 +104,8 @@ const queryTutorsByCurrentJob = async (currentJobArr) => {
 }
 
 const queryTutorsByAchievement = async (achievementArr) => {
+  console.log('achievement arr:', achievementArr)
+  //
   const queryRef = collection(db, _rootCollection)
   const q = query(
     queryRef,
@@ -112,7 +151,17 @@ const getApplyingTutors = async (tutorDocs) => {
   return applyingTutors
 }
 
-const queryTutors = async (queryObj) => {
+const queryTutorsByInput = async (queryStr) => {
+  let tutors = []
+  if (isNaN(parseInt(queryStr))) {
+    tutors = await queryTutorsByName(queryStr)
+  } else {
+    tutors = await queryTutorsById(queryStr)
+  }
+  return tutors
+}
+
+const queryTutorsByFilter = async (queryObj) => {
   let result = []
 
   let tutorsByGender = []
@@ -128,6 +177,14 @@ const queryTutors = async (queryObj) => {
   if (queryObj.achievement.length) {
     tutorsByAchievement = await queryTutorsByAchievement(queryObj.achievement)
   }
+  if (
+    !queryObj.gender.length &&
+    !queryObj.currentJob.length &&
+    !queryObj.achievement.length
+  ) {
+    let tutors = await getAllTutors()
+    return tutors
+  }
 
   // merge into 1 array and remove duplicates
   let tutors = [...tutorsByGender, ...tutorsByCurrentJob, ...tutorsByAchievement]
@@ -135,22 +192,21 @@ const queryTutors = async (queryObj) => {
 
   // check tutor existence
   tutors.forEach((tutor) => {
-    /*
-    console.log('tutor name:', tutor.name)
-    console.log('gender:', isIncluded(tutor, tutorsByGender))
-    console.log('current job:', isIncluded(tutor, tutorsByCurrentJob))
-    console.log('achievement:', isIncluded(tutor, tutorsByAchievement))
-    console.log('')
-    */
-    if (
-      isIncluded(tutor, tutorsByGender) &&
-      isIncluded(tutor, tutorsByCurrentJob) &&
-      isIncluded(tutor, tutorsByAchievement)
-    ) {
+    let matchingScore = 0
+
+    if (isIncluded(tutor, tutorsByGender)) {
+      matchingScore++
+    }
+    if (isIncluded(tutor, tutorsByCurrentJob)) {
+      matchingScore++
+    }
+    if (isIncluded(tutor, tutorsByAchievement)) {
+      matchingScore++
+    }
+    if (matchingScore === 3) {
       result.push(tutor)
     }
   })
-  // console.log('result:', result)
 
   return result
 }
@@ -159,5 +215,6 @@ export const tutorAPI = {
   getTutor,
   getAllTutors,
   getApplyingTutors,
-  queryTutors
+  queryTutorsByFilter,
+  queryTutorsByInput
 }
