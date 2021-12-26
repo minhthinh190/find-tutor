@@ -25,6 +25,7 @@
         class="pl-5 pr-0 py-0"
       >
         <v-text-field
+          v-model="queryInput"
           outlined
           dense
           hide-details
@@ -33,6 +34,7 @@
           prepend-inner-icon="mdi-magnify"
           label="Tìm theo tên hoặc mã gia sư"
           class="v-input--custom"
+          @keyup.enter="queryTutorsByQueryStr"
         ></v-text-field>
       </v-col>
 
@@ -330,108 +332,116 @@
             :key="index"
           >
             <v-col class="pr-0 py-0">
-              <div class="py-3 tutor-card">
-                <v-row>
-                  <!-- Tutor Avatar -->
-                  <v-col cols="3">
-                    <v-img
-                      height="250"
-                      :src="tutor.avatar"
-                      class=""
-                    ></v-img>
-                  </v-col>
+              <nuxt-link
+                :to="{
+                  name: 'tutor-id',
+                  params: { id: tutor.id, email: tutor.email }
+                }"
+                class="link"
+              >
+                <div class="py-3 tutor-card">
+                  <v-row>
+                    <!-- Tutor Avatar -->
+                    <v-col cols="3">
+                      <v-img
+                        height="250"
+                        :src="tutor.avatar"
+                        class=""
+                      ></v-img>
+                    </v-col>
 
-                  <!-- Tutor Info -->
-                  <v-col cols="9">
-                    <!-- Service Short Description -->
-                    <v-container fluid>
-                      <v-row>
-                        <v-col cols="10" class="pa-0">
-                          <p class="ma-0 service-title">
-                            <strong>{{ generateTutorTitle(tutor.fee) }}</strong>
-                          </p>
-                        </v-col>
+                    <!-- Tutor Info -->
+                    <v-col cols="9">
+                      <!-- Service Short Description -->
+                      <v-container fluid>
+                        <v-row>
+                          <v-col cols="10" class="pa-0">
+                            <p class="ma-0 service-title">
+                              <strong>{{ generateTutorTitle(tutor.fee) }}</strong>
+                            </p>
+                          </v-col>
 
-                        <v-col cols="2" class="pa-0">
-                          <p class="ma-0 text-right">
-                            <strong>{{ tutor.id }}</strong>
-                          </p>
-                        </v-col>
-                      </v-row>
-                    </v-container>
+                          <v-col cols="2" class="pa-0">
+                            <p class="ma-0 text-right">
+                              <strong>{{ tutor.id }}</strong>
+                            </p>
+                          </v-col>
+                        </v-row>
+                      </v-container>
 
-                    <v-spacer class="mb-2"/>
+                      <v-spacer class="mb-2"/>
 
-                    <!-- Name -->
-                    <p class="ma-0">
-                      <strong>{{ tutor.name }}</strong>
-                    </p>
+                      <!-- Name -->
+                      <p class="ma-0">
+                        <strong>{{ tutor.name }}</strong>
+                      </p>
 
-                    <!-- DoB & Location -->
-                    <div class="d-flex">
-                      <div class="d-flex mr-4">
-                        <v-icon small class="mr-2">
-                          mdi-calendar-range
-                        </v-icon>
-                        <p class="ma-0 text--secondary">
-                          {{ tutor.birthDate + '/' + tutor.birthMonth + '/' + tutor.birthYear }}
-                        </p>
-                      </div>
-
+                      <!-- DoB & Location -->
                       <div class="d-flex">
-                        <v-icon small class="mr-2">
-                          mdi-map-marker
-                        </v-icon>
-                        <p class="ma-0 text--secondary">
-                          {{ tutor.hometown }}
+                        <div class="d-flex mr-4">
+                          <v-icon small class="mr-2">
+                            mdi-calendar-range
+                          </v-icon>
+                          <p class="ma-0 text--secondary">
+                            {{ tutor.birthDate + '/' + tutor.birthMonth + '/' + tutor.birthYear }}
+                          </p>
+                        </div>
+
+                        <div class="d-flex">
+                          <v-icon small class="mr-2">
+                            mdi-map-marker
+                          </v-icon>
+                          <p class="ma-0 text--secondary">
+                            {{ tutor.hometown }}
+                          </p>
+                        </div>
+                      </div>
+
+                      <v-spacer class="mb-2"/>  
+
+                      <!-- Self Introduction -->
+                      <p class="tutor-introduction ma-0">
+                        {{ shortenTutorDesc(tutor.selfIntroduction) }}
+                      </p>
+
+                      <v-spacer class="mb-2"/>
+
+                      <!-- Ratings -->
+                      <div class="d-flex align-center">
+                        <p class="my-0 mr-2 rating-score">
+                          <strong>4.9</strong>
+                        </p>
+
+                        <v-rating
+                          small
+                          dense
+                          half-increments
+                          readonly
+                          :value="4.5"
+                          background-color="yellow darken-3"
+                          color="yellow darken-3"
+                          class="mr-2"
+                        ></v-rating>
+
+                        <p class="ma-0 rating-quantity">
+                          ({{ Math.floor(Math.random() * 50) + 1 }})
                         </p>
                       </div>
-                    </div>
 
-                    <v-spacer class="mb-2"/>  
-
-                    <!-- Self Introduction -->
-                    <p class="tutor-introduction ma-0">
-                      {{ shortenTutorDesc(tutor.selfIntroduction) }}
-                    </p>
-
-                    <v-spacer class="mb-2"/>
-
-                    <!-- Ratings -->
-                    <div class="d-flex align-center">
-                      <p class="my-0 mr-2 rating-score">
-                        <strong>4.9</strong>
-                      </p>
-
-                      <v-rating
-                        small
-                        dense
-                        half-increments
-                        readonly
-                        :value="4.5"
-                        background-color="yellow darken-3"
-                        color="yellow darken-3"
-                        class="mr-2"
-                      ></v-rating>
-
-                      <p class="ma-0 rating-quantity">
-                        ({{ Math.floor(Math.random() * 50) + 1 }})
-                      </p>
-                    </div>
-
-                    <!-- Achievement -->
-                    <div class="mt-2 d-flex">
-                      <div
-                        v-for="(achievement, index) in tutor.achievement"
-                        :key="index"
-                        class="mr-2 achievement-label"
-                      >
-                        {{ achievement }}
+                      <!-- Achievement -->
+                      <div class="mt-2 d-flex">
+                        <div
+                          v-for="(achievement, index) in tutor.achievement"
+                          :key="index"
+                          class="mr-2 achievement-label"
+                        >
+                          {{ achievement }}
+                        </div>
                       </div>
-                    </div>
-                  </v-col>
-                </v-row>
-              </div>
+                    </v-col>
+                  </v-row>
+                </div>
+              </nuxt-link>
             </v-col>
           </v-row>
         </v-container>
@@ -481,6 +491,7 @@ export default {
         'IELTS',
         'TOEIC'
       ],
+      queryInput: '',
       query: {
         gender: [],
         currentJob: [],
@@ -496,7 +507,7 @@ export default {
   watch: {
     query: {
       handler () {
-        this.queryTutors();
+        this.queryTutorsByFilter();
       },
       deep: true
     }
@@ -507,18 +518,27 @@ export default {
   methods: {
     async getTutors () {
       this.isLoading = true
-      //
       await this.$store.dispatch('tutor/getTutors')
       this.$store.dispatch('tutor/paginateTutorList')
-      //
       this.isLoading = false
     },
-    async queryTutors () {
+    async queryTutorsByQueryStr () {
       this.isLoading = true
-      //
-      await this.$store.dispatch('tutor/queryTutors', this.query)
+
+      // reset query object
+      this.query = { gender: [], currentJob: [], achievement: [] }
+
+      await this.$store.dispatch('tutor/queryTutorsByInput', this.queryInput)
       this.$store.dispatch('tutor/paginateTutorList')
-      //
+
+      this.isLoading = false
+    },
+    async queryTutorsByFilter () {
+      this.isLoading = true
+
+      await this.$store.dispatch('tutor/queryTutorsByFilter', this.query)
+      this.$store.dispatch('tutor/paginateTutorList')
+
       this.isLoading = false
     },
     generateTutorTitle (feeData) {
@@ -589,6 +609,10 @@ export default {
 .v-expansion-panel-content::v-deep .v-expansion-panel-content__wrap {
   padding-left: 8px;
   padding-right: 8px;
+}
+.link {
+  text-decoration: none;
+  color: black;
 }
 .tutor-card {
   border-bottom: 1px solid #BDBDBD;
