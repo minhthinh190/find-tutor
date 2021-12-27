@@ -155,11 +155,11 @@
                       :key="index"
                       :to="{
                         name: 'tutor-id',
-                        params: { id: 1000, email: tutor.email }
+                        params: { id: tutor.id, email: tutor.email }
                       }"
                       class="link"
                     >
-                      {{ tutor.email }}
+                      {{ tutor.status === 'accepted' ? tutor.name : null }}
                       <span
                         v-if="index !== item.tutors.length - 1"
                         class="comma"
@@ -213,9 +213,12 @@ export default {
       this.filterBookings(val)
     }
   },
-  async created () {
+  async mounted () {
     this.isLoading = true
+
+    // get booking list
     await this.$store.dispatch('booking/getBookings')
+
     this.isLoading = false
   },
   methods: {

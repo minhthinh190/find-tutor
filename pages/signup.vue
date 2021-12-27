@@ -16,6 +16,7 @@
                 dense
                 outlined
                 :rules="emailRules"
+                class="v-input--custom"
               ></v-text-field>
 
               <v-spacer class="py-1" />
@@ -40,6 +41,7 @@
                 :type="isPwShowed ? 'text' : 'password'"
                 :append-icon="isPwShowed ? 'mdi-eye' : 'mdi-eye-off'"
                 :rules="passwordRules"
+                class="v-input--custom"
                 @click:append="isPwShowed = !isPwShowed"
               ></v-text-field>
 
@@ -54,6 +56,7 @@
                 :type="isCfPwShowed ? 'text' : 'password'"
                 :append-icon="isCfPwShowed ? 'mdi-eye' : 'mdi-eye-off'"
                 :rules="confirmPasswordRules"
+                class="v-input--custom"
                 @click:append="isCfPwShowed = !isCfPwShowed"
                 @keyup.enter="signUp"
               ></v-text-field>
@@ -65,6 +68,7 @@
               <v-col cols="12" sm=12 md="12" lg="12" align="center">
                 <v-btn
                   color="teal darken-1"
+                  tile
                   depressed
                   block
                   :loading="isSigningUp"
@@ -172,5 +176,8 @@ export default {
 }
 .link:hover {
   filter: brightness(70%);
+}
+.v-input--custom {
+  border-radius: 0;
 }
 </style>

@@ -11,6 +11,10 @@ export const state = () => ({
 export const getters = {
   paginatedTutors: (state) => {
     return state.paginatedTutors
+  },
+
+  tutorQuantity: (state) => {
+    return state.tutors.length
   }
 }
 
