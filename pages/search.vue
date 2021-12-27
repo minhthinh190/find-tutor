@@ -20,6 +20,7 @@
         ></v-select>
       </v-col>
 
+      <!-- Search Input -->
       <v-col
         cols="6"
         class="pl-5 pr-0 py-0"
@@ -598,10 +599,6 @@ export default {
   left: 0;
   width: 100%;
   background: white;
-}
-.search-bar {
-  width: 50%;
-  margin: auto;
 }
 .white-border {
   border: 6px solid white;
