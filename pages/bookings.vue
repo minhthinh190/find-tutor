@@ -21,18 +21,18 @@
             <h4 class="ml-3">Username</h4>
           </v-card-title>
           
-          <div class="px-4 py-2 nav-item">
-            <v-icon class="mr-3">
+          <div class="py-2 nav-item">
+            <v-icon class="mr-2">
               mdi-account
             </v-icon>
 
-            <nuxt-link to="" class="nav-link">
+            <nuxt-link to="/my-account" class="nav-link">
               Tài khoản của tôi
             </nuxt-link>
           </div>
 
-          <div class="px-4 py-2 nav-item">
-            <v-icon class="mr-3">
+          <div class="py-2 nav-item">
+            <v-icon class="mr-2">
               mdi-bell
             </v-icon>
 
@@ -46,7 +46,7 @@
       <v-col
         cols="12"
         md="9"
-        class="pl-md-6 pa-0"
+        class="pa-0"
       >
         <!-- Filter -->
         <v-tabs
@@ -151,15 +151,15 @@
                   <v-card-subtitle>
                     Gia sư:
                     <nuxt-link
-                      v-for="(tutor, index) in item.tutors"
+                      v-for="(tutor, index) in getAcceptedTutors(item.tutors)"
                       :key="index"
                       :to="{
                         name: 'tutor-id',
-                        params: { id: 1000, email: tutor.email }
+                        params: { id: tutor.id, email: tutor.email }
                       }"
                       class="link"
                     >
-                      {{ tutor.email }}
+                      {{ tutor.name }}
                       <span
                         v-if="index !== item.tutors.length - 1"
                         class="comma"
@@ -213,9 +213,12 @@ export default {
       this.filterBookings(val)
     }
   },
-  async created () {
+  async mounted () {
     this.isLoading = true
+
+    // get booking list
     await this.$store.dispatch('booking/getBookings')
+
     this.isLoading = false
   },
   methods: {
@@ -234,6 +237,17 @@ export default {
         })
         this.isLoading = false
       }
+    },
+
+    getAcceptedTutors (tutors) {
+      let acceptedTutors = []
+
+      tutors.forEach((tutor) => {
+        if (tutor.status === 'accepted') {
+          acceptedTutors.push(tutor)
+        }
+      })
+      return acceptedTutors
     },
 
     selectItem (item) {
@@ -281,7 +295,6 @@ export default {
 }
 .nav-item:hover {
   cursor: pointer;
-  background: #EEEEEE;
 }
 .nav-item:hover .nav-link {
   color: black;

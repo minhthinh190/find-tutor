@@ -22,18 +22,18 @@
             <h4 class="ml-3">Username</h4>
           </v-card-title>
           
-          <div class="px-4 py-2 nav-item">
-            <v-icon class="mr-3">
+          <div class="py-2 nav-item">
+            <v-icon class="mr-2">
               mdi-account
             </v-icon>
 
-            <nuxt-link to="" class="nav-link">
+            <nuxt-link to="/my-account" class="nav-link">
               Tài khoản của tôi
             </nuxt-link>
           </div>
 
-          <div class="px-4 py-2 nav-item">
-            <v-icon class="mr-3">
+          <div class="py-2 nav-item">
+            <v-icon class="mr-2">
               mdi-bell
             </v-icon>
 
@@ -52,7 +52,7 @@
         <!-- Loader -->
         <v-container v-if="isLoading" fluid>
           <v-row>
-            <v-col class="pl-3">
+            <v-col>
               <v-skeleton-loader
                 type="heading"
               ></v-skeleton-loader>
@@ -76,7 +76,7 @@
         <!-- Booking Details-->
         <v-container v-else fluid>
           <v-row class="mb-1">
-            <v-col cols="6" class="pl-3">
+            <v-col cols="6">
               <div
                 class="px-2 py-1 status-label"
                 :class="{
@@ -100,7 +100,7 @@
 
           <!-- Tutor List -->
           <v-row v-if="getAcceptedTutorEmails().length" class="mb-4">
-            <v-col cols="12" class="pl-3">
+            <v-col cols="12">
               <v-card flat tile outlined>
                 <v-card-text>
                   <p class="ma-0">
@@ -109,14 +109,17 @@
                     </span>
 
                     <nuxt-link
-                      v-for="(tutor, index) in booking.tutors"
+                      v-for="(tutor, index) in acceptedTutors"
                       :key="index"
-                      to=""
+                      :to="{
+                        name: 'tutor-id',
+                        params: { id: tutor.id, email: tutor.email }
+                      }"
                       class="link"
                     >
-                      {{ tutor.email }}
+                      {{ tutor.name }}
                       <span
-                        v-if="index !== booking.tutors.length - 1"
+                        v-if="index !== acceptedTutors.length - 1"
                         class="comma"
                       >
                         ,&nbsp;
@@ -130,7 +133,7 @@
 
           <!-- Format & Time -->
           <v-row class="mb-4">
-            <v-col cols="12" class="pl-3">
+            <v-col cols="12">
               <v-data-table
                 hide-default-footer
                 :headers="headers"
@@ -142,7 +145,7 @@
 
           <!-- Description -->
           <v-row class="mb-4">
-            <v-col cols="12" class="pl-3">
+            <v-col cols="12">
               <v-card flat tile outlined>
                 <div class="px-4 pt-4 pb-0">
                   <p class="ma-0 font-weight-bold custom-card-text">
@@ -159,7 +162,7 @@
 
           <!-- Address -->
           <v-row class="mb-4">
-            <v-col cols="12" class="pl-3">
+            <v-col cols="12">
               <v-card flat tile outlined>
                 <v-card-text>
                   <p class="ma-0">
@@ -175,7 +178,7 @@
 
           <!-- Contact -->
           <v-row class="mb-8">
-            <v-col cols="12" class="pl-3">
+            <v-col cols="12">
               <v-card flat tile outlined>
                 <v-card-text>
                   <p class="ma-0">
@@ -191,7 +194,7 @@
 
           <!-- Applying Tutor List -->
           <v-row v-if="applyingTutors.length" class="mb-16">
-            <v-col cols="12" class="mb-1 pl-3">
+            <v-col cols="12" class="mb-1">
               <h3>Danh sách gia sư ứng tuyển</h3>
             </v-col>
 
@@ -210,15 +213,31 @@
                   </p>
                 </v-card-subtitle>
 
-                <v-img
-                  height="150"
-                  :src="tutor.avatar"
-                  class="mx-3"
-                ></v-img>
+                <nuxt-link
+                  :to="{
+                    name: 'tutor-id',
+                    params: { id: tutor.id, email: tutor.email }
+                  }"
+                  class="link"
+                >
+                  <v-img
+                    height="150"
+                    :src="tutor.avatar"
+                    class="mx-3"
+                  ></v-img>
+                </nuxt-link>
                 
                 <v-card-text class="px-3">
                   <p class="ma-0 tutor-name">
-                    <strong>{{ tutor.name }}</strong>
+                    <nuxt-link
+                      :to="{
+                        name: 'tutor-id',
+                        params: { id: tutor.id, email: tutor.email }
+                      }"
+                      class="link"
+                    >
+                      <strong>{{ tutor.name }}</strong>
+                    </nuxt-link>
                   </p>
                   <v-spacer class="mb-1"/>
                   <p class="ma-0">
@@ -290,6 +309,7 @@
 <script>
 import { mapState } from 'vuex'
 import { bookingAPI } from '~/api/booking'
+import { tutorAPI } from '~/api/tutor'
 import ConfirmDialog from '~/components/ConfirmDialog'
 
 export default {
@@ -310,6 +330,7 @@ export default {
         { text: 'Số buổi/tuần', value: 'perWeek', align: 'start', sortable: false },
         { text: 'Thời lượng', value: 'duration', align: 'start', sortable: false }
       ],
+      acceptedTutors: [],
       selectedTutor: null
     }
   },
@@ -323,11 +344,23 @@ export default {
       applyingTutors: state => state.tutor.applyingTutors
     }),
   },
-  async created () {
+  async mounted () {
     this.isLoading = true
     const id = this.bookingId
+    
+    // get booking data
     await this.$store.dispatch('booking/getBookingById', { id })
+    
+    // get accepted tutor list
+    const acceptedTutorEmails = this.getAcceptedTutorEmails()
+    acceptedTutorEmails.forEach(async (email) => {
+      const tutor = await tutorAPI.getTutor(email)
+      this.acceptedTutors.push(tutor)
+    })
+
+    // get applying tutor list
     await this.getApplyingTutorsData()
+
     this.isLoading = false
   },
   methods: {
@@ -348,9 +381,11 @@ export default {
 
       return vnStatus
     },
+
     capitalizeFirstLetter (str) {
       return str.charAt(0).toUpperCase() + str.slice(1)
     },
+
     generateDetailsTableData () {
       const data = [
         {
@@ -363,6 +398,7 @@ export default {
       ]
       return data
     },
+
     getApplyingTutorEmails () {
       let applyingTutorEmails = []
 
@@ -373,6 +409,7 @@ export default {
       })
       return applyingTutorEmails
     },
+
     getAcceptedTutorEmails () {
       let acceptedTutorEmails = []
 
@@ -383,12 +420,14 @@ export default {
       })
       return acceptedTutorEmails
     },
+
     getApplyingTutorsData () {
       const applyingTutorEmails = this.getApplyingTutorEmails()
       this.$store.dispatch(
         'tutor/getApplyingTutors', applyingTutorEmails
       )
     },
+
     async hireTutor () {
       this.isHiring = true
 
@@ -422,6 +461,7 @@ export default {
         'on-going'
       )
     },
+
     async rejectTutor (tutor) {
       let tutors = []
       const bookingId = this.bookingId.toString()
@@ -445,7 +485,7 @@ export default {
           this.showNotification(err.code, 'error')
         })
     },
-    //
+
     showNotification (message, color) {
       this.$store.dispatch('notification/showNotification', {
         message,
@@ -475,7 +515,6 @@ export default {
 }
 .nav-item:hover {
   cursor: pointer;
-  background: #EEEEEE;
 }
 .nav-item:hover .nav-link {
   color: black;
@@ -483,6 +522,13 @@ export default {
 .nav-link {
   color: #757575;
   text-decoration: none;
+}
+.link {
+  text-decoration: none;
+  color: #00BFA5;
+}
+.link:hover {
+  filter: brightness(70%);
 }
 .created-date {
   font-weight: normal;

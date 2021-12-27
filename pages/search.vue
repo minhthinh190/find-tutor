@@ -52,7 +52,7 @@
             :width="3"
           ></v-progress-circular>
 
-          <p v-else class="ma-0">150 kết quả</p>
+          <p v-else class="ma-0">{{ tutorQuantity }} kết quả</p>
         </div>
       </v-col>
     </v-row>
@@ -215,7 +215,6 @@
 
               <v-expansion-panel-content>
                 <v-radio-group hide-details class="ma-0">
-                  <!-- 4.5 & up -->
                   <div class="mb-2 d-flex align-end">
                     <v-radio
                       color="teal lighten-1"
@@ -236,7 +235,6 @@
                     <p class="ma-0 rating-score-label">&#8805; 4.5</p>
                   </div>
 
-                  <!-- 4.0 & up -->
                   <div class="mb-2 d-flex align-end">
                     <v-radio
                       color="teal lighten-1"
@@ -257,7 +255,6 @@
                     <p class="ma-0 rating-score-label">&#8805; 4.0</p>
                   </div>
 
-                  <!-- 3.5 & up -->
                   <div class="mb-2 d-flex align-end">
                     <v-radio
                       color="teal lighten-1"
@@ -278,7 +275,6 @@
                     <p class="ma-0 rating-score-label">&#8805; 3.5</p>
                   </div>
 
-                  <!-- 3.0 & up -->
                   <div class="mb-2 d-flex align-end">
                     <v-radio
                       color="teal lighten-1"
@@ -346,7 +342,6 @@
                     <v-col cols="3">
                       <v-img
                         height="250"
-                        :src="tutor.avatar"
                         class=""
                       ></v-img>
                     </v-col>
@@ -502,7 +497,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      tutors: 'tutor/paginatedTutors'
+      tutors: 'tutor/paginatedTutors',
+      tutorQuantity: 'tutor/tutorQuantity'
     })
   },
   watch: {
@@ -519,8 +515,13 @@ export default {
   methods: {
     async getTutors () {
       this.isLoading = true
+
+      // get all tutors
       await this.$store.dispatch('tutor/getTutors')
+
+      // paginate tutor list
       this.$store.dispatch('tutor/paginateTutorList')
+
       this.isLoading = false
     },
     async queryTutorsByQueryStr () {
