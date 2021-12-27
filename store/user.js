@@ -45,5 +45,12 @@ export const actions = {
       .then(() => {
         commit('setUser', { id: null, email: null })
       })
+  },
+
+  changePassword ({ commit }, { newPassword }) {
+    return authAPI.changePassword(newPassword)
+      .then(() => {
+        commit('setUser', { id: null, email: null })
+      })
   }
 }

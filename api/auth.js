@@ -35,8 +35,19 @@ const signUserOut = () => {
     })
 }
 
+const changePassword = async (newPassword) => {
+  await authService.changePassword(newPassword)
+
+  return authService.signUserOut()
+    .then(() => {
+      localStorage.removeItem('uid')
+      localStorage.removeItem('email')
+    })
+}
+
 export const authAPI = {
   signUserIn,
   signUserUp,
-  signUserOut
+  signUserOut,
+  changePassword
 }

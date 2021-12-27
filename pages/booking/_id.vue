@@ -22,18 +22,18 @@
             <h4 class="ml-3">Username</h4>
           </v-card-title>
           
-          <div class="px-4 py-2 nav-item">
-            <v-icon class="mr-3">
+          <div class="py-2 nav-item">
+            <v-icon class="mr-2">
               mdi-account
             </v-icon>
 
-            <nuxt-link to="" class="nav-link">
+            <nuxt-link to="/my-account" class="nav-link">
               Tài khoản của tôi
             </nuxt-link>
           </div>
 
-          <div class="px-4 py-2 nav-item">
-            <v-icon class="mr-3">
+          <div class="py-2 nav-item">
+            <v-icon class="mr-2">
               mdi-bell
             </v-icon>
 
@@ -52,7 +52,7 @@
         <!-- Loader -->
         <v-container v-if="isLoading" fluid>
           <v-row>
-            <v-col class="pl-3">
+            <v-col>
               <v-skeleton-loader
                 type="heading"
               ></v-skeleton-loader>
@@ -76,7 +76,7 @@
         <!-- Booking Details-->
         <v-container v-else fluid>
           <v-row class="mb-1">
-            <v-col cols="6" class="pl-3">
+            <v-col cols="6">
               <div
                 class="px-2 py-1 status-label"
                 :class="{
@@ -100,7 +100,7 @@
 
           <!-- Tutor List -->
           <v-row v-if="getAcceptedTutorEmails().length" class="mb-4">
-            <v-col cols="12" class="pl-3">
+            <v-col cols="12">
               <v-card flat tile outlined>
                 <v-card-text>
                   <p class="ma-0">
@@ -133,7 +133,7 @@
 
           <!-- Format & Time -->
           <v-row class="mb-4">
-            <v-col cols="12" class="pl-3">
+            <v-col cols="12">
               <v-data-table
                 hide-default-footer
                 :headers="headers"
@@ -145,7 +145,7 @@
 
           <!-- Description -->
           <v-row class="mb-4">
-            <v-col cols="12" class="pl-3">
+            <v-col cols="12">
               <v-card flat tile outlined>
                 <div class="px-4 pt-4 pb-0">
                   <p class="ma-0 font-weight-bold custom-card-text">
@@ -162,7 +162,7 @@
 
           <!-- Address -->
           <v-row class="mb-4">
-            <v-col cols="12" class="pl-3">
+            <v-col cols="12">
               <v-card flat tile outlined>
                 <v-card-text>
                   <p class="ma-0">
@@ -178,7 +178,7 @@
 
           <!-- Contact -->
           <v-row class="mb-8">
-            <v-col cols="12" class="pl-3">
+            <v-col cols="12">
               <v-card flat tile outlined>
                 <v-card-text>
                   <p class="ma-0">
@@ -194,7 +194,7 @@
 
           <!-- Applying Tutor List -->
           <v-row v-if="applyingTutors.length" class="mb-16">
-            <v-col cols="12" class="mb-1 pl-3">
+            <v-col cols="12" class="mb-1">
               <h3>Danh sách gia sư ứng tuyển</h3>
             </v-col>
 
@@ -515,7 +515,6 @@ export default {
 }
 .nav-item:hover {
   cursor: pointer;
-  background: #EEEEEE;
 }
 .nav-item:hover .nav-link {
   color: black;
