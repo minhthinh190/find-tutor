@@ -9,8 +9,6 @@
         cols="3"
         class="pr-12 py-0"
       >
-        <!-- Temporary Comment -->
-        <!--
         <v-select
           outlined
           dense
@@ -20,7 +18,6 @@
           :items="subjects"
           class="v-input--custom"
         ></v-select>
-        -->
       </v-col>
 
       <!-- Search Input -->
@@ -300,7 +297,6 @@
                 </v-radio-group>
               </v-expansion-panel-content>
             </v-expansion-panel>
-            -->
           </v-expansion-panels>
         </v-container>
       </v-col>
