@@ -77,6 +77,24 @@ const queryTutorsByName = async (tutorName) => {
   return tutors
 }
 
+const queryTutorsBySubject = async (subjectData) => {
+  let subject = subjectData.toLowerCase()
+  let tutors = []
+  const queryRef = collection(db, _rootCollection)
+
+  if (subject === 'tất cả') {
+    tutors = await getAllTutors()
+  } else {
+    const q = query(queryRef, where('subjects', 'array-contains-any', [subject]))
+    const querySnapshot = await getDocs(q)
+
+    querySnapshot.forEach((doc) => {
+      tutors.push(doc.data())
+    })
+  }
+  return tutors
+}
+
 const queryTutorsByGender = async (genderArr) => {
   const queryRef = collection(db, _rootCollection)
   const q = query(queryRef, where('gender', 'in', genderArr))
@@ -164,10 +182,14 @@ const queryTutorsByInput = async (queryStr) => {
 const queryTutorsByFilter = async (queryObj) => {
   let result = []
 
+  let tutorsBySubject = []
   let tutorsByGender = []
   let tutorsByCurrentJob = []
   let tutorsByAchievement = []
 
+  if ([queryObj.subject].length) {
+    tutorsBySubject = await queryTutorsBySubject(queryObj.subject)
+  }
   if (queryObj.gender.length) {
     tutorsByGender = await queryTutorsByGender(queryObj.gender)
   }
@@ -182,18 +204,26 @@ const queryTutorsByFilter = async (queryObj) => {
     !queryObj.currentJob.length &&
     !queryObj.achievement.length
   ) {
-    let tutors = await getAllTutors()
-    return tutors
+    // let tutors = await getAllTutors()
+    return tutorsBySubject
   }
 
   // merge into 1 array and remove duplicates
-  let tutors = [...tutorsByGender, ...tutorsByCurrentJob, ...tutorsByAchievement]
+  let tutors = [
+    ...tutorsBySubject,
+    ...tutorsByGender,
+    ...tutorsByCurrentJob,
+    ...tutorsByAchievement
+  ]
   tutors = [...new Map(tutors.map(item => [item['id'], item])).values()]
 
   // check tutor existence
   tutors.forEach((tutor) => {
     let matchingScore = 0
 
+    if (isIncluded(tutor, tutorsBySubject)) {
+      matchingScore++
+    }
     if (isIncluded(tutor, tutorsByGender)) {
       matchingScore++
     }
@@ -203,7 +233,7 @@ const queryTutorsByFilter = async (queryObj) => {
     if (isIncluded(tutor, tutorsByAchievement)) {
       matchingScore++
     }
-    if (matchingScore === 3) {
+    if (matchingScore === 4) {
       result.push(tutor)
     }
   })
