@@ -171,7 +171,7 @@
           <v-spacer class="my-8"/>
 
           <!-- Tutor Achievement -->
-          <v-row>
+          <v-row v-if="tutor.achievement.length">
             <v-col class="pa-0">
               <v-card flat tile outlined>
                 <v-card-title class="pt-3 pb-2 custom-card-title">
@@ -356,9 +356,9 @@ export default {
           this.feeTableData.push(
             {
               subject: item.subject,
-              level: item.level.reduce((prevLevel, currentLevel) => {
+              level: item.level.length ? item.level.reduce((prevLevel, currentLevel) => {
                 return prevLevel.toString() + ', ' + currentLevel.toString()
-              }),
+              }) : '',
               fee: item.fee
             }
           )

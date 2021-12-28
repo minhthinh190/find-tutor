@@ -10,6 +10,7 @@
         class="pr-12 py-0"
       >
         <v-select
+          v-model="query.subject"
           outlined
           dense
           hide-details
@@ -478,6 +479,7 @@ export default {
       isLoading: false,
       page: 1,
       subjects: [
+        'Tất cả',
         'Toán',
         'Vật lý',
         'Hóa học',
@@ -489,6 +491,7 @@ export default {
       ],
       queryInput: '',
       query: {
+        subject: '',
         gender: [],
         currentJob: [],
         achievement: []
@@ -515,34 +518,31 @@ export default {
   methods: {
     async getTutors () {
       this.isLoading = true
-
       // get all tutors
       await this.$store.dispatch('tutor/getTutors')
-
       // paginate tutor list
       this.$store.dispatch('tutor/paginateTutorList')
-
       this.isLoading = false
     },
+
     async queryTutorsByQueryStr () {
       this.isLoading = true
-
-      // reset query object
-      this.query = { gender: [], currentJob: [], achievement: [] }
-
-      await this.$store.dispatch('tutor/queryTutorsByInput', this.queryInput)
+      // format query string
+      const queryInput = this.formatQueryStr(this.queryInput)
+      // query tutors
+      await this.$store.dispatch('tutor/queryTutorsByInput', queryInput)
+      // paginate tutor list
       this.$store.dispatch('tutor/paginateTutorList')
-
       this.isLoading = false
     },
+
     async queryTutorsByFilter () {
       this.isLoading = true
-
       await this.$store.dispatch('tutor/queryTutorsByFilter', this.query)
       this.$store.dispatch('tutor/paginateTutorList')
-
       this.isLoading = false
     },
+
     generateTutorTitle (feeData) {
       // get subjects from tutor
       let subjects = []
@@ -568,6 +568,17 @@ export default {
 
       return title
     },
+
+    formatQueryStr (queryStr) {
+      let formattedQueryStr = queryStr
+        .toLowerCase()
+        .split(' ')
+        .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
+        .join(' ')
+
+      return formattedQueryStr
+    },
+
     shortenTutorDesc (desc) {
       const threshold = 450
       let shortDesc = ''
