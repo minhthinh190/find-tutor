@@ -80,6 +80,7 @@
               <div
                 class="px-2 py-1 status-label"
                 :class="{
+                  'status-label--responding': booking.status === 'responding',
                   'status-label--waiting': booking.status === 'waiting',
                   'status-label--on-going': booking.status === 'on-going',
                   'status-label--finished': booking.status === 'finished'
@@ -95,6 +96,34 @@
                   Ngày tạo: {{ booking.createdDate }}
                 </p>
               </div>
+            </v-col>
+          </v-row>
+
+          <!-- Confirming Tutor -->
+          <v-row v-if="booking.status === 'responding'" class="mb-4">
+            <v-col cols="12">
+              <v-card flat tile outlined>
+                <v-card-text>
+                  <p class="ma-0">
+                    <span class="font-weight-bold black--text custom-card-text">
+                      Đã liên hệ gia sư:&nbsp;
+                    </span>
+
+                    <nuxt-link
+                      :to="{
+                        name: 'tutor-id',
+                        params: {
+                          id: booking.tutors[0].id,
+                          email: booking.tutors[0].email
+                        }
+                      }"
+                      class="link"
+                    >
+                      {{ booking.tutors[0].name }}
+                    </nuxt-link>
+                  </p>  
+                </v-card-text>
+              </v-card>
             </v-col>
           </v-row>
 
@@ -204,7 +233,7 @@
               cols="12"
               lg="3"
               md="4"
-              class="pr-0"
+              class="mr-4 px-0"
             >
               <v-card flat tile outlined>
                 <v-card-subtitle class="px-3 pt-3 pb-2">
@@ -368,8 +397,11 @@ export default {
       let vnStatus = null
 
       switch (status) {
+        case 'responding':
+          vnStatus = 'Chờ gia sư phản hồi'
+          break
         case 'waiting':
-          vnStatus = 'Đang chờ'
+          vnStatus = 'Chưa có gia sư'
           break
         case 'on-going':
           vnStatus = 'Đang tiến hành'
@@ -543,6 +575,9 @@ export default {
   font-size: 13px;
   font-weight: bold;
   color: #263238;
+}
+.status-label--responding {
+  background: #FFF59D;
 }
 .status-label--waiting {
   background: #E57373;

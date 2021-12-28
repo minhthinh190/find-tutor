@@ -77,6 +77,7 @@
                     block
                     color="teal darken-1"
                     class="text-capitalize white--text"
+                    @click.stop="isDialogShowed = true;"
                   >
                     Thuê gia sư
                   </v-btn>
@@ -280,18 +281,49 @@
         </v-container>
       </v-col>
     </v-row>
+
+    <!-- Choosing Booking Dialog -->
+    <booking-option-dialog
+      :isDialogShowed="isDialogShowed"
+      :isConfirming="isHiring"
+      v-on:close-dialog="isDialogShowed = false"
+      v-on:confirm="hireTutor"
+    >
+      <template #dialogTitle>
+        Lựa chọn yêu cầu của bạn
+      </template>
+
+      <!--
+      <template #dialogContent>
+        Đồng ý thuê gia sư này?
+      </template>
+      -->
+
+      <template #confirmBtnText>
+        Xác nhận
+      </template>
+
+      <template #cancelBtnText>
+        Hủy
+      </template>
+    </booking-option-dialog>
   </v-container>
 </template>
 
 <script>
 import { mapState } from 'vuex'
+import BookingOptionDialog from '~/components/BookingOptionDialog'
 
 export default {
   middleware: 'auth',
   layout: 'appbar',
+  components: {
+    BookingOptionDialog
+  },
   data () {
     return {
       isLoading: false,
+      isDialogShowed: false,
       feeTableHeaders: [
         { text: 'Môn học', value: 'subject', align: '', sortable: false },
         { text: 'Lớp', value: 'level', align: '', sortable: false },
@@ -336,6 +368,7 @@ export default {
       }
       return currentJob
     },
+
     displayTeachingFormat (value) {
       let format = ''
       switch (value) {
@@ -350,6 +383,7 @@ export default {
       }
       return format
     },
+
     generateFeeTableData () {
       this.tutor.fee.forEach((item) => {
         if (item.subject !== '') {

@@ -172,6 +172,7 @@
                   <v-card-text
                     class="ml-4 mb-4 px-2 py-0 font-weight-bold status-label"
                     :class="{
+                      'status-label--responding': item.status === 'responding',
                       'status-label--waiting': item.status === 'waiting',
                       'status-label--on-going': item.status === 'on-going',
                       'status-label--finished': item.status === 'finished'
@@ -198,8 +199,8 @@ export default {
   data () {
     return {
       isLoading: false,
-      vnFilters: ['Tất cả', 'Hoàn tất', 'Đang tiến hành', 'Đang chờ'],
-      filters: ['All', 'Finished', 'On-going', 'Waiting'],
+      vnFilters: ['Tất cả', 'Hoàn tất', 'Đang tiến hành', 'Chưa có gia sư', 'Chờ phản hồi'],
+      filters: ['All', 'Finished', 'On-going', 'Waiting', 'Responding'],
       currentFilter: 0
     }
   },
@@ -258,8 +259,11 @@ export default {
       let status = ''
 
       switch (originalStatus) {
+        case 'responding':
+          status = 'Chờ gia sư phản hồi'
+          break
         case 'waiting':
-          status = 'Đang chờ'
+          status = 'Chưa có gia sư'
           break
         case 'on-going':
           status = 'Đang tiến hành'
@@ -311,6 +315,9 @@ export default {
   font-size: 13px;
   font-weight: bold;
   color: #263238;
+}
+.status-label--responding {
+  background: #FFF59D;
 }
 .status-label--waiting {
   background: #E57373;
