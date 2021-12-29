@@ -13,39 +13,62 @@
 
       <v-card-text class="px-4">
         <v-container fluid class="px-0 py-4 booking-list">
-          <!-- Waiting Booking List -->
-          <v-list-item-group>
-            <!-- Booking Card -->
-            <v-list-item
-              v-for="n in 7"
+          <!-- Loader -->
+          <div v-if="isLoading">
+            <v-skeleton-loader
+              v-for="n in 3"
               :key="n"
-              class="mb-4 pa-0"
-            >
-              <template v-slot:default="{ active }">
-                <v-list-item-action class="mr-4">
-                  <v-checkbox
-                    color="teal accent-4"
-                    :input-value="active"
-                  ></v-checkbox>
-                </v-list-item-action>
+              type="card"
+              class="mb-4 booking-option-loader"
+            ></v-skeleton-loader>
+          </div>
 
-                <v-list-item-content class="px-3 booking-card">
-                  <v-card-subtitle class="d-flex pa-0">
-                    <p class="ma-0 booking-title">Toán</p>
-                    <v-spacer />
-                    <p class="ma-0 text--disabled">28/12/2021</p>
-                  </v-card-subtitle>
+          <!-- Waiting Booking List -->
+          <v-list-item-group v-else>
+            <!-- Booking Card -->
+            <v-radio-group v-model="selectedBooking">
+              <v-list-item
+                v-for="(booking, index) in bookingList"
+                :key="index"
+                class="mb-4 pa-0"
+              >
+                <template v-slot:default="{ active }">
+                  <v-list-item-action class="mr-4">
+                    <v-radio
+                      color="teal accent-4"
+                      :value="booking.id"
+                      :input-value="active"
+                    ></v-radio>
+                  </v-list-item-action>
 
-                  <v-spacer class="mb-1"/>
+                  <v-list-item-content class="px-3 booking-card">
+                    <v-card-subtitle class="d-flex pa-0">
+                      <p class="ma-0 booking-title">
+                        {{ formatSubjectName(booking.subject) }}
+                      </p>
+                      <v-spacer />
+                      <p class="ma-0 text--disabled">{{ booking.createdDate }}</p>
+                    </v-card-subtitle>
 
-                  <div>
-                    <div class="pa-1 status-label status-label--waiting">
-                      Chưa có gia sư
+                    <v-spacer class="mb-1"/>
+
+                    <div>
+                      <div
+                        class="pa-1 status-label"
+                        :class="{
+                          'status-label--responding': booking.status === 'responding',
+                          'status-label--waiting': booking.status === 'waiting',
+                          'status-label--on-going': booking.status === 'on-going',
+                          'status-label--finished': booking.status === 'finished'
+                        }"
+                      >
+                        {{ translateBookingStatus(booking.status) }}
+                      </div>
                     </div>
-                  </div>
-                </v-list-item-content>
-              </template>
-            </v-list-item>
+                  </v-list-item-content>
+                </template>
+              </v-list-item>
+            </v-radio-group>
           </v-list-item-group>
         </v-container>
       </v-card-text>
@@ -70,7 +93,7 @@
           color="teal darken-1"
           class="px-3 text-capitalize white--text"
           :loading="isConfirming"
-          @click="$emit('confirm')"
+          @click="$emit('confirm', selectedBooking)"
         >
           <slot name="confirmBtnText">Confirm</slot>
         </v-btn>
@@ -80,6 +103,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   props: {
     isDialogShowed: {
@@ -90,7 +115,69 @@ export default {
       type: Boolean,
       required: true
     }
-  }  
+  },
+  data () {
+    return {
+      isLoading: false,
+      selectedBooking: ''
+    }
+  },
+  computed: {
+    ...mapState({
+      bookingList: state => state.booking.list
+    })
+  },
+  watch: {
+    isDialogShowed (val) {
+      if (val === true) {
+        this.getWaitingBookings()
+      }
+    }
+  },
+  methods: {
+    async getWaitingBookings () {
+      this.isLoading = true
+      const property = 'status'
+      const value = 'waiting'
+
+      await this.$store.dispatch('booking/getBookingsByStatus', {
+        property,
+        value
+      })
+      this.isLoading = false
+    },
+
+    formatSubjectName (subjectName) {
+      let formattedSubjectName = subjectName
+        .toLowerCase()
+        .split(' ')
+        .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
+        .join(' ')
+
+      return formattedSubjectName
+    },
+
+    translateBookingStatus (originalStatus) {
+      let status = ''
+
+      switch (originalStatus) {
+        case 'responding':
+          status = 'Chờ gia sư phản hồi'
+          break
+        case 'waiting':
+          status = 'Chưa có gia sư'
+          break
+        case 'on-going':
+          status = 'Đang tiến hành'
+          break
+        case 'finished':
+          status = 'Hoàn tất'
+          break
+      }
+
+      return status
+    },
+  }
 }
 </script>
 
@@ -98,9 +185,11 @@ export default {
 .box {
   border: 1px solid red;
 }
+/*
 .booking-list {
   overflow: hidden;
 }
+*/
 .booking-card {
   border: 1px solid #BDBDBD;
 }
@@ -111,11 +200,24 @@ export default {
 }
 .status-label {
   width: fit-content;
-  font-size: 13px;
+  font-size: 11px;
   font-weight: bold;
   color: #263238;
 }
+.status-label--responding {
+  background: #FFF59D;
+}
 .status-label--waiting {
   background: #E57373;
+}
+.status-label--on-going {
+  background: #E6EE9C;
+}
+.status-label--finished {
+  background: #80CBC4;
+}
+.booking-option-loader {
+  height: 75px;
+  border-radius: 0;
 }
 </style>

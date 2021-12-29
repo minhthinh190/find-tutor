@@ -114,8 +114,13 @@ const updateBookingTutorData = async (userDoc, bookingId, tutors) => {
     _collection,
     bookingId
   )
+
+  const res = await getDoc(docRef)
+  const tutorList = res.data().tutors
+  tutorList.push({ ...tutors })
+
   await updateDoc(docRef, {
-    tutors: tutors
+    tutors: tutorList
   })
 }
 

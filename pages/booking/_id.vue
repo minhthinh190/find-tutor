@@ -113,13 +113,13 @@
                       :to="{
                         name: 'tutor-id',
                         params: {
-                          id: booking.tutors[0].id,
-                          email: booking.tutors[0].email
+                          id: contactedTutor.id,
+                          email: contactedTutor.email
                         }
                       }"
                       class="link"
                     >
-                      {{ booking.tutors[0].name }}
+                      {{ contactedTutor.name }}
                     </nuxt-link>
                   </p>  
                 </v-card-text>
@@ -359,6 +359,7 @@ export default {
         { text: 'Số buổi/tuần', value: 'perWeek', align: 'start', sortable: false },
         { text: 'Thời lượng', value: 'duration', align: 'start', sortable: false }
       ],
+      contactedTutor: null,
       acceptedTutors: [],
       selectedTutor: null
     }
@@ -376,9 +377,13 @@ export default {
   async mounted () {
     this.isLoading = true
     const id = this.bookingId
+    console.log('bookingId:', id)
     
     // get booking data
     await this.$store.dispatch('booking/getBookingById', { id })
+
+    // get contacted tutor if existed
+    this.getContactedTutor()
     
     // get accepted tutor list
     const acceptedTutorEmails = this.getAcceptedTutorEmails()
@@ -429,6 +434,14 @@ export default {
         }
       ]
       return data
+    },
+
+    getContactedTutor () {
+      this.booking.tutors.forEach((tutor) => {
+        if (tutor.status === 'confirming') {
+          this.contactedTutor = tutor
+        }
+      })
     },
 
     getApplyingTutorEmails () {

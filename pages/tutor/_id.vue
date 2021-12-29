@@ -285,9 +285,9 @@
     <!-- Choosing Booking Dialog -->
     <booking-option-dialog
       :isDialogShowed="isDialogShowed"
-      :isConfirming="isHiring"
+      :isConfirming="isRequestSending"
       v-on:close-dialog="isDialogShowed = false"
-      v-on:confirm="hireTutor"
+      v-on:confirm="sendRequestToTutor"
     >
       <template #dialogTitle>
         Lựa chọn yêu cầu của bạn
@@ -312,6 +312,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import { bookingAPI } from '~/api/booking'
 import BookingOptionDialog from '~/components/BookingOptionDialog'
 
 export default {
@@ -324,6 +325,7 @@ export default {
     return {
       isLoading: false,
       isDialogShowed: false,
+      isRequestSending: false,
       feeTableHeaders: [
         { text: 'Môn học', value: 'subject', align: '', sortable: false },
         { text: 'Lớp', value: 'level', align: '', sortable: false },
@@ -343,7 +345,8 @@ export default {
       return this.$route.params.email
     },
     ...mapState({
-      tutor: state => state.tutor.tutorProfile
+      tutor: state => state.tutor.tutorProfile,
+      userEmail: state => state.user.email
     })
   },
   async mounted () {
@@ -385,18 +388,60 @@ export default {
     },
 
     generateFeeTableData () {
-      this.tutor.fee.forEach((item) => {
-        if (item.subject !== '') {
-          this.feeTableData.push(
-            {
-              subject: item.subject,
-              level: item.level.length ? item.level.reduce((prevLevel, currentLevel) => {
-                return prevLevel.toString() + ', ' + currentLevel.toString()
-              }) : '',
-              fee: item.fee
-            }
+      if (this.tutor.fee.length) {
+        this.tutor.fee.forEach((item) => {
+          if (item.subject !== '') {
+            this.feeTableData.push(
+              {
+                subject: item.subject,
+                level: item.level.length ? item.level.reduce((prevLevel, currentLevel) => {
+                  return prevLevel.toString() + ', ' + currentLevel.toString()
+                }) : '',
+                fee: item.fee
+              }
+            )
+          }
+        })
+      }
+    },
+
+    async sendRequestToTutor (selectedBooking) {
+      this.isRequestSending = true
+      
+      const bookingId = selectedBooking.toString()
+
+      const tutor = {
+        email: this.tutor.email,
+        id: this.tutor.id,
+        name: this.tutor.name,
+        status: 'confirming'
+      }
+
+      await bookingAPI.updateBookingTutorData(
+        this.userEmail,
+        bookingId,
+        tutor
+      )
+        .then(async () => {
+          this.isDialogShowed = false
+          this.isRequestSending = false
+
+          await bookingAPI.updateBookingStatus(
+            this.userEmail,
+            bookingId,
+            'responding'
           )
-        }
+        })
+        .catch((err) => {
+          this.isRequestSending = false
+          this.showNotification(err.code, 'error')
+        })
+    },
+
+    showNotification (message, color) {
+      this.$store.dispatch('notification/showNotification', {
+        message,
+        color
       })
     }
   }

@@ -138,7 +138,7 @@
                       :to="{ name: 'booking-id', params: { id: item.id } }"
                       class="link"
                     >
-                      {{ capitalizeFirstLetter(item.subject) }}
+                      {{ formatSubjectName(item.subject) }}
                     </nuxt-link>
 
                     <v-spacer />
@@ -253,6 +253,16 @@ export default {
 
     selectItem (item) {
       this.currentFilter = item
+    },
+
+    formatSubjectName (subjectName) {
+      let formattedSubjectName = subjectName
+        .toLowerCase()
+        .split(' ')
+        .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
+        .join(' ')
+
+      return formattedSubjectName
     },
 
     translateBookingStatus (originalStatus) {
