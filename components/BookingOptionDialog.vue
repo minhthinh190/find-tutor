@@ -23,6 +23,26 @@
             ></v-skeleton-loader>
           </div>
 
+          <div
+            v-else-if="!bookingList.length"
+            class="text-center"
+          >
+            <p>Bạn không có yêu cầu nào</p>
+
+            <nuxt-link to="/connect" class="link">
+              <v-btn
+                tile
+                depressed
+                outlined
+                color="teal darken-1"
+                class="pl-3 pr-5 white--text text-capitalize"
+              >
+                <v-icon class="mr-2">mdi-plus</v-icon>
+                Tạo yêu cầu
+              </v-btn>
+            </nuxt-link>
+          </div>
+
           <!-- Waiting Booking List -->
           <v-list-item-group v-else>
             <!-- Booking Card -->
@@ -92,6 +112,7 @@
           depressed
           color="teal darken-1"
           class="px-3 text-capitalize white--text"
+          :disabled="!bookingList.length"
           :loading="isConfirming"
           @click="$emit('confirm', selectedBooking)"
         >
@@ -131,6 +152,9 @@ export default {
     isDialogShowed (val) {
       if (val === true) {
         this.getWaitingBookings()
+      }
+      if (val === false) {
+        this.selectedBooking = ''
       }
     }
   },
@@ -190,6 +214,9 @@ export default {
   overflow: hidden;
 }
 */
+.link {
+  text-decoration: none;
+}
 .booking-card {
   border: 1px solid #BDBDBD;
 }
