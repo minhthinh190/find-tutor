@@ -221,6 +221,25 @@
             </v-col>
           </v-row>
 
+          <!-- Finish Button -->
+          <v-row
+            v-if="booking.status === 'on-going'"
+            class="mb-8"
+          >
+            <v-col cols="12" class="text-right">
+              <v-btn
+                tile
+                depressed
+                color="teal darken-1"
+                class="white--text text-capitalize"
+                :loading="isFinishing"
+                @click="finishSession"
+              >
+                Hoàn thành
+              </v-btn>
+            </v-col>
+          </v-row>
+
           <!-- Applying Tutor List -->
           <v-row v-if="applyingTutors.length" class="mb-16">
             <v-col cols="12" class="mb-1">
@@ -354,6 +373,7 @@ export default {
       isDialogShowed: false,
       isHiring: false,
       isRejecting: false,
+      isFinishing: false,
       headers: [
         { text: 'Môn học', value: 'subject', align: 'start', sortable: false },
         { text: 'Hình thức', value: 'format', align: 'start', sortable: false },
@@ -413,7 +433,7 @@ export default {
           vnStatus = 'Đang tiến hành'
           break
         case 'finished':
-          vnStatus = 'Hoàn tất'
+          vnStatus = 'Hoàn thành'
           break
       }
 
@@ -534,6 +554,19 @@ export default {
           this.isRejecting = false
           this.showNotification(err.code, 'error')
         })
+    },
+
+    async finishSession () {
+      this.isFinishing = true
+      const bookingId = this.bookingId.toString()
+
+      await bookingAPI.updateBookingStatus(
+        this.userEmail,
+        bookingId,
+        'finished'
+      )
+      $nuxt.$router.push({ name: 'bookings' })
+      this.isFinishing = false
     },
 
     showNotification (message, color) {

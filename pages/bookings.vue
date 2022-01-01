@@ -199,7 +199,7 @@ export default {
   data () {
     return {
       isLoading: false,
-      vnFilters: ['Tất cả', 'Hoàn tất', 'Đang tiến hành', 'Chưa có gia sư', 'Chờ phản hồi'],
+      vnFilters: ['Tất cả', 'Đã hoàn thành', 'Đang tiến hành', 'Chưa có gia sư', 'Chờ phản hồi'],
       filters: ['All', 'Finished', 'On-going', 'Waiting', 'Responding'],
       currentFilter: 0
     }
@@ -279,7 +279,7 @@ export default {
           status = 'Đang tiến hành'
           break
         case 'finished':
-          status = 'Hoàn tất'
+          status = 'Hoàn thành'
           break
       }
 
