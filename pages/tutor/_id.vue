@@ -349,7 +349,7 @@ export default {
       userEmail: state => state.user.email
     })
   },
-  async mounted () {
+  async created () {
     this.isLoading = true
     await this.$store.dispatch('tutor/getTutorProfile', this.tutorEmail)
     this.generateFeeTableData()
@@ -417,7 +417,7 @@ export default {
         status: 'confirming'
       }
 
-      await bookingAPI.updateBookingTutorData(
+      await bookingAPI.addConfirmingTutorToBookingTutors(
         this.userEmail,
         bookingId,
         tutor

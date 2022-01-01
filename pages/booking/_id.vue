@@ -284,6 +284,7 @@
                   <v-btn
                     tile
                     depressed
+                    :loading="isRejecting"
                     class="text-capitalize"
                     @click="rejectTutor(tutor)"
                   >
@@ -352,6 +353,7 @@ export default {
       isLoading: false,
       isDialogShowed: false,
       isHiring: false,
+      isRejecting: false,
       headers: [
         { text: 'Môn học', value: 'subject', align: 'start', sortable: false },
         { text: 'Hình thức', value: 'format', align: 'start', sortable: false },
@@ -374,10 +376,9 @@ export default {
       applyingTutors: state => state.tutor.applyingTutors
     }),
   },
-  async mounted () {
+  async created () {
     this.isLoading = true
     const id = this.bookingId
-    console.log('bookingId:', id)
     
     // get booking data
     await this.$store.dispatch('booking/getBookingById', { id })
@@ -508,6 +509,8 @@ export default {
     },
 
     async rejectTutor (tutor) {
+      this.isRejecting = true
+
       let tutors = []
       const bookingId = this.bookingId.toString()
 
@@ -525,8 +528,10 @@ export default {
           const id = this.bookingId
           await this.$store.dispatch('booking/getBookingById', { id })
           await this.getApplyingTutorsData()
+          this.isRejecting = false
         })
         .catch((err) => {
+          this.isRejecting = false
           this.showNotification(err.code, 'error')
         })
     },

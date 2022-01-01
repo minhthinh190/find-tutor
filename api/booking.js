@@ -106,7 +106,21 @@ const queryBookingByProperty = async (userDoc, property, value) => {
   return bookingList
 }
 
-const updateBookingTutorData = async (userDoc, bookingId, tutors) => {
+const updateBookingTutorData = async (userDoc, bookingId, tutorArr) => {
+  const docRef = doc(
+    db,
+    _rootCollection,
+    userDoc,
+    _collection,
+    bookingId
+  )
+
+  await updateDoc(docRef, {
+    tutors: tutorArr
+  })
+}
+
+const addConfirmingTutorToBookingTutors = async (userDoc, bookingId, tutors) => {
   const docRef = doc(
     db,
     _rootCollection,
@@ -144,5 +158,6 @@ export const bookingAPI = {
   getNumberOfBookings,
   queryBookingByProperty,
   updateBookingTutorData,
+  addConfirmingTutorToBookingTutors,
   updateBookingStatus
 }
