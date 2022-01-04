@@ -11,7 +11,7 @@
         cols="12"
         sm="12"
         md="6"
-        class="pr-md-10"
+        class="mb-16 pr-md-10"
       >
         <div class="d-flex flex-column justify-center intro-container">
           <h1 class="pb-4">
@@ -41,7 +41,7 @@
         cols="12"
         sm="12"
         md="6"
-        class="pl-md-10"
+        class="mb-16 pl-md-10"
       >
         <div>
           <img

@@ -1,6 +1,5 @@
 <template>
   <v-container
-    v-if="booking"
     fluid
     class="py-7 pa-sm-16 root-container"
   >
@@ -19,7 +18,7 @@
               color="grey lighten-2"
             ></v-avatar>
 
-            <h4 class="ml-3">Username</h4>
+            <h4 class="ml-3">minhthinh</h4>
           </v-card-title>
           
           <div class="py-2 nav-item">
@@ -317,7 +316,7 @@
                     depressed
                     color="teal darken-1"
                     class="text-capitalize white--text"
-                    @click.stop="isDialogShowed = true; selectedTutor = tutor.email"
+                    @click.stop="isDialogShowed = true; selectedTutor = { email: tutor.email, id: tutor.id, name: tutor.name }"
                   >
                     Chấp nhận
                   </v-btn>
@@ -359,6 +358,7 @@
 import { mapState } from 'vuex'
 import { bookingAPI } from '~/api/booking'
 import { tutorAPI } from '~/api/tutor'
+import { classAPI } from '~/api/class'
 import ConfirmDialog from '~/components/ConfirmDialog'
 
 export default {
@@ -499,7 +499,12 @@ export default {
 
       const bookingId = this.bookingId.toString()
       const tutors = [
-        { email: this.selectedTutor, status: 'accepted' }
+        {
+          email: this.selectedTutor.email,
+          id: this.selectedTutor.id,
+          name: this.selectedTutor.name,
+          status: 'accepted'
+        }
       ]
 
       await bookingAPI.updateBookingTutorData(
@@ -526,6 +531,14 @@ export default {
         bookingId,
         'on-going'
       )
+
+      await classAPI.updateClassStatus(
+        this.selectedTutor.email,
+        this.bookingId,
+        'on-going'
+      )
+
+      $nuxt.$router.push({ name: 'bookings' })
     },
 
     async rejectTutor (tutor) {
@@ -554,6 +567,8 @@ export default {
           this.isRejecting = false
           this.showNotification(err.code, 'error')
         })
+
+      await classAPI.rejectClass(tutor.email, this.bookingId)
     },
 
     async finishSession () {
@@ -565,6 +580,15 @@ export default {
         bookingId,
         'finished'
       )
+
+      for (const tutor of this.acceptedTutors) {
+        await classAPI.updateClassStatus(
+          tutor.email,
+          this.bookingId,
+          'finished'
+        ) 
+      }
+
       $nuxt.$router.push({ name: 'bookings' })
       this.isFinishing = false
     },

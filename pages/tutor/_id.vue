@@ -313,6 +313,7 @@
 <script>
 import { mapState } from 'vuex'
 import { bookingAPI } from '~/api/booking'
+import { tutorAPI } from '~/api/tutor'
 import BookingOptionDialog from '~/components/BookingOptionDialog'
 
 export default {
@@ -436,6 +437,15 @@ export default {
           this.isRequestSending = false
           this.showNotification(err.code, 'error')
         })
+      
+      await tutorAPI.addClass(
+        tutor.email,
+        {
+          contact: this.userEmail,
+          id: selectedBooking,
+          status: 'responding'
+        }
+      )
     },
 
     showNotification (message, color) {

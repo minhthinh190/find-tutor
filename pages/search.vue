@@ -344,6 +344,7 @@
                       <v-img
                         height="250"
                         class=""
+                        :src="tutor.avatar"
                       ></v-img>
                     </v-col>
 

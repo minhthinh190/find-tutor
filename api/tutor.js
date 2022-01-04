@@ -8,7 +8,8 @@ import {
   getDoc,
   getDocs,
   query,
-  where
+  where,
+  updateDoc
 } from 'firebase/firestore'
 
 initializeApp(config)
@@ -42,6 +43,14 @@ const getAllTutorDocs = async () => {
     }
   })
   return tutorDocs
+}
+
+const getAllClassIds = async (tutorDoc) => {
+  const docRef = doc(db, _rootCollection, tutorDoc)
+  const res = await getDoc(docRef)
+  const classIds = res.data().class
+
+  return classIds
 }
 
 const queryTutorsById = async (tutorId) => {
@@ -122,8 +131,6 @@ const queryTutorsByCurrentJob = async (currentJobArr) => {
 }
 
 const queryTutorsByAchievement = async (achievementArr) => {
-  console.log('achievement arr:', achievementArr)
-  //
   const queryRef = collection(db, _rootCollection)
   const q = query(
     queryRef,
@@ -241,10 +248,19 @@ const queryTutorsByFilter = async (queryObj) => {
   return result
 }
 
+const addClass = async (tutorEmail, classData) => {
+  let classIds = await getAllClassIds(tutorEmail)
+  classIds.push({ ...classData })
+
+  const docRef = doc(db, _rootCollection, tutorEmail)
+  await updateDoc(docRef, { class: classIds })
+}
+
 export const tutorAPI = {
   getTutor,
   getAllTutors,
   getApplyingTutors,
   queryTutorsByFilter,
-  queryTutorsByInput
+  queryTutorsByInput,
+  addClass
 }
