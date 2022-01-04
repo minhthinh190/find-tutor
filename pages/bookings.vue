@@ -18,7 +18,7 @@
               color="grey lighten-2"
             ></v-avatar>
 
-            <h4 class="ml-3">Username</h4>
+            <h4 class="ml-3">minhthinh</h4>
           </v-card-title>
           
           <div class="py-2 nav-item">
