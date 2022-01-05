@@ -239,6 +239,43 @@
             </v-col>
           </v-row>
 
+          <!-- Cancel Contact Button -->
+          <v-row
+            v-if="booking.status === 'responding'"
+            class="mb-8"
+          >
+            <v-col cols="12" class="text-right">
+              <v-btn
+                tile
+                depressed
+                color="teal darken-1"
+                class="white--text text-capitalize"
+                :loading="isContactCanceling"
+                @click="cancelSendingRequest"
+              >
+                Hủy liên hệ
+              </v-btn>
+            </v-col>
+          </v-row>
+
+          <!-- Rate & Review Button -->
+          <v-row
+            v-if="booking.status === 'finished'"
+            class="mb-8"
+          >
+            <v-col cols="12" class="text-right">
+              <v-btn
+                tile
+                depressed
+                color="teal darken-1"
+                class="white--text text-capitalize"
+                @click.stop="isRatingDialogShowed = true"
+              >
+                Đánh giá gia sư
+              </v-btn>
+            </v-col>
+          </v-row>
+
           <!-- Applying Tutor List -->
           <v-row v-if="applyingTutors.length" class="mb-16">
             <v-col cols="12" class="mb-1">
@@ -351,6 +388,14 @@
         Hủy
       </template>
     </confirm-dialog>
+
+    <!-- Review & Ratings Dialog -->
+    <rating-dialog
+      :isDialogShowed="isRatingDialogShowed"
+      :isConfirming="isSendingRatings"
+      :tutorIds="booking.tutors.length ? booking.tutors : []"
+      v-on:close-dialog="isRatingDialogShowed = false"
+    ></rating-dialog>
   </v-container>
 </template>
 
@@ -360,20 +405,25 @@ import { bookingAPI } from '~/api/booking'
 import { tutorAPI } from '~/api/tutor'
 import { classAPI } from '~/api/class'
 import ConfirmDialog from '~/components/ConfirmDialog'
+import RatingDialog from '~/components/RatingDialog'
 
 export default {
   middleware: 'auth',
   layout: 'appbar',
   components: {
-    ConfirmDialog
+    ConfirmDialog,
+    RatingDialog
   },
   data () {
     return {
       isLoading: false,
       isDialogShowed: false,
+      isRatingDialogShowed: false,
+      isSendingRatings: false,
       isHiring: false,
       isRejecting: false,
       isFinishing: false,
+      isContactCanceling: false,
       headers: [
         { text: 'Môn học', value: 'subject', align: 'start', sortable: false },
         { text: 'Hình thức', value: 'format', align: 'start', sortable: false },
@@ -552,6 +602,7 @@ export default {
           tutors.push(element)
         }
       })
+
       await bookingAPI.updateBookingTutorData(
         this.userEmail,
         bookingId,
@@ -561,7 +612,6 @@ export default {
           const id = this.bookingId
           await this.$store.dispatch('booking/getBookingById', { id })
           await this.getApplyingTutorsData()
-          this.isRejecting = false
         })
         .catch((err) => {
           this.isRejecting = false
@@ -569,6 +619,8 @@ export default {
         })
 
       await classAPI.rejectClass(tutor.email, this.bookingId)
+
+      this.isRejecting = false
     },
 
     async finishSession () {
@@ -591,6 +643,39 @@ export default {
 
       $nuxt.$router.push({ name: 'bookings' })
       this.isFinishing = false
+    },
+
+    async cancelSendingRequest () {
+      this.isContactCanceling = true
+      
+      let tutors = []
+      const bookingId = this.bookingId.toString()
+
+      this.booking.tutors.forEach((element) => {
+        if (element.email !== this.contactedTutor.email) {
+          tutors.push(element)
+        }
+      })
+
+      await bookingAPI.updateBookingStatus(
+        this.userEmail,
+        bookingId,
+        'waiting'
+      )
+
+      await bookingAPI.updateBookingTutorData(
+        this.userEmail,
+        bookingId,
+        tutors
+      )
+
+      await classAPI.rejectClass(
+        this.contactedTutor.email,
+        this.bookingId
+      )
+
+      $nuxt.$router.push({ name: 'bookings' })
+      this.isContactCanceling = false
     },
 
     showNotification (message, color) {

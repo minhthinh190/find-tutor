@@ -34,6 +34,7 @@
               <v-img
                 contain
                 height="250"
+                :src="tutor.avatar"
                 class="mx-auto img-placeholder"
               ></v-img>
             </v-col>

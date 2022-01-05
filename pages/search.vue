@@ -209,6 +209,7 @@
             </v-expansion-panel>
 
             <!-- Ratings -->
+            <!--
             <v-expansion-panel>
               <v-expansion-panel-header class="px-3">
                 <h3>Đánh giá</h3>
@@ -298,6 +299,7 @@
                 </v-radio-group>
               </v-expansion-panel-content>
             </v-expansion-panel>
+            -->
           </v-expansion-panels>
         </v-container>
       </v-col>
@@ -405,6 +407,7 @@
                       <v-spacer class="mb-2"/>
 
                       <!-- Ratings -->
+                      <!--
                       <div class="d-flex align-center">
                         <p class="my-0 mr-2 rating-score">
                           <strong>4.9</strong>
@@ -425,6 +428,7 @@
                           ({{ Math.floor(Math.random() * 50) + 1 }})
                         </p>
                       </div>
+                      -->
 
                       <!-- Achievement -->
                       <div class="mt-2 d-flex">
