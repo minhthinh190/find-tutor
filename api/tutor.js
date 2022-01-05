@@ -256,11 +256,20 @@ const addClass = async (tutorEmail, classData) => {
   await updateDoc(docRef, { class: classIds })
 }
 
+const addRatings = async (tutorEmail, ratingsData) => {
+  const docRef = doc(db, _rootCollection, tutorEmail)
+  await updateDoc(docRef, {
+    ratingScore: ratingsData.ratingScore,
+    review: ratingsData.review
+  })
+}
+
 export const tutorAPI = {
   getTutor,
   getAllTutors,
   getApplyingTutors,
   queryTutorsByFilter,
   queryTutorsByInput,
-  addClass
+  addClass,
+  addRatings
 }

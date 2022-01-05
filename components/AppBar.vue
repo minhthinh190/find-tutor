@@ -72,8 +72,8 @@ export default {
       ],
       menu: [
         { title: 'Danh sách yêu cầu', icon: 'mdi-book-education', action: 'goToBookingList' },
-        { title: 'Thông báo', icon: 'mdi-bell', action: '' },
-        { title: 'Tài khoản của tôi', icon: 'mdi-account', action: '' },
+        // { title: 'Thông báo', icon: 'mdi-bell', action: '' },
+        { title: 'Tài khoản của tôi', icon: 'mdi-account', action: 'goToAccountSetting' },
         { title: 'Đăng xuất', icon: 'mdi-logout', action: 'signOut' }
       ]
     }
@@ -84,6 +84,9 @@ export default {
     },
     goToBookingList () {
       this.$router.push({ name: 'bookings' })
+    },
+    goToAccountSetting () {
+      this.$router.push({ name: 'my-account' })
     },
     signOut () {
       this.$store.dispatch('user/signOut')

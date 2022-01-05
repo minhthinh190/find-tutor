@@ -18,7 +18,9 @@
               color="grey lighten-2"
             ></v-avatar>
 
-            <h4 class="ml-3">Username</h4>
+            <h4 class="ml-3">
+              {{ userEmail.substr(0, userEmail.indexOf('@')) }}
+            </h4>
           </v-card-title>
           
           <div class="py-2 nav-item">
@@ -31,6 +33,7 @@
             </nuxt-link>
           </div>
 
+          <!--
           <div class="py-2 nav-item">
             <v-icon class="mr-2">
               mdi-bell
@@ -40,6 +43,7 @@
               Thông báo
             </nuxt-link>
           </div>
+          -->
         </v-container>
       </v-col>
 

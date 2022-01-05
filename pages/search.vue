@@ -407,10 +407,12 @@
                       <v-spacer class="mb-2"/>
 
                       <!-- Ratings -->
-                      <!--
-                      <div class="d-flex align-center">
+                      <div
+                        v-if="tutor.ratingScore.length"
+                        class="d-flex align-center"
+                      >
                         <p class="my-0 mr-2 rating-score">
-                          <strong>4.9</strong>
+                          <strong>{{ getAverageRatingScore(tutor.ratingScore) }}</strong>
                         </p>
 
                         <v-rating
@@ -418,17 +420,16 @@
                           dense
                           half-increments
                           readonly
-                          :value="4.5"
+                          :value="getAverageRatingScore(tutor.ratingScore)"
                           background-color="yellow darken-3"
                           color="yellow darken-3"
                           class="mr-2"
                         ></v-rating>
 
                         <p class="ma-0 rating-quantity">
-                          ({{ Math.floor(Math.random() * 50) + 1 }})
+                          ({{ tutor.ratingScore.length }})
                         </p>
                       </div>
-                      -->
 
                       <!-- Achievement -->
                       <div class="mt-2 d-flex">
@@ -532,6 +533,8 @@ export default {
 
     async queryTutorsByQueryStr () {
       this.isLoading = true
+      this.page = 1
+
       // format query string
       const queryInput = this.formatQueryStr(this.queryInput)
       // query tutors
@@ -543,6 +546,7 @@ export default {
 
     async queryTutorsByFilter () {
       this.isLoading = true
+      this.page = 1
       await this.$store.dispatch('tutor/queryTutorsByFilter', this.query)
       this.$store.dispatch('tutor/paginateTutorList')
       this.isLoading = false
@@ -572,6 +576,22 @@ export default {
       title = "Gia sư chuyên dạy kèm môn " + title
 
       return title
+    },
+
+    getAverageRatingScore (ratingScoreArr) {
+      let sum = 0
+      ratingScoreArr.forEach((item) => {
+        sum += item.score
+      })
+
+      let avgScore
+      if (ratingScoreArr.length) {
+        avgScore = sum / ratingScoreArr.length
+      } else {
+        avgScore = 0
+      }
+
+      return avgScore
     },
 
     formatQueryStr (queryStr) {

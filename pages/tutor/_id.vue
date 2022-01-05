@@ -265,7 +265,7 @@
           <v-spacer class="my-8"/>
 
           <!-- Format -->
-          <v-row>
+          <v-row class="mb-16">
             <v-col class="pa-0">
               <v-card flat tile outlined>
                 <v-card-text>
@@ -277,6 +277,63 @@
                   </p>  
                 </v-card-text>
               </v-card>
+            </v-col>
+          </v-row>
+
+          <!-- Ratings & Review -->
+          <v-row class="mb-16">
+            <v-col cols="12" class="px-0 pt-0">
+              <v-card-title class="pa-0 font-weight-bold">
+                Đánh giá
+              </v-card-title>
+            </v-col>
+
+            <v-col
+              v-if="!tutor.ratingScore.length && !tutor.review.length"
+              cols="12"
+              class="px-0"
+            >
+              <div class="pa-16 text-center">
+                <img
+                  src="~/assets/images/books.jpg"
+                  class="image"
+                />
+                <p>Chưa có đánh giá</p>
+              </div>
+            </v-col>
+
+            <v-col v-else class="pa-0">
+              <div
+                v-for="(item, index) in ratingData"
+                :key="index"
+                class="mb-12"
+              > 
+                <div class="d-flex align-center">
+                  <v-avatar
+                    class="mr-3"
+                  >
+                    <v-img class="img-placeholder"/>
+                  </v-avatar>
+
+                  <div>
+                    <p class="ml-1 mr-0 my-0 font-weight-bold">
+                      {{ item.reviewer.substr(0, item.reviewer.indexOf('@')) }}
+                    </p>
+                    <v-rating
+                      dense
+                      half-increments
+                      readonly
+                      :value="item.score"
+                      background-color="yellow darken-3"
+                      color="yellow darken-3"
+                    ></v-rating>
+                  </div>
+                </div>
+
+                <div class="ml-16 mt-4">
+                  {{ item.content }}
+                </div>
+              </div>
             </v-col>
           </v-row>
         </v-container>
@@ -340,6 +397,7 @@ export default {
         { text: 'Tối', value: 'evening', align: '', sortable: false }
       ],
       feeTableData: [],
+      ratingDataArr: []
     }
   },
   computed: {
@@ -355,6 +413,7 @@ export default {
     this.isLoading = true
     await this.$store.dispatch('tutor/getTutorProfile', this.tutorEmail)
     this.generateFeeTableData()
+    this.generateRatingData()
     this.isLoading = false
   },
   methods: {
@@ -405,6 +464,26 @@ export default {
           }
         })
       }
+    },
+
+    generateRatingData () {
+      let ratingDataObj = {}
+
+      this.tutor.ratingScore.forEach((item) => {
+        ratingDataObj[item.reviewer] = {
+          reviewer: item.reviewer,
+          score: item.score,
+          content: ''
+        }
+      })
+      this.tutor.review.forEach((item) => {
+        if (ratingDataObj[item.reviewer]) {
+          ratingDataObj[item.reviewer].content = item.content
+        } else {
+          ratingDataObj[item.reviewer] = { ...item, score: null }
+        }
+      })
+      this.ratingData = Object.values(ratingDataObj)
     },
 
     async sendRequestToTutor (selectedBooking) {
@@ -490,5 +569,8 @@ export default {
 }
 .v-skeleton-loader--custom {
   border-radius: 0;
+}
+.image {
+  width: 150px;
 }
 </style>

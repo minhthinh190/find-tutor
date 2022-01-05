@@ -18,7 +18,9 @@
               color="grey lighten-2"
             ></v-avatar>
 
-            <h4 class="ml-3">minhthinh</h4>
+            <h4 class="ml-3">
+              {{ userEmail.substr(0, userEmail.indexOf('@')) }}
+            </h4>
           </v-card-title>
           
           <div class="py-2 nav-item">
@@ -31,6 +33,7 @@
             </nuxt-link>
           </div>
 
+          <!--
           <div class="py-2 nav-item">
             <v-icon class="mr-2">
               mdi-bell
@@ -40,6 +43,7 @@
               Thông báo
             </nuxt-link>
           </div>
+          -->
         </v-container>
       </v-col>
 
@@ -392,7 +396,7 @@
     <!-- Review & Ratings Dialog -->
     <rating-dialog
       :isDialogShowed="isRatingDialogShowed"
-      :isConfirming="isSendingRatings"
+      :reviewer="userEmail"
       :tutorIds="booking.tutors.length ? booking.tutors : []"
       v-on:close-dialog="isRatingDialogShowed = false"
     ></rating-dialog>
@@ -419,7 +423,6 @@ export default {
       isLoading: false,
       isDialogShowed: false,
       isRatingDialogShowed: false,
-      isSendingRatings: false,
       isHiring: false,
       isRejecting: false,
       isFinishing: false,
@@ -452,9 +455,6 @@ export default {
     
     // get booking data
     await this.$store.dispatch('booking/getBookingById', { id })
-
-    // get contacted tutor if existed
-    this.getContactedTutor()
     
     // get accepted tutor list
     const acceptedTutorEmails = this.getAcceptedTutorEmails()
@@ -462,6 +462,9 @@ export default {
       const tutor = await tutorAPI.getTutor(email)
       this.acceptedTutors.push(tutor)
     })
+
+    // get contacted tutor if existed
+    this.getContactedTutor()
 
     // get applying tutor list
     await this.getApplyingTutorsData()

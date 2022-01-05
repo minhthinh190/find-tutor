@@ -79,6 +79,7 @@
           depressed
           color="teal darken-1"
           class="px-3 text-capitalize white--text"
+          :loading="isSendingRatings"
           @click="sendRatings"
         >
           Gửi đánh giá
@@ -97,8 +98,8 @@ export default {
       type: Boolean,
       required: true
     },
-    isConfirming: {
-      type: Boolean,
+    reviewer: {
+      type: String,
       required: true
     },
     tutorIds: {
@@ -108,6 +109,7 @@ export default {
   },
   data () {
     return {
+      isSendingRatings: false,
       tutors: []
     }
   },
@@ -135,8 +137,36 @@ export default {
       }
     },
 
-    sendRatings () {
-      console.log('tutors:', this.tutors)
+    async sendRatings () {
+      this.isSendingRatings = true
+
+      for (const tutor of this.tutors) {
+        if (tutor.newRatingScore !== 0) {
+          tutor.ratingScore.push(
+            {
+              score: tutor.newRatingScore,
+              reviewer: this.reviewer
+            }
+          )
+        }
+        if (tutor.newReview !== '') {
+          tutor.review.push(
+            {
+              content: tutor.newReview,
+              reviewer: this.reviewer
+            }
+          )
+        }
+        await tutorAPI.addRatings(
+          tutor.email,
+          {
+            ratingScore: tutor.ratingScore,
+            review: tutor.review
+          }
+        )
+      }
+      $nuxt.$router.push({ name: 'bookings' })
+      this.isSendingRatings = false
     }
   }
 }
