@@ -185,7 +185,7 @@ export default {
         bookingAPI.createNewBooking(this.userEmail, bookingData)
           .then(() => {
             this.isSending = false
-            this.showNotification('Your request sent!', 'success')
+            this.showNotification('Đã gửi yêu cầu!', 'teal darken-1')
             this.$refs.form.reset()
           })
           .catch((err) => {
