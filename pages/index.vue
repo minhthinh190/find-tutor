@@ -52,6 +52,9 @@
         </div>
       </v-col>
     </v-row>
+
+    <v-row class="mb-16"></v-row>
+    <v-row class="mb-10"></v-row>
   </v-container>
 </template>
 
